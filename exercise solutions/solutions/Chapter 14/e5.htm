@@ -1,0 +1,68 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 14, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+
+
+For simplicity, assume that <em class=var>n = 2<sup>q</sup></em> for some
+
+integer <em class=var>q</em>.
+
+Further, assume that <em class=var>k</em> = 8.
+
+Using the substitution method, we get
+
+<br><br>
+
+<em class=var>t(n)</em>
+
+= <em class=var>7<sup>2</sup>t(n/4) + cn<sup>2</sup>(7/4 + 1)</em><br>
+
+= <em class=var>7<sup>3</sup>t(n/8) + cn<sup>2</sup>((7/4)<sup>2</sup> + 7/4 + 1)</em><br>
+
+= <em class=var>7<sup>4</sup>t(n/16) + cn<sup>2</sup>((7/4)<sup>3</sup> + (7/4)<sup>2</sup> + 7/4 + 1)</em><br>
+
+.<br>
+
+.<br>
+
+.<br>
+
+= <em class=var>7<sup>q-3</sup>t(8) + cn<sup>2</sup>((7/4)<sup>q-4</sup> + ... + (7/4)<sup>3</sup> + (7/4)<sup>2</sup> + 7/4 + 1)</em><br>
+
+= <em class=var>7<sup>q-3</sup>t(8) + 4cn<sup>2</sup>((7/4)<sup>q-3</sup> - 1)/3</em><br>
+
+= <em class=var>7<sup>log<sub>2</sub>n-3</sup>t(8) + 4cn<sup>2</sup>((7/4)<sup>log<sub>2</sub>n-3</sup> - 1)/3</em><br>
+
+= <em class=var>n<sup>log<sub>2</sub>7</sup>t(8)/7<sup>3</sup> + 4cn<sup>2</sup>((7/4)<sup>log<sub></sub>n-3</sup>-1)/3</br></em>
+
+= Theta(<em class=var>n<sup>log<sub>2</sub>7</sup></em>)
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

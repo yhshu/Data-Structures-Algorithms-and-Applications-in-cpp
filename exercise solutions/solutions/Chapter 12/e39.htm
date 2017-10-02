@@ -1,0 +1,114 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 39<BR>
+
+<BR>
+
+</H1>
+
+
+
+The code is very similar to the case when the iterators were
+
+members of <code class=code>LinkedWDigraph</code>.  The major
+
+difference is that we no longer need an array of current
+
+positions.  The user is expected to create an iterator for
+
+each vertex whose adjacency list he/she wishes to traverse.
+
+The new implementation is more general than the one in the text
+
+because it permits the user to assign several iterators to a single
+
+vertex.
+
+<br><br>
+
+The codes is given below and in the file
+
+<code class=code>lwgiter.h</code>.
+
+It can also be use as an iterator for <code class=code>LinkedWGraph</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+class LinkedWeightedIterator {
+
+   public:
+
+      int Begin(LinkedWDigraph&lt;T&gt;&amp; G, int i);
+
+      int NextVertex();
+
+   private:
+
+      ChainIterator&lt;GraphNode&lt;T&gt; &gt; p;  // used to traverse adjacency list
+
+};
+
+
+
+template &lt;class T&gt;
+
+int LinkedWeightedIterator&lt;T&gt;::
+
+    Begin(LinkedWDigraph&lt;T&gt;&amp; G, int i)
+
+{// Return first vertex adjacent to vertex i.
+
+   if (i &lt; 1 || i &gt; G.n) throw OutOfBounds();
+
+   GraphNode&lt;T&gt; *x = p.Initialize(G.h[i]);
+
+   return (x) ? x-&gt;vertex : 0;
+
+}
+
+
+
+template &lt;class T&gt;
+
+int LinkedWeightedIterator&lt;T&gt;::NextVertex()
+
+{// Return next adjacent vertex.
+
+   GraphNode&lt;T&gt; *x = p.Next();
+
+   return (x) ? x-&gt;vertex : 0;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

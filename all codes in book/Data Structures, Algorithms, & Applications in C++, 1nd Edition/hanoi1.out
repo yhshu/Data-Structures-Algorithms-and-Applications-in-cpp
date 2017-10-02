@@ -1,0 +1,8 @@
+Moves for a three disk problem are
+Move top disk from tower 1 to top of tower 2
+Move top disk from tower 1 to top of tower 3
+Move top disk from tower 2 to top of tower 3
+Move top disk from tower 1 to top of tower 2
+Move top disk from tower 3 to top of tower 1
+Move top disk from tower 3 to top of tower 2
+Move top disk from tower 1 to top of tower 2

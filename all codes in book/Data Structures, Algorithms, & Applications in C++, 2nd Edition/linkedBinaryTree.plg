@@ -1,0 +1,93 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: linkedBinaryTree - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\sahni\LOCALS~1\Temp\RSP52.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/linkedBinaryTree.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\sahni\dsaac\texbook\codes\linkedBinaryTree.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\sahni\LOCALS~1\Temp\RSP52.tmp" 
+Creating temporary file "C:\DOCUME~1\sahni\LOCALS~1\Temp\RSP53.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/linkedBinaryTree.pdb" /debug /machine:I386 /out:"Debug/linkedBinaryTree.exe" /pdbtype:sept 
+.\Debug\linkedBinaryTree.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\sahni\LOCALS~1\Temp\RSP53.tmp"
+<h3>Output Window</h3>
+Compiling...
+linkedBinaryTree.cpp
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2143: syntax error : missing ';' before '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2182: 'visit' : illegal use of type 'void'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2433: 'visit' : 'friend' not permitted on data declarations
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2244: 'visit' : unable to resolve function overload
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2059: syntax error : '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(17) : error C2238: unexpected token(s) preceding ';'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2143: syntax error : missing ';' before '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2182: 'preOrder' : illegal use of type 'void'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2433: 'preOrder' : 'friend' not permitted on data declarations
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2244: 'preOrder' : unable to resolve function overload
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2059: syntax error : '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(18) : error C2238: unexpected token(s) preceding ';'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2143: syntax error : missing ';' before '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2182: 'inOrder' : illegal use of type 'void'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2433: 'inOrder' : 'friend' not permitted on data declarations
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2244: 'inOrder' : unable to resolve function overload
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2059: syntax error : '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(19) : error C2238: unexpected token(s) preceding ';'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2143: syntax error : missing ';' before '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2182: 'postOrder' : illegal use of type 'void'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2433: 'postOrder' : 'friend' not permitted on data declarations
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2244: 'postOrder' : unable to resolve function overload
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2059: syntax error : '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(20) : error C2238: unexpected token(s) preceding ';'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2143: syntax error : missing ';' before '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2182: 'levelOrder' : illegal use of type 'void'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2433: 'levelOrder' : 'friend' not permitted on data declarations
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2244: 'levelOrder' : unable to resolve function overload
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2059: syntax error : '<'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\binarytreenode.h(21) : error C2238: unexpected token(s) preceding ';'
+        c:\sahni\dsaac\texbook\codes\binarytreenode.h(43) : see reference to class template instantiation 'binaryTreeNode<T>' being compiled
+c:\sahni\dsaac\texbook\codes\linkedbinarytree.h(71) : error C2350: 'linkedBinaryTree<E>::visit' is not a static member
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+linkedBinaryTree.exe - 31 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

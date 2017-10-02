@@ -1,0 +1,394 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 7, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+Before we can delete the minimum element, we must verify that
+
+the structure is not empty.  When we have at least one element in the
+
+skip list, the minimum element is the first one in the level 0
+
+chain.
+
+The key of this element can be determined by doing a type conversion
+
+from the type <code class=var>E</code> to
+
+the type <code class=var>K</code>
+
+as was done in the code for <code class=var>Insert</code>.
+
+Now the minimum element can be deleted by invoking
+
+<code class=var>Delete</code>.
+
+This strategy
+
+results in the following implementation of
+
+<code class=var>DeleteMin</code>.
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+SkipList&lt;E, K&gt;&amp; SkipList&lt;E, K&gt;::DeleteMin(E&amp; e)
+
+{// Put the minimum element in e and delete it
+
+ // from the skip list.
+
+   // make sure there is a min element
+
+   if (head-&gt;link[0] == tail) // empty
+
+      throw OutOfBounds();
+
+
+
+   // delete the minimum element
+
+   K k = head-&gt;link[0]-&gt;data; // min key
+
+   Delete(k,e);  // delete min element
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+The call to <code class=var>Delete</code>
+
+in the above code results in a search
+
+for the element with key <code class=var>k</code>
+
+and the setting of the array
+
+<code class=var>last</code>.
+
+This is unneccessary as we know that the element is in
+
+<code class=var>head->link[0]</code>
+
+and that all <code class=var>last</code> values are <code class=var>head</code>.
+
+So we can eliminate the work done by the
+
+<code class=var>SaveSearch</code> that is invoked
+
+by <code class=var>Delete</code> and tailor the remainder of
+
+the code in <code class=var>Delete</code> to
+
+our situtaion.  The faster version of <code class=var>DeleteMin</code> is
+
+given below.
+
+<br><br>
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E, class K&gt;
+
+SkipList&lt;E, K&gt;&amp; SkipList&lt;E, K&gt;::DeleteMin(E&amp; e)
+
+{// Put the minimum element in e and delete it
+
+ // from the skip list.
+
+   // make sure there is a min element
+
+   if (head-&gt;link[0] == tail) // empty
+
+      throw OutOfBounds();
+
+
+
+   // save pointer to node with min element
+
+   SkipNode&lt;E,K&gt; *MinNode = head-&gt;link[0];
+
+
+
+   // delete MinNode from structure
+
+   for (int i = 0; i &lt;= Levels &amp;&amp;
+
+            head-&gt;link[i] == MinNode; i++)
+
+      head-&gt;link[i] = head-&gt;link[i]-&gt;link[i];
+
+
+
+   // update Levels
+
+   while (Levels &gt; 0 &amp;&amp; head-&gt;link[Levels] == tail)
+
+      Levels--;
+
+
+
+   // save min element and delete MinNode
+
+   e = MinNode-&gt;data;
+
+   delete MinNode;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+<br><br>
+
+Before we can delete the maximum element, we need to verify that
+
+such an element exists.  This is so iff the structure is not empty.
+
+If there is a max element, it is in the last node on the
+
+level 0 chain.  The max element is in the node with
+
+<code class=var>link[0]</code>
+
+equal to <code class=var>tail</code>.  We can find this node by invoking
+
+<code class=var>SaveSearch(TailKey)</code>.
+
+Following this invocation, <code class=var>last[0]</code> points to
+
+the node just before the
+
+tail.  This node contains the max element.  The key of this
+
+max element is determined by performing a type conversion
+
+as was done in the code for <code class=var>Insert</code>.
+
+The key may now be used to invoke
+
+<code class=var>Delete</code> which will then delete the desired element.
+
+The final code is given below.
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E, class K&gt;
+
+SkipList&lt;E, K&gt;&amp; SkipList&lt;E, K&gt;::DeleteMax(E&amp; e)
+
+{// Put the maximum element in e and delete it
+
+ // from the skip list.
+
+   // make sure there is a maximum element
+
+   if (head-&gt;link[0] == tail) // empty
+
+      throw OutOfBounds();
+
+ 
+
+   // search for tail key
+
+   SaveSearch(TailKey);
+
+   // get key of max element
+
+   K k = last[0]-&gt;data;
+
+   Delete(k,e);  // delete max element
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+A slightly faster version can be obtained by
+
+tailoring <code class=var>SaveSearch</code>
+
+as we can avoid saving most of
+
+the <code class=var>last</code> values.  The new
+
+code is given below.
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E, class K&gt;
+
+SkipList&lt;E, K&gt;&amp; SkipList&lt;E, K&gt;::DeleteMax(E&amp; e)
+
+{// Put the maximum element in e and delete it
+
+ // from the skip list.
+
+   // make sure there is a maximum element
+
+   if (head-&gt;link[0] == tail) // empty
+
+      throw OutOfBounds();
+
+ 
+
+   // search for max element
+
+   SkipNode&lt;E,K&gt; *y = head;
+
+   for (int i = Levels; i &gt;= 0; i--) {
+
+      while (y-&gt;link[i] != tail)
+
+         y = y-&gt;link[i];
+
+      }
+
+
+
+   // get key of max element
+
+   K k = y-&gt;data;
+
+   Delete(k,e);  // delete max element
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+<br><br>
+
+Since the level 0 chain is in ascending order of the elements,
+
+we can output the elements in ascending order by traversing the level
+
+0 chain from left to right as in the following code:
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E, class K&gt;
+
+void SkipList&lt;E,K&gt;::Output()
+
+{
+
+   SkipNode&lt;E,K&gt; *y = head-&gt;link[0];
+
+   for (; y != tail; y = y-&gt;link[0])
+
+      cout &lt;&lt; y-&gt;data &lt;&lt; ' ';
+
+   cout &lt;&lt; endl;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+<br><br>
+
+The expected complexity of
+
+<code class=var>DeleteMin</code> and
+
+<code class=var>DeleteMax</code> is
+
+O(<code class=var>log n</code>) while that of
+
+<code class=var>Output</code> is
+
+Theta(<code class=var>n</code>).
+
+Here <code class=var>n</code> is the number of elements in the
+
+skip list.
+
+<br><br>
+
+The relevant files are <code class=var>askip.*</code> and
+
+<code class=var>bskip.*</code>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

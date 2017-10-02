@@ -1,0 +1,234 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+The copy functions make use of a function to erase or delete
+
+all nodes in a binary tree.  Such a function is needed
+
+to delete nodes from partially constructed subtrees in case
+
+the copy operation fails.  We may delete all nodes in a binary
+
+tree by performing a postorder traversal.  In the visit step,
+
+the node being visited is deleted.  The code for the erase/delete
+
+function is given below.
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void Erase(BinaryTreeNode&lt;T&gt; * &amp;t)
+
+{// Postorder deletion of *t.
+
+   if (t) {
+
+      Erase(t-&gt;LeftChild);   // delete left subtree
+
+      Erase(t-&gt;RightChild);  // delete right subtree
+
+      delete t;               // delete root
+
+      t = 0;
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+The code to make a copy of a binary tree using a postorder
+
+traversal is given below.  Note the portions of the code that
+
+delete constructed subtrees in case the overall copy fails.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+BinaryTreeNode&lt;T&gt;* PostCopy(BinaryTreeNode&lt;T&gt; *t)
+
+{// Copy the subtree t using a postorder traversal.
+
+ // Return a pointer to the root of the new tree.
+
+   if (!t) // t is empty
+
+      return 0;
+
+
+
+   // first make copies of left and right subtrees
+
+   BinaryTreeNode&lt;T&gt; *left, *right, *root;
+
+    left = PostCopy(t-&gt;LeftChild);
+
+   try {right = PostCopy(t-&gt;RightChild);}
+
+   catch (...) {
+
+      // copy failed, free nodes in left subtree
+
+      Erase(left);
+
+      throw;}  // rethrow exception
+
+
+
+   // successful copy of left and right subtrees
+
+   // copy root
+
+   try {root = new BinaryTreeNode&lt;T&gt;
+
+                   (t-&gt;data, left, right);}
+
+   catch (...) {
+
+      // failed to get a node for root
+
+      // free nodes in left and right subtrees
+
+      Erase(left);
+
+      Erase(right);
+
+      throw;}
+
+
+
+   return root;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+The preorder copy function is given below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+BinaryTreeNode&lt;T&gt;* PreCopy(BinaryTreeNode&lt;T&gt; *t)
+
+{// Copy the subtree t using a postorder traversal.
+
+ // Return a pointer to the root of the new tree.
+
+   if (!t) // t is empty
+
+      return 0;
+
+
+
+   // first make a copy of the root
+
+   BinaryTreeNode&lt;T&gt; *root;
+
+   root = new BinaryTreeNode&lt;T&gt; (t-&gt;data);
+
+   
+
+   // now make a copy of the left subtree
+
+   try {root-&gt;LeftChild = PreCopy(t-&gt;LeftChild);}
+
+   catch (...) {
+
+      // copy failed, free root node
+
+      delete root;
+
+      throw;}  // rethrow exception
+
+
+
+   // now make a copy of the right subtree
+
+   try {root-&gt;RightChild = PreCopy(t-&gt;RightChild);}
+
+   catch (...) {
+
+      // copy failed, free nodes in left subtree
+
+      // and the root
+
+      Erase(root-&gt;LeftChild);
+
+      delete root;
+
+      throw;}  // rethrow exception
+
+
+
+   return root;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+The recursion stack space needed by
+
+both the preorder and postorder copy functions is O(<em class=var>h</em>),
+
+where <em class=var>h</em> is the height of the binary tree being copied.
+
+
+
+<br><br>
+
+All codes can be found in the file
+
+<code class=var>dtraver.cpp</code>.
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

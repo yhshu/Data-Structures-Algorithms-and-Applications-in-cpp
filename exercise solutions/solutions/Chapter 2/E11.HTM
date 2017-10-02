@@ -1,0 +1,78 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 2, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+The code is
+
+given below and in the files <code class=code>rsort3.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Rearrange(T * &amp;a, int n, int r[])
+
+{// Rearrange the elements of a into sorted order
+
+ // using an additional array u.
+
+   T *u = new T [n+1];
+
+   // move to correct place in u
+
+   for (int i = 0; i &lt; n; i++)
+
+      u[r[i]] = a[i];
+
+
+
+   // free space used by a[]
+
+   delete [] a;
+
+
+
+   // make a point to new space
+
+   a = u;
+
+
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

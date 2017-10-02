@@ -1,0 +1,138 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 23<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+Functions <code class=code>Output</code> (Program 5.9)
+
+and <code class=code>Hold</code> (Program 5.10)
+
+currently take Theta(<code class=code>k</code>) time.
+
+As suggested at the end of Section 5.5.3 we can augment
+
+the data structures used in Section 5.5.3 with an AVL tree
+
+<em class=var>T</em>.
+
+The AVL tree <em class=var>T</em> contains the top
+
+cars (together with the holding tracks they
+
+come from) in each of the holding tracks, and the search key used is the
+
+car index.
+
+<br><br>
+
+When the top car is deleted from holding track
+
+<code class=code>minS</code> in function <code class=code>Output</code>,
+
+this car must be deleted from the AVL tree and the new car at the
+
+top of holding track
+
+<code class=code>minS</code> inserted.  Each of these operations
+
+takes O(<em class=var>log k</em>) time.  We can find the new
+
+<code class=code>minH</code> and
+
+<code class=code>minS</code>
+
+by making as many left child moves as possible starting
+
+at the root of the AVL tree.
+
+Therefore, the complexity of <code class=code>Output</code>
+
+is now O(<em class=var>log k</em>).
+
+<br><br>
+
+In function <code class=code>Hold</code> we must first find the
+
+holding track with the smallest car &gt; <code class=code>c</code>
+
+at its top.  This can be done by starting at the root of the AVL
+
+tree and walking down to a leaf.  If the car in the current AVL tree
+
+node is &lt; <code class=code>c</code>, we move into the right subtree
+
+of this node (the left subtree contains smaller cars which are
+
+not candidates for the answer); and if the car in the current
+
+AVL tree node is &gt; <code class=code>c</code>, it is the
+
+best candidate for the answer found so far and we move into its left subtree
+
+looking for a better candidate (the right subtree contains worse candidates).
+
+The described search takes O(height of tree) = O(<em class=var>log k</em>)
+
+time.
+
+<br><br>
+
+Whe <code class=code>c</code> is added to the best holding track,
+
+we must delete the corresponding entry from the AVL tree and insert the
+
+car <code class=code>c</code> together with its holding track number
+
+into the AVL tree.  The overall complexity of <code class=code>Hold</code>
+
+is now O(<em class=var>log k</em>).
+
+
+
+<br><br>
+
+Since the use of an AVL tree as described above reduces the
+
+complexity of both <code class=code>Output</code> and
+
+<code class=code>Hold</code> to O(<em class=var>log k</em>),
+
+the overall complexity of the solution of Section 5.3.3
+
+becomes O(<em class=var>n log k</em>).
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,218 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 16, Exercise 15<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Every tour contains exactly one edge that leaves each vertex.
+
+The sum of the weights of these edges cannot exceed
+
+<em class=var>(sum from i=1 to n) Max<sub>i</sub></em>.
+
+Therefore, if the digraph has a tour, its cost must be less than
+
+<em class=var>(sum from i=1 to n) Max<sub>i</sub>+1</em>.
+
+<dt> (b)
+
+<dd>
+
+To make use of this observation, we must initialize
+
+<code class=code>bestc</code> to
+
+<em class=var>(sum from i=1 to n) Max<sub>i</sub>+1</em> rather than to
+
+<code class=code>NoEdge</code> in
+
+<code class=code>TSP</code> (Program 16.11).
+
+Once this is done, we can eliminate the tests
+
+<code class=code>bestc == NoEdge</code> from
+
+<code class=code>tSP</code> (Program 16.12).
+
+<br><br>
+
+The modified code is given below and in the files
+
+<code class=code>awd2.h</code> and
+
+<code class=code>btsp2.*</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void AdjacencyWDigraph&lt;T&gt;::tSP(int i)
+
+{// Backtracking code for traveling salesperson.
+
+   if (i == n) {// at parent of a leaf
+
+      // complete tour by adding last two edges
+
+      if (a[x[n-1]][x[n]] != NoEdge &amp;&amp;
+
+         a[x[n]][1] != NoEdge &amp;&amp;
+
+         (cc + a[x[n-1]][x[n]] + a[x[n]][1] &lt; bestc)) {
+
+         // better tour found
+
+         for (int j = 1; j &lt;= n; j++)
+
+            bestx[j] = x[j];
+
+         bestc = cc + a[x[n-1]][x[n]] + a[x[n]][1];}
+
+      }
+
+   else {// try out subtrees
+
+      for (int j = i; j &lt;= n; j++)
+
+         // is move to subtree labeled x[j] possible?
+
+         if (a[x[i-1]][x[j]] != NoEdge &amp;&amp;
+
+               (cc + a[x[i-1]][x[i]] &lt; bestc)) {// yes
+
+            // search this subtree
+
+            Swap(x[i], x[j]);
+
+            cc += a[x[i-1]][x[i]];
+
+            tSP(i+1);
+
+            cc -= a[x[i-1]][x[i]];
+
+            Swap(x[i], x[j]);}
+
+      }
+
+}
+
+
+
+template&lt;class T&gt;
+
+T AdjacencyWDigraph&lt;T&gt;::TSP(int v[])
+
+{// Traveling salesperson by backtracking.
+
+ // Return cost of best tour, return tour in v[1:n].
+
+   // initialize for tSP
+
+   // first compute bestc
+
+   bestc = 1;
+
+   int MaxCost;
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      // find max cost edge out of vertex i
+
+      MaxCost = 0;
+
+      for (int j = 1; j &lt;= n; j++)
+
+         if (a[i][j] != NoEdge &amp;&amp; a[i][j] &gt; MaxCost)
+
+            MaxCost = a[i][j];
+
+
+
+      // make sure vertex i has an out edge
+
+      if (MaxCost == NoEdge) // no edge out of vertex i
+
+         // there is no tour possible
+
+         return NoEdge;
+
+
+
+      // it has an out edge
+
+      bestc += MaxCost;
+
+     }
+
+
+
+   x = new int [n+1];
+
+   // x is identity permutation
+
+   for (int i = 1; i &lt;= n; i++)
+
+      x[i] = i;
+
+   bestx = v;  // use array v to store best tour
+
+   cc = 0;
+
+
+
+   // search permutations of x[2:n]
+
+   tSP(2);
+
+
+
+   delete [] x;
+
+   return bestc;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

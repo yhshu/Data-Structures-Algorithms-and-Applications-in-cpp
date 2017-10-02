@@ -1,0 +1,128 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 27<BR>
+
+<BR>
+
+</H1>
+
+
+
+To find the shortest path from the source vertex <code class=code>s</code>
+
+to the vertex <code class=code>i</code>, we first verify the existence
+
+of such a path.  A path exists iff <code class=var>p[i]</code> != 0.
+
+When the path exists, it may be constructed backwards from
+
+<code class=code>i</code> to <code class=var>s</code> by
+
+following the vertex sequence <code class=var>p[i]</code>,
+
+<code class=var>p[p[i]]</code>,
+
+<code class=var>p[p[p[i]]]</code>, ...,
+
+<code class=var>s</code>.
+
+
+
+<br><br>
+
+
+
+
+
+The code
+
+given below and in the files
+
+<code class=code>short1.*</code> outputs the path backwards.
+
+If we must output the forward path, we can first store the
+
+backward path in an array and then output it in the desired order.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Path(int p[], int s, int i)
+
+{// Output shortest path from s to i.
+
+   if (i != s &amp;&amp; !p[i]) {// no path
+
+      cout &lt;&lt; "There is no path from vertex "
+
+           &lt;&lt; s &lt;&lt; " to vertex " &lt;&lt; i &lt;&lt; endl;
+
+      return;
+
+      }
+
+
+
+   // there is a shortest path to i
+
+   // construct it backwards from i to s
+
+   cout &lt;&lt; "Shortest path from vertex "
+
+        &lt;&lt; s &lt;&lt; " to vertex " &lt;&lt; i
+
+        &lt;&lt; " is the reverse of " &lt;&lt; i;
+
+   while (i != s) {
+
+      // move back one vertex
+
+      i = p[i];
+
+      cout &lt;&lt; " " &lt;&lt; i;
+
+      }
+
+   cout &lt;&lt; endl;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+Since a shortest path has at most <code class=code>n</code>
+
+vertices on it, the complexity of <code class=var>Path</code>
+
+is O(<code class=code>n</code>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

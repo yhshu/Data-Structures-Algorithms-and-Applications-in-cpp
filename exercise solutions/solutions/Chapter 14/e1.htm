@@ -1,0 +1,86 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 14, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+
+
+First consider the case when we simply want to detect the presence
+
+of a light counterfeit.
+
+If <em class=var>m</em> is even, divide the coins into two sets, each set having
+
+<em class=var>n/2</em> coins.  Compare the weight of the two sets.
+
+If the two sets have the same weight, there is no counterfeit coin;
+
+and if one set is lighter, there is a counterfeit coin.  The number
+
+of weight comparisons is one.  If <em class=var>n</em> is odd, remove one coin and apply the test
+
+for an even number of coins to the remaining <em class=var>n-1</em> coins.  If this test
+
+detects the presence of a counterfeit coin, we are done.
+
+If no counterfeit coin is detected in the set of <em class=var>n-1</em> coins,
+
+there is still the possibility that the coin we removed is counterfeit.
+
+Compare the weight of this coin with that of any of the remaining
+
+<em class=var>n-1</em> coins.  If both weigh the same, no coin is counterfeit.  Otherwise,
+
+the lighter coin is counterfeit.  So when <em class=var>n</em> is odd, we need to
+
+make either one or two weight comparisons.
+
+<br><br>
+
+Next consider the case when we want to identify the counterfeit coin.
+
+If <em class=var>n</em> is &lt;= 3, we can identify the counterfeit with at most
+
+two weight comparisons as described in Example 14.1.  If <em class=var>n</em> &gt; 3,
+
+we proceed as above.  With one weight comparison, the problem is either
+
+solved (there is no counterfeit) or reduced to one of size
+
+<em class=var>floor(n/2)</em>.  If two weight comparisons are done (possible only when
+
+<em class=var>n</em> is odd, the problem is solved).
+
+The maximum number of weight comparisons is
+
+<em class=var>ceil(log<sub>2</sub>n)</em>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

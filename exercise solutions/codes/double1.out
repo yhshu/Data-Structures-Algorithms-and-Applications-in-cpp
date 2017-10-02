@@ -1,0 +1,5 @@
+List is 2  4  6  8  
+Positioned at front of list but not at the end
+List in sequence is 2 4 6 8 
+Positioned at end of list but not at the front
+List in reverse order is 8 6 4 2 

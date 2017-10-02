@@ -1,0 +1,96 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 17, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+
+
+The solution space tree is that of Figure 16.2.  In a LIFO branch and
+
+bound, the list of live nodes bahaves as a stack.  The first E node is
+
+node A.  It is expanded to get nodes B and C.  Since both are feasible,
+
+both are added to the stack.  Suppose they are added to the stack in this order.
+
+The next E node is the node C which is currently at the top of the stack.
+
+Node C is deleted from the live node stack and expanded to get nodes
+
+F and G.  Both of these are feasible nodes and are added to the stack.
+
+The next E node is node G.  When it expanded, we get nodes N and O.
+
+Both are feasible leaves.  Node N represents a solution that is better than the
+
+best found so far.  Therefore, this solution is saved.
+
+The value for this solution is 25.
+
+<br><br>
+
+The next E node is node F.  When expanded, it yields the leaves L and M.
+
+Although both leaves are feasible, only L corresponds to a solution
+
+with value more than 25.  The solution value at L is 50.
+
+B is the next E node.  Its left child D is infeasible.
+
+So it is discarded.  Its right child E is saved on the live node stack.
+
+E becomes the next E node. Its left child is infeasible and its right child
+
+is a leaf with value less than 50.
+
+<br><br>
+
+As no live nodes remain, the algorithm terminates with node L
+
+yielding the best knapsack packing.
+
+<br><br>
+
+LIFO branch and bound is not the same as backtracking.
+
+In backtracking, as soon as we generate a feasible child of the
+
+current E node, this feasible child becomes the new E node.
+
+In branch and bound, all children of the current E node are
+
+generated, the feasible ones saved on a live node list, and the
+
+infeasible children discarded.
+
+In backtracking, a node can become the E node many times, while in
+
+branch and bound, a node can be the Enode at most once.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

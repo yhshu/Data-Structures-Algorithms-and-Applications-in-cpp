@@ -1,0 +1,188 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 15<BR>
+
+<BR>
+
+</H1>
+
+
+
+The out-degree of vertex <em class=var>i</em> is the sum
+
+of the entries in
+
+the adjacency matrix row for vertex <em class=var>i</em>;
+
+the in-degree of vertex <em class=var>i</em> is the sum
+
+of the entries in
+
+the adjacency matrix column for vertex <em class=var>i</em>;
+
+and the number of edges is the sum of all adjacency matrix entries.
+
+<br><br>
+
+The codes are given below and
+
+in the file <code class=code>egraph.cpp<code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+int OutDegree(int **a, int n, int i)
+
+{// a[0:n-1][0:n-1] is the adjacency matrix of
+
+ // an n vertex digraph.  Return the out-degree of
+
+ // vertex i.
+
+ // Throw OutOfBounds exception if i invalid.
+
+   if (i < 1 || i &gt; n) throw OutOfBounds();
+
+
+
+   // out-degree is sum of row i-1
+
+   int v = i - 1,   // row index into a
+
+       degree = 0;  // out-degree of vertex i
+
+   for (int j = 0; j < n; j++)
+
+      degree += a[v][j];
+
+
+
+   return degree;
+
+}
+
+
+
+int InDegree(int **a, int n, int i)
+
+{// a[0:n-1][0:n-1] is the adjacency matrix of
+
+ // an n vertex digraph.  Return the in-degree of
+
+ // vertex i.
+
+ // Throw OutOfBounds exception if i invalid.
+
+   if (i &lt; 1 || i &gt; n) throw OutOfBounds();
+
+
+
+   // in-degree is sum of column i-1
+
+   int v = i - 1,   // column index into a
+
+       degree = 0;  // in-degree of vertex i
+
+   for (int j = 0; j < n; j++)
+
+      degree += a[j][v];
+
+
+
+   return degree;
+
+}
+
+
+
+int NumberOfEdges(int **a, int n)
+
+{// a[0:n-1][0:n-1] is the adjacency matrix of
+
+ // an n vertex digraph.  Return the number of
+
+ // edges in the digraph.
+
+
+
+   // answer is sum of adjacency matrix entries
+
+   int sum = 0;
+
+   for (int i = 0; i < n; i++)
+
+      for (int j = 0; j < n; j++)
+
+         sum += a[i][j];
+
+
+
+   return sum;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The complexity of the code to find the out- and in-degrees
+
+is Theta(1) in case an exception is thrown.  When no exception is thrown,
+
+both codes make <code class=code>n</code> iterations of the
+
+<code class=code>for</code> loop and their complexity is
+
+Theta(<code class=code>n</code>).  So the overall complexity of each
+
+code is O(<code clss=code>n</code>).
+
+<br><br>
+
+The statement
+
+<br>
+
+<code class=code>sum += a[i][j];</code><br>
+
+in <code class=code>NumberOfEdges</code> is
+
+iterated <code class=code>n<sup>2</sup></code> times and no statement
+
+has a greater total cost.
+
+Therefore, the complexity of
+
+<code class=code>NumberOfEdges</code> is
+
+Theta(<code class=code>n<sup>2</sup></code>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

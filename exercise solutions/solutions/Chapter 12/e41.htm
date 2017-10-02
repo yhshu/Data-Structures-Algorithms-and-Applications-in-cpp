@@ -1,0 +1,426 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 41<BR>
+
+<BR>
+
+</H1>
+
+
+
+The class <code class=code>AbstractQueue</code> is given
+
+below and in the file
+
+<code class=code>absqueue.h</code>.
+
+We could also include a zero parameter constructor and
+
+use the array expansion and contraction strategy
+
+of Exercise 5.3 for the case of formula-based queues.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class AbstractQueue {
+
+   public:
+
+      virtual bool IsEmpty() const = 0;
+
+      virtual bool IsFull() const = 0;
+
+      virtual T First() const = 0; // return front element
+
+      virtual T Last() const = 0;  // return last element
+
+      virtual AbstractQueue&lt;T&gt;&amp; Add(const T&amp; x) = 0;
+
+      virtual AbstractQueue&lt;T&gt;&amp; Delete(T&amp; x) = 0;
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+The code for the formula-based queue class that derives from
+
+<code class=code>AbstractQueue</code> is given below and
+
+in the file <code class=code>mqueue.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class Queue : AbstractQueue&lt;T&gt; {
+
+// FIFO objects
+
+   public:
+
+      Queue(int MaxQueueSize = 10);
+
+      ~Queue() {delete [] queue;}
+
+      bool IsEmpty() const {return front == rear;}
+
+      bool IsFull() const {return (
+
+           ((rear + 1) % MaxSize == front) ? 1 : 0);}
+
+      T First() const; // return front element
+
+      T Last() const; // return last element
+
+      AbstractQueue&lt;T&gt;&amp; Add(const T&amp; x);
+
+      AbstractQueue&lt;T&gt;&amp; Delete(T&amp; x);
+
+   private:
+
+      int front;   // one counterclockwise from first
+
+      int rear;    // last element
+
+      int MaxSize; // size of array queue
+
+      T *queue;    // element array
+
+};
+
+
+
+template&lt;class T&gt;
+
+Queue&lt;T&gt;::Queue(int MaxQueueSize)
+
+{// Create an empty queue whose capacity
+
+ // is MaxQueueSize.
+
+   MaxSize = MaxQueueSize + 1;
+
+   queue = new T[MaxSize];
+
+   front = rear = 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+T Queue&lt;T&gt;::First() const
+
+{// Return first element of queue.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+   if (IsEmpty()) throw OutOfBounds();
+
+   return queue[(front + 1) % MaxSize];
+
+}
+
+
+
+template&lt;class T&gt;
+
+T Queue&lt;T&gt;::Last() const
+
+{// Return last element of queue.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+   if (IsEmpty()) throw OutOfBounds();
+
+   return queue[rear];
+
+}
+
+
+
+template&lt;class T&gt;
+
+AbstractQueue&lt;T&gt;&amp; Queue&lt;T&gt;::Add(const T&amp; x)
+
+{// Add x to the rear of the queue.  Throw
+
+ // NoMem exception if the queue is full.
+
+   if (IsFull()) throw NoMem();
+
+   rear = (rear + 1) % MaxSize;
+
+   queue[rear] = x;
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+AbstractQueue&lt;T&gt;&amp; Queue&lt;T&gt;::Delete(T&amp; x)
+
+{// Delete first element and put in x.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+   if (IsEmpty()) throw OutOfBounds();
+
+   front = (front + 1) % MaxSize;
+
+   x = queue[front];
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for the linked queue class that derives from
+
+<code class=code>AbstractQueue</code> is given below and
+
+in the file <code class=code>nqueue.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class LinkedQueue : AbstractQueue&lt;T&gt; {
+
+// FIFO objects
+
+   public:
+
+      LinkedQueue() {front = rear = 0;} // constructor
+
+      ~LinkedQueue(); // destructor
+
+      bool IsEmpty() const
+
+           {return ((front) ? false : true);}
+
+      bool IsFull() const;
+
+      T First() const; // return first element
+
+      T Last() const; // return last element
+
+      AbstractQueue&lt;T&gt;&amp; Add(const T&amp; x);
+
+      AbstractQueue&lt;T&gt;&amp; Delete(T&amp; x);
+
+   private:
+
+      Node&lt;T&gt; *front;  // pointer to first node
+
+      Node&lt;T&gt; *rear;   // pointer to last node
+
+};
+
+
+
+template&lt;class T&gt;
+
+LinkedQueue&lt;T&gt;::~LinkedQueue()
+
+{// Queue destructor.  Delete all nodes.
+
+   Node&lt;T&gt; *next;
+
+   while (front) {
+
+      next = front-&gt;link; 
+
+      delete front; 
+
+      front = next;
+
+      }
+
+}
+
+
+
+template&lt;class T&gt;
+
+bool LinkedQueue&lt;T&gt;::IsFull() const
+
+{// Is the queue full?
+
+   Node&lt;T&gt; *p;
+
+   try {p = new Node&lt;T&gt;;
+
+        delete p;
+
+        return false;}
+
+   catch (NoMem) {return true;}
+
+}
+
+
+
+template&lt;class T&gt;
+
+T LinkedQueue&lt;T&gt;::First() const
+
+{// Return first element of queue.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+   if (IsEmpty()) throw OutOfBounds();
+
+   return front-&gt;data;
+
+}
+
+
+
+template&lt;class T&gt;
+
+T LinkedQueue&lt;T&gt;::Last() const
+
+{// Return last element of queue.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+   if (IsEmpty()) throw OutOfBounds();
+
+   return rear-&gt;data;
+
+}
+
+
+
+template&lt;class T&gt;
+
+AbstractQueue&lt;T&gt;&amp; LinkedQueue&lt;T&gt;::Add(const T&amp; x)
+
+{// Add x to rear of queue.  Do not catch
+
+ // possible NoMem exception thrown by new.
+
+
+
+   // create node for new element
+
+   Node&lt;T&gt; *p = new Node&lt;T&gt;;
+
+   p-&gt;data = x;
+
+   p-&gt;link = 0;
+
+
+
+   // add new node to rear of queue
+
+   if (front) rear-&gt;link = p;  // queue not empty
+
+   else front = p;             // queue empty
+
+   rear = p;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+AbstractQueue&lt;T&gt;&amp; LinkedQueue&lt;T&gt;::Delete(T&amp; x)
+
+{// Delete first element and put it in x.  Throw
+
+ // OutOfBounds exception if the queue is empty.
+
+
+
+   if (IsEmpty()) throw OutOfBounds();
+
+
+
+   // save element in first node
+
+   x = front-&gt;data;
+
+
+
+   // delete first node
+
+   Node&lt;T&gt; *p = front;
+
+   front = front-&gt;link;
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

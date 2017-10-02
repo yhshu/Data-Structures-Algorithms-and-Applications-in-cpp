@@ -1,0 +1,282 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+The code for
+
+<code class=var>MinHBLT</code>
+
+can be obtained from that for
+
+<code class=var>MaxHBLT</code>
+
+by changing the line
+
+<pre class=code>
+
+if (x-&gt;data &lt; y-&gt;data) Swap(x,y);
+
+</pre>
+
+of <code class=var>Meld</code> to
+
+<pre class=code>
+
+if (x-&gt;data &gt; y-&gt;data) Swap(x,y);
+
+</pre>
+
+The complete code is given below
+
+and in the file <code class=var>minhblt.h</code>
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class MinHBLT {
+
+   public:
+
+      MinHBLT() {root = 0;}
+
+      ~MinHBLT() {Free(root);}
+
+      T Min() {if (!root) throw OutOfBounds();
+
+               return root-&gt;data;}
+
+      MinHBLT&lt;T&gt;&amp; Insert(const T&amp; x);
+
+      MinHBLT&lt;T&gt;&amp; DeleteMin(T&amp; x);
+
+      MinHBLT&lt;T&gt;&amp; Meld(MinHBLT&lt;T&gt;&amp; x) {
+
+                Meld(root,x.root);
+
+                x.root = 0;
+
+                return *this;}
+
+      void Initialize(T a[], int n);
+
+   private:
+
+      void Free(HBLTNode&lt;T&gt; *t);
+
+      void Meld(HBLTNode&lt;T&gt;* &amp;x, HBLTNode&lt;T&gt;* y);
+
+      HBLTNode&lt;T&gt; *root;  // pointer to tree root
+
+};
+
+
+
+template&lt;class T&gt;
+
+void MinHBLT&lt;T&gt;::Free(HBLTNode&lt;T&gt; *t)
+
+{// Delete all nodes in tree rooted at t.
+
+ // Use a postorder traversal.
+
+   if (t) {Free(t-&gt;LeftChild);
+
+           Free(t-&gt;RightChild);
+
+           delete t;}
+
+}
+
+
+
+template&lt;class T&gt;
+
+void MinHBLT&lt;T&gt;::Meld(HBLTNode&lt;T&gt;* &amp;x, HBLTNode&lt;T&gt;* y)
+
+{// Meld leftist trees with roots *x and *y.
+
+ // Return pointer to new root in x.
+
+   if (!y) return; // y is empty
+
+   if (!x) // x is empty
+
+      {x = y;
+
+       return;}
+
+
+
+   // neither is empty
+
+   if (x-&gt;data &gt; y-&gt;data) Swap(x,y);
+
+   // now x-&gt;data &lt;= y-&gt;data
+
+   Meld(x-&gt;RightChild,y);
+
+   if (!x-&gt;LeftChild) {// left subtree empty
+
+         // swap subtrees
+
+         x-&gt;LeftChild = x-&gt;RightChild;
+
+         x-&gt;RightChild = 0;
+
+         x-&gt;s = 1;}
+
+   else {// see if subtrees to be swapped
+
+         if (x-&gt;LeftChild-&gt;s &lt; x-&gt;RightChild-&gt;s)
+
+            Swap(x-&gt;LeftChild,x-&gt;RightChild);
+
+         x-&gt;s = x-&gt;RightChild-&gt;s + 1;}
+
+}
+
+
+
+template&lt;class T&gt;
+
+MinHBLT&lt;T&gt;&amp; MinHBLT&lt;T&gt;::Insert(const T&amp; x)
+
+{// Insert x into the leftist tree.
+
+ // Create tree with one node.
+
+   HBLTNode&lt;T&gt; *q = new HBLTNode&lt;T&gt; (x,1);
+
+   // meld q and original tree
+
+   Meld(root,q);
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+MinHBLT&lt;T&gt;&amp; MinHBLT&lt;T&gt;::DeleteMin(T&amp; x)
+
+{// Delete min element and put it in x.
+
+   if (!root) throw OutOfBounds();
+
+
+
+   // tree not empty
+
+   x = root-&gt;data;  // min element
+
+   HBLTNode&lt;T&gt; *L = root-&gt;LeftChild;
+
+   HBLTNode&lt;T&gt; *R = root-&gt;RightChild;
+
+   delete root;
+
+   root = L;
+
+   Meld(root,R);
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void MinHBLT&lt;T&gt;::Initialize(T a[], int n)
+
+{// Initialize hblt with n elements.
+
+   Queue&lt;HBLTNode&lt;T&gt; *&gt; Q(n);
+
+   Free(root);  // delete old nodes
+
+   // initialize queue of trees
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      // create trees with one node each
+
+      HBLTNode&lt;T&gt; *q = new HBLTNode&lt;T&gt; (a[i],1);
+
+      Q.Add(q);
+
+      }
+
+
+
+   // repeatedly meld from queue
+
+   HBLTNode&lt;T&gt; *b, *c;
+
+   for (int i = 1; i &lt;= n - 1; i++) {
+
+      // delete and meld two trees
+
+      Q.Delete(b).Delete(c);
+
+      Meld(b,c);
+
+      // put melded tree on queue
+
+      Q.Add(b);
+
+      }
+
+
+
+   if (n) Q.Delete(root);
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

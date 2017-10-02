@@ -1,0 +1,13 @@
+Stack should be 1234, bottom to top
+The stack is not empty
+The stack size is 4
+Stack top is 4
+Popped top element
+Stack top is 3
+Popped top element
+Stack top is 2
+Popped top element
+Stack top is 1
+Popped top element
+Last pop failed 
+Invalid operation on empty stack

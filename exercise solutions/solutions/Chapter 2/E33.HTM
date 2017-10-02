@@ -1,0 +1,78 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 2, Exercise 33<BR>
+
+<BR>
+
+</H1>
+
+
+
+First suppose that <em class=var>f(n) = o(g(n))</em>.
+
+From the definition of little oh, <em class=var>f(n) = O(g(n))</em>
+
+and <em class=var>f(n) != Omega(g(n))</em>.  Since
+
+<em class=var>f(n) != Omega(g(n))</em>, <em class=var>(limit n->infinity)
+
+g(n)/f(n)</em>
+
+is not bounded by any constant.
+
+Also, since <em class=var>f(n) = O(g(n))</em>,
+
+<em class=var>(limit n->infinity)f(n)/g(n) <= c</em>, for some
+
+constant <em class=var>c</em>.
+
+The only way to meet both of these requirements is to have
+
+<em class=var>c = 0</em>.
+
+Therefore, <em class=var>(limit n->infinity)f(n)/g(n) = 0</em>.
+
+<br><br>
+
+Next, suppose that <em class=var>(limit n->infinity)f(n)/g(n) = 0</em>,
+
+<em class=var>(limit n->infinity)f(n)/g(n) <= c</em>,
+
+and so
+
+<em class=var>f(n) = O(g(n))</em>.
+
+Further,
+
+<em class=var>(limit n->infinity)g(n)/f(n)</em>,
+
+either does not exist or is infinity.
+
+Therefore, <em class=var>f(n) != Omega(g(n))</em>.  Consequently.
+
+<em class=var>f(n) = o(g(n))</em>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

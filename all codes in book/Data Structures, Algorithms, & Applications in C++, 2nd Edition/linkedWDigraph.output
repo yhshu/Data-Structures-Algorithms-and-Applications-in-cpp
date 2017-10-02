@@ -1,0 +1,29 @@
+Number of Vertices = 4
+Number of Edges = 0
+
+The graph is
+Number of Vertices = 4
+Number of Edges = 5
+4 4   3 2   
+1 3   4 1   
+
+2 5   
+
+
+The graph after deleting (2,1) is
+Number of Vertices = 4
+Number of Edges = 4
+4 4   3 2   
+4 1   
+
+2 5   
+
+existsEdge(3,1) = 0
+existsEdge(1,3) = 1
+inDegree(3) = 1
+outDegree(1) = 2
+Number of Vertices = 4
+Number of Edges = 4
+
+Edges incident to vertex 4
+2 5

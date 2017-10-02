@@ -1,0 +1,128 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 15, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+
+
+Since we are only interested in the existence of a path,
+
+we can change <em class=var>c(i,j,k)</em> to be a
+
+function with range {0,1}.
+
+<em class=var>c(i,j,k)</em> is 0 iff there is
+
+no path from vertex <em class=var>i</em> to vertex <em class=var>j</em>
+
+that has no intermediate vertex larger than
+
+<em class=var>k</em>.
+
+<br><br>
+
+With this change, we see that
+
+<em class=var>c(i,j,0)</em> is 0 iff <em class=var>i != j</em> and
+
+there is
+
+no edge from vertex <em class=var>i</em> to vertex <em class=var>j</em>.
+
+Further, the recurrence for
+
+<em class=var>c(i,j,k)</em> can be rewritten
+
+using logical operators.  The new equation is<br>
+
+<em class=var>c(i,j,k) = c(i,j,k-1) || (c(i,k,k-1) && c(k,j,k-1), k &gt; 0</em>
+
+<br><br>
+
+These changes together with the observation that we
+
+need no longer compute <code class=var>kay</code>
+
+result in the transitive closure code given below and in
+
+the files <code class=code>ad1.h</code> and <code class=code>closure.*</code>.
+
+The complexity of the code is seen to be the same as that
+
+of Program 15.9; that is Theta(<em class=var>n<sup>3</sup></em>).
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void AdjacencyDigraph::
+
+     ReflexiveTransitiveClosure(int **RTC)
+
+{// Return, in RTC, the relexive transitive closure
+
+ // matrix of the digraph.  Modified version of the
+
+ // dynamic programming code of Program 15.9.
+
+   // copy adjacency matrix into RTC
+
+   for (int i = 1; i &lt;= n; i++)
+
+      for (int j = 1; j &lt;= n; j++)
+
+         RTC[i][j] = a[i][j];
+
+
+
+   // set diagonal entries to 1
+
+   for (int i = 1; i &lt;= n; i++)
+
+      RTC[i][i] = 1;
+
+
+
+   // 3 nested loops of Program 5.9 using
+
+   // logical operators
+
+   for (int k = 1; k &lt;= n; k++)
+
+      for (int i = 1; i &lt;= n; i++)
+
+         for (int j = 1; j &lt;= n; j++)
+
+            RTC[i][j] = RTC[i][j] || (RTC[i][k] &amp;&amp; RTC[k][j]);
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

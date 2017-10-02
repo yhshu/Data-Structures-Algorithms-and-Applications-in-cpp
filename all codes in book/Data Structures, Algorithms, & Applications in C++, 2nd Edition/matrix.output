@@ -1,0 +1,38 @@
+Initialized x(i,j) = 2*i + j
+x(3,1) = 7
+x is
+3  4  
+5  6  
+7  8  
+
+Assigned y = x
+y is
+3  4  
+5  6  
+7  8  
+
+x incremented by 2 is
+5  6  
+7  8  
+9  10  
+
+y + x is
+8  10  
+12  14  
+16  18  
+
+-(y + x) is
+-8  -10  
+-12  -14  
+-16  -18  
+
+Initialized w(i,j) = i + j
+w is
+2  3  4  
+3  4  5  
+
+y * w is
+18  25  32  
+28  39  50  
+38  53  68  
+

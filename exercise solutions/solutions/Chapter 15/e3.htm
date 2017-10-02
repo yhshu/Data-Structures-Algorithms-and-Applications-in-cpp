@@ -1,0 +1,220 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 15, Exercise 3<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Equation 15.1 becomes
+
+<em class=var>f(n,y) = 0</em> for
+
+<em class=var>0 <= y < w<sub>n</sub></em>,
+
+<em class=var>f(n,y) = p<sub>n</sub></em> for
+
+<em class=var>w<sub>n</sub> <= y < 2w<sub>n</sub></em>,
+
+and
+
+<em class=var>f(n,y) = 2p<sub>n</sub></em> for
+
+<em class=var>y >= 2w<sub>n</sub></em>.
+
+<br><br>
+
+Equation 15.2 becomes
+
+<em class=var>f(i,y) = f(i+1,y)</em> for
+
+<em class=var>0 <= y < w<sub>i</sub></em>,
+
+<em class=var>f(i,y) = max{f(i+1,y), f(i+1,y-w<sub>i</sub>) + p<sub>i</sub>}</em> for
+
+<em class=var>w<sub>i</sub> <= y < 2w<sub>i</sub></em>,
+
+and
+
+<em class=var>f(i,y) = max{f(i+1,y), f(i+1,y-w<sub>i</sub>) + p<sub>i</sub>,
+
+f(i+1,y-2w<sub>i</sub>) + 2p<sub>i</sub>}</em> for
+
+<em class=var>y >= 2w<sub>i</sub></em>.
+
+<br><br>
+
+
+
+<dt> (b)
+
+<dd>
+
+The new program incorporates the changes made to Equations 15.1 and 15.2
+
+into Program 15.2.  The traceback code now needs an additional parameter
+
+<code class=code>p</code> which is the profit array.
+
+The code is given below and in the file
+
+<code class=code>dknap2.cpp</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void Knapsack(T p[], int w[], int c, int n, T** f)
+
+{// Compute f[i][y] for all i and y.
+
+
+
+   // initialize f[n][]
+
+   int yMax = min(w[n]-1,c);
+
+   for (int y = 0; y &lt;= yMax; y++)
+
+      f[n][y] = 0;
+
+   yMax = min(2*w[n]-1,c);
+
+   for (int y = w[n]; y &lt;= yMax; y++)
+
+      f[n][y] = p[n];
+
+   for (int y = 2*w[n]; y &lt;= c; y++)
+
+      f[n][y] = 2*p[n];
+
+   
+
+   // compute remaining f's
+
+   for (int i = n - 1; i &gt; 1; i--) {
+
+      yMax = min(w[i]-1,c);
+
+      for (int y = 0; y &lt;= yMax; y++)
+
+         f[i][y] = f[i+1][y];
+
+      for (int y = w[i]; y &lt;= c; y++)
+
+         f[i][y] = max(f[i+1][y],
+
+                       f[i+1][y-w[i]] + p[i]);
+
+      for (int y = 2*w[i]; y &lt;= c; y++)
+
+         f[i][y] = max(f[i][y],
+
+                       f[i+1][y-2*w[i]] + 2*p[i]);
+
+      }
+
+   f[1][c] = f[2][c];
+
+   if (c &gt;= w[1])
+
+      f[1][c] = max(f[1][c], f[2][c-w[1]] + p[1]);
+
+   if (c &gt;= 2*w[1])
+
+      f[1][c] = max(f[1][c], f[2][c-2*w[1]] + 2*p[1]);
+
+}
+
+
+
+template&lt;class T&gt;
+
+void Traceback(T **f, T p[], int w[], int c, int n, int x[])
+
+{// Compute x for optimal filling.
+
+   for (int i = 1; i &lt; n; i++)
+
+      if (f[i][c] == f[i+1][c]) x[i] = 0;
+
+      else if (f[i][c] == f[i+1][c-w[i]] + p[i]) {
+
+              x[i] = 1;
+
+              c -= w[i];}
+
+           else {
+
+              x[i] = 2;
+
+              c -= 2*w[i];}
+
+
+
+   // compute x[n]
+
+   if (c &lt; w[n]) x[n] = 0;
+
+   else if (c &lt; 2*w[n]) x[n] = 1;
+
+        else x[n] = 2;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+It takes Theta(<code class=code>c</code>) time to compute each
+
+<code class=code>f[i][*]</code>, <code class=code>1 < i <= n</code>.
+
+Therefore, the complexity of <code class=code>Knapsack</code>
+
+is Theta(<code class=code>nc</code>).
+
+<br><br>
+
+The traceback function computes each <code class=code>x[i]</code>
+
+in Theta(1) time.  Therefore its complexity is Theta(<code class=code>n</code>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

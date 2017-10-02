@@ -1,0 +1,106 @@
+Enter the number of vertices in the graph
+Enter the number of edges in the graph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+The input graph is
+Vertex 1 = 2  
+Vertex 2 = 3  5  1  
+Vertex 3 = 2  
+Vertex 4 = 5  
+Vertex 5 = 4  2  
+Vertex 6 = 8  7  
+Vertex 7 = 9  6  
+Vertex 8 = 9  6  
+Vertex 9 = 7  8  
+The transitive closure is
+1 1 1 1 1 0 0 0 0 
+1 1 1 1 1 0 0 0 0 
+1 1 1 1 1 0 0 0 0 
+1 1 1 1 1 0 0 0 0 
+1 1 1 1 1 0 0 0 0 
+0 0 0 0 0 1 1 1 1 
+0 0 0 0 0 1 1 1 1 
+0 0 0 0 0 1 1 1 1 
+0 0 0 0 0 1 1 1 1 
+Enter the number of vertices in the graph
+Enter the number of edges in the graph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+The input graph is
+Vertex 1 = 7  5  4  
+Vertex 2 = 9  3  
+Vertex 3 = 8  2  
+Vertex 4 = 6  1  
+Vertex 5 = 1  
+Vertex 6 = 4  
+Vertex 7 = 1  
+Vertex 8 = 3  
+Vertex 9 = 2  
+Vertex 10 = 
+Vertex 11 = 
+The transitive closure is
+1 0 0 1 1 1 1 0 0 0 0 
+0 1 1 0 0 0 0 1 1 0 0 
+0 1 1 0 0 0 0 1 1 0 0 
+1 0 0 1 1 1 1 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 
+0 1 1 0 0 0 0 1 1 0 0 
+0 1 1 0 0 0 0 1 1 0 0 
+0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 
+Enter the number of vertices in the graph
+Enter the number of edges in the graph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+Enter edge 11
+The input graph is
+Vertex 1 = 4  
+Vertex 2 = 12  11  
+Vertex 3 = 11  
+Vertex 4 = 5  1  
+Vertex 5 = 7  4  
+Vertex 6 = 7  
+Vertex 7 = 6  5  
+Vertex 8 = 9  
+Vertex 9 = 14  8  
+Vertex 10 = 11  
+Vertex 11 = 10  3  2  
+Vertex 12 = 13  2  
+Vertex 13 = 12  
+Vertex 14 = 9  
+The transitive closure is
+1 0 0 1 1 1 1 0 0 0 0 0 0 0 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+1 0 0 1 1 1 1 0 0 0 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 0 0 0 
+1 0 0 1 1 1 1 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 1 1 0 0 0 0 1 
+0 0 0 0 0 0 0 1 1 0 0 0 0 1 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+0 1 1 0 0 0 0 0 0 1 1 1 1 0 
+0 0 0 0 0 0 0 1 1 0 0 0 0 1 

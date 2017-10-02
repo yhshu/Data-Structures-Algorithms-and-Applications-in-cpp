@@ -1,0 +1,6 @@
+The given inorder list is 3  5  1  0  2  6  4  
+and the given preorder list is 0  1  3  5  2  4  6  
+The constructed mapping array is 3  2  4  0  6  1  5  
+Construction of binary tree is complete
+Inorder sequence is 3 5 1 0 2 6 4 
+Preorder sequence is 0 1 3 5 2 4 6 

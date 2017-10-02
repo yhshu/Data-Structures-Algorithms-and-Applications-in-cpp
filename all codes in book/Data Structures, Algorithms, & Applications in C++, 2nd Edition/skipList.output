@@ -1,0 +1,8 @@
+The dictionary is 1 5  2 10  6 30  8 40  10 50  12 60  
+Its size is 6
+Element associated with 1 is 5
+Element associated with 6 is 30
+Element associated with 12 is 60
+Deleted 1, 2, 6, 12
+The dictionary is 8 40  10 50  
+Its size is 2

@@ -1,0 +1,150 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 1, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+
+
+We may represent a subset of <code class=code>n</code> elements
+
+by the one-dimensional array <code class=code>x[1:n]</code>,
+
+where
+
+<code class=code>x[j]</code> is one if element
+
+<code class=code>j</code> is included in the subset and
+
+<code class=code>x[j]</code> is zero if element
+
+<code class=code>j</code> is not included in the subset.
+
+<br><br>
+
+To output the subsets recursively, we define a function
+
+<code class=var>Subsets(int i)</code>
+
+which outputs all
+
+<code class=code>x[1:n]</code> with preset values for
+
+<code class=code>x[1:i-1]</code> and
+
+<code class=code>x[i:n]</code> taking on all possible 0 and 1
+
+values.  The invocation
+
+<code class=code>Subsets(1)</code>
+
+will output all subsets.
+
+<br><br>
+
+The code is
+
+given below and in the files <code class=code>rsubset.*</code>.
+
+The code assumes that
+
+<code class=code>n</code> and
+
+<code class=code>x</code> are global variables.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Subsets(int i)
+
+{// Output all subsets of x[1:n].
+
+ // Only x[i:n] to be changed.
+
+   if (i == n) {// x[n] can be 0 or 1
+
+                // output subset without element n
+
+                x[n] = 0;
+
+                for (int j = 1; j &lt;= n; j++)
+
+                   cout &lt;&lt; x[j] &lt;&lt; " ";
+
+                cout &lt;&lt; endl;
+
+                
+
+                // output subset with element n
+
+                x[n] = 1;
+
+                for (int j = 1; j &lt;= n; j++)
+
+                   cout &lt;&lt; x[j] &lt;&lt; " ";
+
+                cout &lt;&lt; endl;
+
+                return;
+
+                }
+
+                
+
+    // leave element i out
+
+    x[i] = 0;
+
+    // generate all subsets with i out
+
+    Subsets(i+1);
+
+                
+
+    // put element i into subset
+
+    x[i] = 1;
+
+    // generate all subsets with i included
+
+    Subsets(i+1);
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+<br><br>
+
+The above code may be modified if we are to ouptut element identifiers
+
+for the selected elements rather than 0/1 vectors.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

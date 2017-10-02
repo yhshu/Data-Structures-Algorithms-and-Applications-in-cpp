@@ -1,0 +1,10 @@
+Type an expression
+The pairs of matching parentheses in
+(d+(a+b)*c*(d+e)-f))(()
+are
+3 7
+11 15
+0 18
+No match for right parenthesis at 19
+21 22
+No match for left parenthesis at 20

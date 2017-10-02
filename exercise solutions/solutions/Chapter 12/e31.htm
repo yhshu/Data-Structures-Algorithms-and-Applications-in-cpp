@@ -1,0 +1,266 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 31<BR>
+
+<BR>
+
+</H1>
+
+The solution is similar to that for Exercise 29.<br><br>
+
+
+
+To input a weighted digraph we first destroy the old digraph stored in the 
+
+object <code class=code>*this</code>.
+
+Next, we input the number of vertices and edges in the new graph;
+
+verify that these numbers are legitimate (i.e., neither is less
+
+than zero and the number of edges does not exceed the number of
+
+edges in a complete graph with the given number of vertices);
+
+allocate an array
+
+<code class=code>h</code> of the needed size; and finally read in the
+
+edges one by one.  Each edge can be added to the data structure
+
+being constructed using the function
+
+<code class=code>Add</code>.
+
+Recall that
+
+<code class=code>Add</code> throws an exception when an attempt is
+
+made to add an edge that is already in the graph.  Therefore,
+
+we need to not check for duplicate edges in the code we are to write.
+
+<br><br>
+
+We define two public member functions <code class=code>Input</code>
+
+as shown below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Input() {Input(cin);}
+
+
+
+template &lt;class T&gt;
+
+void LinkedWDigraph&lt;T&gt;::Input(istream&amp; in)
+
+{// Input the adjacency lists.
+
+   // first delete the old digraph
+
+   delete [] h;
+
+
+
+   // input new size and create h
+
+   cout &lt;&lt; "Enter the number of vertices in the digraph" &lt;&lt; endl;
+
+   cin &gt;&gt; n;
+
+   if (n &lt; 0) throw BadInput();
+
+   cout &lt;&lt; "Enter the number of edges in the digraph" &lt;&lt; endl;
+
+   int E;
+
+   cin &gt;&gt; E;
+
+   if (E &lt; 0 || E &gt; n*(n-1)) throw BadInput();
+
+   h = new Chain&lt;GraphNode&lt;T&gt; &gt; [n+1];
+
+
+
+   // now input the edges and add them to the adjacency
+
+   // lists
+
+   e = 0;
+
+   int u, v;  // edge end points
+
+   T w;       // edge weight
+
+   for (int i = 1; i &lt;= E; i++) {
+
+      cout &lt;&lt; "Enter edge " &lt;&lt; i &lt;&lt; endl;
+
+      in &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+
+      Add(u,v,w);
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The complexity of the above code to input a weighted digraph is
+
+O(<code class=code>ne</code>) because each time an edge is input,
+
+the function <code class=code>Exist</code> is invoked to determine whether
+
+the input edge is a duplicate.  The complexity can be reduced to
+
+O(<code class=code>n+e</code>) by deferring the check for
+
+duplicate edges until after all edges have been input.
+
+The strategy to check for duplicate edges is the same as that
+
+used in Exercise 28.  Please see the solution to Exercise 28
+
+for a description and implementation of the strategy.
+
+<br><br>
+
+The operator
+
+<code class=code>&gt;&gt;</code> may be overloaded using the code given below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+// overload &gt;&gt;
+
+template &lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, LinkedWDigraph&lt;T&gt;&amp; x)
+
+   {x.Input(in); return in;}
+
+<HR class = coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code to output a graph is already included in the file
+
+<code class=code>lbase.h</code>.  To make it easy to
+
+overload the operator <code class=code>&lt;&lt;</code>, we modify
+
+it as below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Output() const
+
+   {Output(cout);}
+
+
+
+template&lt;class T&gt;
+
+void LinkedBase&lt;T&gt;::Output(ostream&amp; out) const
+
+{// Output the adjacency lists.
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      out &lt;&lt; "Vertex " &lt;&lt; i &lt;&lt; " = ";
+
+      h[i].Output(out);
+
+      out &lt;&lt; endl;}
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The operator <code class=code>&gt;&gt;</code> may now be overloaded
+
+as below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, const LinkedBase&lt;T&gt;&amp; x)
+
+   {x.Output(out); return out;}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+The above codes, a test file, test data, and output can be found in the files
+
+<code class=code>lbase2.h</code>
+
+and
+
+<code class=code>lwdgph2.*</code>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

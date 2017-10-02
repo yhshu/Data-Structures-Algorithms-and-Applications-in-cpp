@@ -1,0 +1,15 @@
+Edges = 0
+The graph is
+100 3 2 4 
+3 100 5 1 
+2 5 100 100 
+4 1 100 100 
+The graph after deleting (1,2) is
+100 100 2 4 
+100 100 5 1 
+2 5 100 100 
+4 1 100 100 
+Exist(3,1) = 1
+Degree(3) = 2
+Degree(1) = 2
+Edges = 4

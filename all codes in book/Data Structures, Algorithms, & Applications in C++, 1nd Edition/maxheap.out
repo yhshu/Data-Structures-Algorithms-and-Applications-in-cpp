@@ -1,0 +1,14 @@
+Elements in array order
+The 3 elements are
+20 10 5 
+Insert of 15  succeeded
+An insert has failed
+Elements in array order
+The 4 elements are
+20 15 5 10 
+The max element is 20
+Deleted max element 20
+Deleted max element 15
+Elements in array order
+The 2 elements are
+10 5 

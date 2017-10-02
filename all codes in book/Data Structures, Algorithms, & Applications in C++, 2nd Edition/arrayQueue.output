@@ -1,0 +1,30 @@
+Queue rear is 1
+Queue rear is 2
+Queue rear is 3
+Queue rear is 4
+Queue should be 1234, front to rear
+The queue is not empty
+The queue size is 4
+Queue front is 1
+Popped front element
+Queue front is 2
+Popped front element
+Queue front is 3
+Popped front element
+Queue front is 4
+Popped front element
+Last pop failed 
+Invalid operation on empty queue
+Queue should be 34567, front to rear
+The queue is not empty
+The queue size is 5
+Queue front is 3
+Popped front element
+Queue front is 4
+Popped front element
+Queue front is 5
+Popped front element
+Queue front is 6
+Popped front element
+Queue front is 7
+Popped front element

@@ -1,0 +1,6 @@
+The given inorder list is 3  5  1  0  2  6  4  
+and the given postorder list is 5  3  1  6  4  2  0  
+The constructed mapping array is 1  0  2  5  6  4  3  
+Construction of binary tree is complete
+Inorder sequence is 3 5 1 0 2 6 4 
+Postorder sequence is 5 3 1 6 4 2 0 

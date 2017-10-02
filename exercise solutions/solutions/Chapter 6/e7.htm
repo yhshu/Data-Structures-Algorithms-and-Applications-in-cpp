@@ -1,0 +1,312 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 6, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+The extensions are
+
+<br>
+
+<dl compact>
+
+<dt> <em class=var>Size</em><font class=var>( )</font>:
+
+<dd>
+
+Return the number of elements in the queue;
+
+
+
+<dt> <em class=var>Input</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the input operator to input a queue from front to rear;
+
+
+
+<dt><em class=var>Output</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the output operator to output the queue elements from front to rear;
+
+</dl>
+
+<br>
+
+The new class definition is given below.  Changes from Program 6.4 are shown
+
+in
+
+<font color=red>red</font>.
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class LinkedQueue {
+
+   <font color=red>friend ostream&amp; operator&lt;&lt;
+
+          (ostream&amp;, const LinkedQueue&lt;T&gt;&amp;);
+
+   friend istream&amp; operator&gt;&gt;
+
+          (istream&amp;, LinkedQueue&lt;T&gt;&amp;);</font>
+
+   public:
+
+      LinkedQueue() {front = rear = 0;} // constructor
+
+      <font color=red>~LinkedQueue() {Erase();}</font>
+
+      bool IsEmpty() const
+
+           {return ((front) ? false : true);}
+
+      bool IsFull() const;
+
+      T First() const; // return first element
+
+      T Last() const; // return last element
+
+      LinkedQueue&lt;T&gt;&amp; Add(const T&amp; x);
+
+      LinkedQueue&lt;T&gt;&amp; Delete(T&amp; x);
+
+      <font color=red>int Size() const;</font>
+
+   private:
+
+      Node&lt;T&gt; *front;  // pointer to first node
+
+      Node&lt;T&gt; *rear;   // pointer to last node
+
+      <font color=red>void Erase();    // delete all nodes</font>
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br>
+
+The codes to delete all nodes from a queue,
+
+determine the queue size, and to overload the input
+
+and output operators are given below.
+
+The relevant files are
+
+<strong class=var>equeue.*</strong>.
+
+<br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void LinkedQueue&lt;T&gt;::Erase()
+
+{// Delete all nodes.
+
+   Node&lt;T&gt; *next;
+
+   while (front) {
+
+      next = front-&gt;link; 
+
+      delete front; 
+
+      front = next;
+
+      }
+
+}
+
+
+
+template&lt;class T&gt;
+
+int LinkedQueue&lt;T&gt;::Size() const
+
+{// Return number of elements in the queue.
+
+   int size = 0;
+
+   Node&lt;T&gt; *current = front;
+
+   while (current) {
+
+      size++;
+
+      current = current-&gt;link;
+
+      }
+
+   return size;
+
+}
+
+
+
+// overload &gt;&gt;
+
+template&lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, LinkedQueue&lt;T&gt;&amp; q)
+
+{// Input queue q from front to rear.
+
+   // first delete all elements from q
+
+   q.Erase();
+
+
+
+   // determine size of input queue
+
+   int size;
+
+   cout &lt;&lt; "Enter size of queue" &lt;&lt; endl;
+
+   in &gt;&gt; size;
+
+
+
+   if (!size) // no elements
+
+      return in;
+
+
+
+   // at least one element to input
+
+   // input the queue elements and link together
+
+   cout &lt;&lt; "Enter the elements from front to rear"
+
+        &lt;&lt; endl;
+
+
+
+   // get first element
+
+   q.rear = q.front = new Node&lt;T&gt;;
+
+   in &gt;&gt; q.front-&gt;data;
+
+
+
+   // get remaining elements
+
+   for (int i = 2; i &lt;= size ; i++) {
+
+      q.rear-&gt;link = new Node&lt;T&gt;;
+
+      q.rear = q.rear-&gt;link;
+
+      in &gt;&gt; q.rear-&gt;data;
+
+      }
+
+
+
+   // set pointer in rear node
+
+   q.rear-&gt;link = 0;
+
+
+
+   return in;
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out,
+
+                    const LinkedQueue&lt;T&gt;&amp; q)
+
+{// Output the queue q from front to rear
+
+
+
+   // output queue size
+
+   int size = q.Size();
+
+   out &lt;&lt; "The queue has " &lt;&lt; size
+
+       &lt;&lt; " element(s)" &lt;&lt; endl;
+
+
+
+   // output queue elements
+
+   out &lt;&lt; "The element(s) from front to rear are"
+
+       &lt;&lt; endl;
+
+   Node&lt;T&gt; *current = q.front;
+
+   for (int i = 1; i &lt;= size ; i++) {
+
+      out &lt;&lt; current-&gt;data &lt;&lt; ' ';
+
+      current = current-&gt;link;
+
+      }
+
+   out &lt;&lt; endl;
+
+
+
+   return out;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

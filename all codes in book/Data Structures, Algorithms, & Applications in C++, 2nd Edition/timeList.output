@@ -1,0 +1,16 @@
+Best-case times in progress
+50000 inserts took 3.95 ms when started with capacity 10
+50000 gets took 1.0421 ms
+50000 indexOfs took 2282 ms
+Worst-case indexOf took 0.0906 ms
+50000 erases took 2.0062 ms
+50000 inserts took 2.0906 ms when started with capacity 50000
+Average-case times in progress
+5000000 randoms took 125 ms
+50000 inserts took 1453 ms when started with capacity 10
+50000 erases took 1454 ms
+50000 inserts took 1453 ms when started with capacity 50000
+Worst-case times in progress
+50000 inserts took 2500 ms when started with capacity 10
+50000 erases took 2453 ms
+50000 inserts took 2453 ms when started with capacity 50000

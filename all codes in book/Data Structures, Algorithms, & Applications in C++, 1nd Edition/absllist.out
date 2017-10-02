@@ -1,0 +1,8 @@
+Length = 0
+IsEmpty = 1
+List is 2  6  
+IsEmpty = 0
+First element is 2
+Length = 2
+Deleted element is 2
+List is 6  

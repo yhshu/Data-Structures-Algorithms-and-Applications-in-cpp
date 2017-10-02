@@ -1,0 +1,30 @@
+One tree in postorder is
+7  9  1  8  11  
+Other tree in postorder is
+4  2  6  9  
+After melding, the tree in postorder is
+1  2  6  8  4  9  7  9  11  
+After deleting four elements, the tree is
+2  4  6  1  7  
+The deleted elements, in order, are
+11  9  9  8
+Leftist tree in postorder
+2  4  6  1  7  10  5  20  
+Leftist tree in postorder
+2  4  6  1  7  10  5  15  20  2  30  
+The max element is 30
+Deleted max element 30
+Leftist tree in postorder
+5  2  15  2  4  6  1  7  10  20  
+Deleted max element 20
+Leftist tree in postorder
+2  4  6  1  7  2  10  5  15  
+Deleted 15
+Deleted 10
+Deleted 7
+Deleted 6
+Deleted 5
+Deleted 4
+Deleted 2
+Deleted 2
+Deleted 1

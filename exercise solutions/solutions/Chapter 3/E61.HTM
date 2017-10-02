@@ -1,0 +1,60 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 61<BR>
+
+<BR>
+
+</H1>
+
+The code is given below and in the files
+
+<code class=code>indlist.*</code>.
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+int IndirectList&lt;T&gt;::Search(const T&amp; x) const
+
+{// Locate x.  Return position of x if found.
+
+ // Return 0 if x not in the chain.
+
+   for (int i = 0; i &lt; length; i++)
+
+      if (*table[i] == x) return ++i;
+
+   return 0;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,150 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 37<BR>
+
+<BR>
+
+</H1>
+
+
+
+The code is very similar to the case when the iterators were
+
+members of <code class=code>AdjacencyWDigraph</code>.  The major
+
+difference is that we no longer need an array of current
+
+positions.  The user is expected to create an iterator for
+
+each vertex whose adjacency row he/she wishes to traverse.
+
+The new implementation is more general than the one in the text
+
+because it permits the user to assign several iterators to a single
+
+row of the adjacency matrix.
+
+<br><br>
+
+The codes is given below and in the file
+
+<code class=code>adjiter.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class AdjacencyIterator {
+
+   public:
+
+      int Begin(AdjacencyWDigraph&lt;T&gt;&amp; G, int i);
+
+      int NextVertex();
+
+   private:
+
+      int row;  // row of array to use
+
+      int col;  // last column examined
+
+      AdjacencyWDigraph&lt;T&gt; *H;    // pointer to graph 
+
+};
+
+
+
+template&lt;class T&gt;
+
+int AdjacencyIterator&lt;T&gt;::Begin(AdjacencyWDigraph&lt;T&gt;&amp; G, int i)
+
+{// Return first vertex adjacent to vertex i.
+
+   if (i &lt; 1 || i &gt; G.n) throw OutOfBounds();
+
+
+
+   // save vertex and pointer to G
+
+   // for later use by NextVertex
+
+   row = i;
+
+   H = &amp;G;
+
+
+
+   // look for first adjacent vertex
+
+   for (int j = 1; j &lt;= G.n; j++)
+
+      if (G.a[i][j] != G.NoEdge) {// j is first one
+
+         col = j;
+
+         return j;}
+
+
+
+   col = G.n; // no adjacent vertex
+
+   return 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+int AdjacencyIterator&lt;T&gt;::NextVertex()
+
+{// Return next vertex adjacent to vertex row.
+
+
+
+   // find next adjacent vertex
+
+   for (int j = col + 1; j &lt;= H-&gt;n; j++)
+
+      if (H-&gt;a[row][j] != H-&gt;NoEdge) {// j is next vertex
+
+         col = j;
+
+         return j;}
+
+
+
+   col = H-&gt;n; // no next vertex
+
+   return 0;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

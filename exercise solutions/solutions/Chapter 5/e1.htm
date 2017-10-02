@@ -1,0 +1,220 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 5, Exercise 2<BR>
+
+<BR>
+
+</H1>
+
+The extensions are
+
+<br>
+
+<dl compact>
+
+<dt> <em class=var>Size</em><font class=var>( )</font>:
+
+<dd>
+
+Return the number of elements in the stack;
+
+
+
+<dt> <em class=var>Input</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the input operator to input a stack from top to bottom;
+
+
+
+<dt><em class=var>Output</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the output operator to output the stack elements from top to bottom;
+
+</dl>
+
+<br>
+
+The new class definition is given below.  Changes from Program 5.2 are shown
+
+in
+
+<font color=red>red</font>.
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class Stack {
+
+   <font color=red>friend ostream&amp; operator&lt;&lt;
+
+          (ostream&amp;, const Stack&lt;T&gt;&amp;);
+
+   friend istream&amp; operator&gt;&gt;
+
+          (istream&amp;, Stack&lt;T&gt;&amp;);</font>
+
+   public:
+
+      Stack(int MaxStackSize = 10);
+
+      ~Stack() {delete [] stack;}
+
+      bool IsEmpty() const {return top == -1;}
+
+      bool IsFull() const {return top == MaxTop;}
+
+      T Top() const;
+
+      Stack&lt;T&gt;&amp; Add(const T&amp; x);
+
+      Stack&lt;T&gt;&amp; Delete(T&amp; x);
+
+      <font color=red>int Size() {return top + 1;}</font>
+
+   private:
+
+      int top;    // current top of stack
+
+      int MaxTop; // max value for top
+
+      T *stack;   // element array
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br>
+
+The codes to overload the input and output operators are given below.
+
+The relevant files are
+
+<strong class=var>astack.*</strong>.
+
+<br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+// overload &gt;&gt;
+
+template&lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, Stack&lt;T&gt;&amp; s)
+
+{// Input stack s from top to bottom.
+
+   // input and verify stack size
+
+   int size;
+
+   cout &lt;&lt; "Enter size of stack" &lt;&lt; endl;
+
+   in &gt;&gt; size;
+
+   if (size &gt; s.MaxTop + 1) throw NoMem(); // fail
+
+
+
+   s.top = size - 1;
+
+
+
+   // input the stack elements and store in array
+
+   cout &lt;&lt; "Enter the elements from top to bottom"
+
+        &lt;&lt; endl;
+
+   for (int i = s.top; i &gt;= 0 ; i--)
+
+      in &gt;&gt; s.stack[i];
+
+
+
+   return in;
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out,
+
+                    const Stack&lt;T&gt;&amp; s)
+
+{// Output the stack s from top to bottom
+
+
+
+   // output stack size
+
+   out &lt;&lt; "The stack has " &lt;&lt; (s.top + 1)
+
+       &lt;&lt; " element(s)" &lt;&lt; endl;
+
+
+
+   // output stack elements
+
+   out &lt;&lt; "The element(s) from top to bottom are"
+
+       &lt;&lt; endl;
+
+   for (int i = s.top; i &gt;= 0 ; i--)
+
+      out &lt;&lt; s.stack[i] &lt;&lt; ' ';
+
+   out &lt;&lt; endl;
+
+
+
+   return out;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

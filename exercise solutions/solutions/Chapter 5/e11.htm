@@ -1,0 +1,70 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 5, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+First observe that at most
+
+<strong class=var>n</strong> - 1 cars can get on to the stacks
+
+because at least one car must go directly from the input track to the
+
+output track.  Therefore, the size each track need be at most
+
+<strong class=var>n</strong> - 1.
+
+The first track can get this many cars.  This happens when the
+
+input permutation is [1, 2, 3, ..., <em class=var>n</em>].
+
+With this permutation, cars
+
+2, 3, ..., and <em class=var>n</em> get added to stack 1.
+
+Whenever a car is added to stack 2, stack 1 contains one or more cars.
+
+So stack 2 can get at most
+
+<strong class=var>n</strong> - 2 cars.  It gets this many when the
+
+input permutation is [1, 3, 4, ..., <em class=var>n</em>, 2].
+
+In general the <em class=var>i</em>th stack can get at most
+
+<strong class=var>n</strong> - <strong class=var>i</em> cars and so its
+
+size must be at least this much.
+
+The input permutation
+
+[1, <strong class=var>i</em> + 1, <strong class=var>i</em> + 2, ..., <em class=var>n</em>, <em class=var>i</em>,
+
+<em class=var>i</em> - 1, ..., 2] represents the worst case for stack
+
+<em class=var>i</em>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,14 @@
+Heap size is 3
+Elements in array order are
+20  10  5  
+Heap size is 5
+Elements in array order are
+30  20  5  10  15  
+The max element is 30
+The max element is 20
+The max element is 15
+Heap size is 2
+Elements in array order are
+10  5  
+Elements in array order are
+9  8  7  4  5  6  3  2  1  

@@ -1,0 +1,72 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 31<BR>
+
+<BR>
+
+</H1>
+
+
+
+When the B-tree order is <em class=var>2m</em>, the worst case
+
+height is <em class=var>log <sub>m</sub> ((n+1)/2) + 1</em>.
+
+Since the retrieval of each node requires 2 disk accesses,
+
+the maximum number of disk accesses required to preform a search
+
+is <em class=var>2 log <sub>m</sub> ((n+1)/2) + 2</em>.
+
+<br><br>
+
+When the B-tree order is <em class=var>m</em>, the worst case
+
+height is <em class=var>log <sub>d</sub> ((n+1)/2) + 1</em>,
+
+where <em class=var>d = ceil(m/2)</em>.
+
+Since the retrieval of each node requires only 1 disk access,
+
+the maximum number of disk accesses required to preform a search
+
+is <em class=var>log <sub>d</sub> ((n+1)/2) + 1 =
+
+log <sub>m</sub> ((n+1)/2) * (log m / log d) + 1</em>.
+
+<br><br>
+
+
+
+Since <em class=var>(log m / log d) &lt;= 2</em> for <em class=var>m</em>
+
+&gt;= 3, as far as worst-case search complexity is concerned,
+
+we are better off
+
+using a B-tree of order <em class=var>m</em> rather than one
+
+of order <em class=var>2m</em>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

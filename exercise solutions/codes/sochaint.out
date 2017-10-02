@@ -1,0 +1,10 @@
+The chain is 2  4  6  
+Its length is 3
+Deleted 2
+4  6  
+1  4  
+Found 8
+1  4  7  8  
+Attempt to insert duplicate element
+1  4  7  8  
+1  4  7  8  10  

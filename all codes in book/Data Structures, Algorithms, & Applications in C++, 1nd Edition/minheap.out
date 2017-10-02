@@ -1,0 +1,14 @@
+Elements in array order
+The 3 elements are
+5 20 10 
+Insert of 15  succeeded
+An insert has failed
+Elements in array order
+The 4 elements are
+5 15 10 20 
+The min element is 5
+Deleted min element 5
+Deleted min element 10
+Elements in array order
+The 2 elements are
+15 20 

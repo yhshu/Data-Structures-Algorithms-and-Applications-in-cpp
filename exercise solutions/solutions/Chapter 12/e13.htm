@@ -1,0 +1,166 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+The development parallels that used in Secion 4.3.4
+
+for the storage of a lower/upper triangular matrix in
+
+a one-dimensional array.  We will be storing only those
+
+elements of the adjacency matrix that are below the diagonal.
+
+The number of elements below the diagonal is 1 (from row 2) + 2 (from row 3)
+
++ 3 (from row 4) + ... + (<em class=var>n-1</em>) (from row
+
+<em class=var>n</em>) = <em class=var>n(n-1)/2</em>.
+
+Therefore a one dimensional array <code class=code>a[0:n(n-1)/2-1]</code>
+
+suffices.
+
+<br><br>
+
+The elements below the diagonal will be stroed in row-major order.
+
+If <em class=var>i &gt; j</em>, then <em class=var>A(i,j)</em>
+
+will have 1 (from row 2) + 2 (from row 3) + ... +
+
+<em class=var>i-2</em> (from row <em class=var>i-1</em>) +
+
+<em class=var>j-1</em> (from row <em class=var>i</em>) elements preceding
+
+it in row-major order.  Therefore, <em class=var>A(i,j)</em>
+
+is stored in <code class=code>a[(i-2)*(i-1)/2 + j - 1]</code>.
+
+<br><br>
+
+The preceding development leads to the code given below.
+
+This code also appears
+
+in the files <code class=code>cgraph.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Store(int *a, int n, int i, int j, int v)
+
+{// Set A(i,j) equal to v.  v must be 0 or 1.
+
+ // Only lower triangle of A excluding diagonal
+
+ // is stored in a. A is n x n.
+
+ // a is [0:n(n-1)/2-1].
+
+ // Throw OutOfBounds exception if i or j invalid.
+
+ // Throw BadInput exception if is not 0 or 1.
+
+ // Throw MustBeZero if v not zero but should be.
+
+   if (i &lt; 1 || i &gt; n || j &lt; 1 || j &gt; n)
+
+      throw OutOfBounds();
+
+
+
+   if (v &lt; 0 || v &gt; 1) throw BadInput();
+
+
+
+   // convert to lower triangle entry
+
+   // if necessary
+
+   if (i &lt; j) // upper triangle
+
+      Swap(i,j);
+
+   if (i &gt; j) // below diagonal
+
+      a[(i-2)*(i-1)/2 + j - 1] = v;
+
+   else // diagonal
+
+      if (v) throw MustBeZero();
+
+}
+
+
+
+int Retrieve(int * a, int n, int i, int j)
+
+{// Return value of A(i,j).
+
+ // Throw OutOfBounds exception if i or j invalid.
+
+   if (i &lt; 1 || i &gt; n || j &lt; 1 || j &gt; n)
+
+      throw OutOfBounds();
+
+
+
+   // convert to lower triangle entry
+
+   // if necessary
+
+   if (i &lt; j) // upper triangle
+
+      Swap(i,j);
+
+   if (i &gt; j) // below diagonal
+
+      return a[(i-2)*(i-1)/2 + j - 1];
+
+   else // diagonal
+
+      return 0;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

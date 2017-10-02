@@ -1,0 +1,109 @@
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+The input digraph is
+Vertex 1 = 2  
+Vertex 2 = 5  
+Vertex 3 = 2  
+Vertex 4 = 
+Vertex 5 = 4  
+Vertex 6 = 8  7  
+Vertex 7 = 
+Vertex 8 = 9  
+Vertex 9 = 7  
+The transitive closure is
+0 1 0 1 1 0 0 0 0 
+0 0 0 1 1 0 0 0 0 
+0 1 0 1 1 0 0 0 0 
+0 0 0 0 0 0 0 0 0 
+0 0 0 1 0 0 0 0 0 
+0 0 0 0 0 0 1 1 1 
+0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 1 0 1 
+0 0 0 0 0 0 1 0 0 
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+The input digraph is
+Vertex 1 = 7  5  4  
+Vertex 2 = 9  3  
+Vertex 3 = 
+Vertex 4 = 10  
+Vertex 5 = 
+Vertex 6 = 4  
+Vertex 7 = 
+Vertex 8 = 3  
+Vertex 9 = 
+Vertex 10 = 11  
+Vertex 11 = 1  
+The transitive closure is
+1 0 0 1 1 0 1 0 0 1 1 
+0 0 1 0 0 0 0 0 1 0 0 
+0 0 0 0 0 0 0 0 0 0 0 
+1 0 0 1 1 0 1 0 0 1 1 
+0 0 0 0 0 0 0 0 0 0 0 
+1 0 0 1 1 0 1 0 0 1 1 
+0 0 0 0 0 0 0 0 0 0 0 
+0 0 1 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 
+1 0 0 1 1 0 1 0 0 1 1 
+1 0 0 1 1 0 1 0 0 1 1 
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+Enter edge 11
+The input digraph is
+Vertex 1 = 4  
+Vertex 2 = 12  11  
+Vertex 3 = 
+Vertex 4 = 5  
+Vertex 5 = 7  
+Vertex 6 = 7  
+Vertex 7 = 
+Vertex 8 = 9  
+Vertex 9 = 14  
+Vertex 10 = 
+Vertex 11 = 10  3  
+Vertex 12 = 13  
+Vertex 13 = 
+Vertex 14 = 
+The transitive closure is
+0 0 0 1 1 0 1 0 0 0 0 0 0 0 
+0 0 1 0 0 0 0 0 0 1 1 1 1 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 1 0 1 0 0 0 0 0 0 0 
+0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+0 0 0 0 0 0 1 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 0 0 1 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 1 0 0 0 0 0 0 1 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 1 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 

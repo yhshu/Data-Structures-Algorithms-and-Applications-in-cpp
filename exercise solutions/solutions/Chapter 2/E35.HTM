@@ -1,0 +1,274 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 2, Exercise 35<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+<dl compact>
+
+<dt> (I2)
+
+<dd>
+
+First consider the case <em class=var>f<sub>i</sub>(n) = O(g<sub>i</sub>(n))</em>.
+
+From the definition of big oh, it follows that
+
+<em class=var>(sum from i=1 to k)f<sub>i</sub>(n) <= kc max{g<sub>i</sub>(n)}</em>
+
+<em class=var>= d max{g<sub>i</sub>(n)}</em>, where
+
+<em class=var>c</em> and
+
+<em class=var>d</em> are constants.
+
+Therefore,
+
+<em class=var>(sum from i=1 to k)f<sub>i</sub>(n) = O(max{g<sub>i</sub>})</em>.
+
+<br><br>
+
+Next consider the case <em class=var>f<sub>i</sub>(n) = Omega(g<sub>i</sub>(n))</em>.
+
+From the definition of omega, it follows that
+
+<em class=var>(sum from i=1 to k)f<sub>i</sub>(n) >= c max{g<sub>i</sub>(n)}</em>, where
+
+<em class=var>c</em> is a constant.
+
+Therefore,
+
+<em class=var>(sum from i=1 to k)f<sub>i</sub>(n) = Omega(max{g<sub>i</sub>})</em>.
+
+<br><br>
+
+These two asymptotic results imply that
+
+if <em class=var>f<sub>i</sub>(n) = Theta(g<sub>i</sub>(n))</em>, then
+
+<em class=var>(sum from i=1 to k)f<sub>i</sub>(n) = Theta(max{g<sub>i</sub>})</em>.
+
+<br><br>
+
+
+
+<dt> (I3)
+
+<dd>
+
+First consider the case <em class=var>f<sub>i</sub>(n) = O(g<sub>i</sub>(n))</em>.
+
+From the definition of big oh, it follows that
+
+<em class=var>(product from i=1 to k)f<sub>i</sub>(n) <= c (product from i=1 to k)g<sub>i</sub>(n)</em>,
+
+whee <em class=var>c</em> is a constant.
+
+Therefore,
+
+<em class=var>(product from i=1 to k)f<sub>i</sub>(n) =</em>
+
+<em class=var>O(product from i=1 to k)g<sub>i</sub>(n))</em>.
+
+<br><br>
+
+Next consider the case <em class=var>f<sub>i</sub>(n) = Omega(g<sub>i</sub>(n))</em>.
+
+From the definition of omega, it follows that
+
+<em class=var>(product from i=1 to k)f<sub>i</sub>(n) <=</em>
+
+<em class=var>c (product from i=1 to k)g<sub>i</sub>(n)</em>, where
+
+<em class=var>c</em> is a constant.
+
+Therefore,
+
+<em class=var>(product from i=1 to k)f<sub>i</sub>(n) =</em>
+
+<em class=var>Omega(product from i=1 to k)g<sub>i</sub>(n)</em>.
+
+<br><br>
+
+These two asymptotic results imply that
+
+if <em class=var>f<sub>i</sub>(n) = Theta(g<sub>i</sub>(n))</em>, then
+
+<em class=var>(product from i=1 to k)f<sub>i</sub>(n) =</em>
+
+<em class=var>Theta(product from i=1 to k)g<sub>i</sub>(n))</em>.
+
+<br><br>
+
+
+
+<dt> (I4)
+
+<dd>
+
+Since <em class=var>f<sub>1</sub>(n) = O(g<sub>1</sub>(n))</em>,
+
+<em class=var>f<sub>1</sub>(n) <= c<sub>1</sub>g<sub>1</sub>(n)</em>,
+
+for some constant <em class=var>c<sub>1</sub></em> and
+
+<em class=var>n >= n<sub>1</sub></em>.
+
+Also, since <em class=var>f<sub>2</sub>(n) = Theta(g<sub>2</sub>(n))</em>,
+
+<em class=var>f<sub>2</sub>(n) <= c<sub>2</sub>g<sub>2</sub>(n)</em>,
+
+for some constant <em class=var>c<sub>2</sub></em> and
+
+<em class=var>n >= n<sub>2</sub></em>.
+
+It follows that
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) <=</em>
+
+<em class=var>c<sub>3</sub>(g<sub>1</sub>(n) + g<sub>2</sub>(n))</em>,
+
+for <em class=var>c<sub>3</sub> = max{c<sub>1</sub>, c<sub>2</sub>}</em>
+
+and
+
+for <em class=var>n >= max{n<sub>1</sub>, n<sub>2</sub>}</em>.
+
+Therefore,
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) =</em>
+
+<em class=var>O(g<sub>1</sub>(n) + g<sub>2</sub>(n))</em>.
+
+<br><br>
+
+
+
+<dt> (I5)
+
+<dd>
+
+Since <em class=var>f<sub>1</sub>(n) = Theta(g<sub>1</sub>(n))</em>,
+
+<em class=var>f<sub>1</sub>(n) >= c<sub>1</sub>g<sub>1</sub>(n)</em>,
+
+for some constant <em class=var>c<sub>1</sub></em> and
+
+<em class=var>n >= n<sub>1</sub></em>.
+
+Also, since <em class=var>f<sub>2</sub>(n) = Omega(g<sub>2</sub>(n))</em>,
+
+<em class=var>f<sub>2</sub>(n) >= c<sub>2</sub>g<sub>2</sub>n)</em>,
+
+for some constant <em class=var>c<sub>2</sub></em> and
+
+<em class=var>n >= n<sub>2</sub></em>.
+
+It follows that
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) >=</em>
+
+<em class=var>c<sub>3</sub>(g<sub>1</sub>(n) + g<sub>2</sub>(n))</em>,
+
+for <em class=var>c<sub>3</sub> = min{c<sub>1</sub>, c<sub>2</sub>}</em>
+
+and
+
+for <em class=var>n >= max{n<sub>1</sub>, n<sub>2</sub>}</em>.
+
+Therefore,
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) =</em>
+
+<em class=var>Omega(g<sub>1</sub>(n) + g<sub>2</sub>(n))</em>.
+
+<br><br>
+
+
+
+<dt> (I6)
+
+<dd>
+
+Since <em class=var>f<sub>1</sub>(n) = O(g(n))</em>,
+
+<em class=var>f<sub>1</sub>(n) <= c<sub>1</sub>g(n)</em>,
+
+for some constant <em class=var>c<sub>1</sub></em> and
+
+<em class=var>n >= n<sub>1</sub></em>.
+
+Also, since <em class=var>f<sub>2</sub>(n) = Theta(g(n))</em>,
+
+<em class=var>f<sub>2</sub>(n) <= c<sub>2</sub>g(n)</em>,
+
+for some constant <em class=var>c<sub>2</sub></em> and
+
+<em class=var>n >= n<sub>2</sub></em>.
+
+It follows that
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) >=</em>
+
+<em class=var>(c<sub>1</sub> + c<sub>2</sub>)g(n)</em>
+
+for <em class=var>n >= max{n<sub>1</sub>, n<sub>2</sub>}</em>.
+
+Therefore,
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) =</em>
+
+<em class=var>O(g(n))</em>.
+
+<br><br>
+
+Further, since <em class=var>f<sub>2</sub>(n) = Theta(g(n))</em>,
+
+<em class=var>f<sub>2</sub>(n) = Omega(g(n))</em>.
+
+Therefore,
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) = Omega(g(n))</em>.
+
+Consequently,
+
+<em class=var>f<sub>1</sub>(n) + f<sub>2</sub>(n) = Theta(g(n))</em>.
+
+</dl>
+
+
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

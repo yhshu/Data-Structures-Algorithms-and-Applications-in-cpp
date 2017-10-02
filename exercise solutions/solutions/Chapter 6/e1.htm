@@ -1,0 +1,236 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 6, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+The extensions are
+
+<br>
+
+<dl compact>
+
+<dt> <em class=var>Size</em><font class=var>( )</font>:
+
+<dd>
+
+Return the number of elements in the queue;
+
+
+
+<dt> <em class=var>Input</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the input operator to input a queue from front to rear;
+
+
+
+<dt><em class=var>Output</em><font class=var>( )</font>:
+
+<dd>
+
+Overload the output operator to output the queue elements from front to rear;
+
+</dl>
+
+<br>
+
+The new class definition is given below.  Changes from Program 6.1 are shown
+
+in
+
+<font color=red>red</font>.
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class Queue {
+
+   <font color=red>friend ostream&amp; operator&lt;&lt;
+
+          (ostream&amp;, const Queue&lt;T&gt;&amp;);
+
+   friend istream&amp; operator&gt;&gt;
+
+          (istream&amp;, Queue&lt;T&gt;&amp;);</font>
+
+   public:
+
+      Queue(int MaxQueueSize = 10);
+
+      ~Queue() {delete [] queue;}
+
+      bool IsEmpty() const {return front == rear;}
+
+      bool IsFull() const {return (
+
+           ((rear + 1) % MaxSize == front) ? 1 : 0);}
+
+      T First() const; // return front element
+
+      T Last() const; // return last element
+
+      Queue&lt;T&gt;&amp; Add(const T&amp; x);
+
+      Queue&lt;T&gt;&amp; Delete(T&amp; x);
+
+      <font color=red>int Size() const
+
+          {return (MaxSize + rear - front) % MaxSize;}</font>
+
+   private:
+
+      int front;   // one counterclockwise from first
+
+      int rear;    // last element
+
+      int MaxSize; // size of array queue
+
+      T *queue;    // element array
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br>
+
+The codes to overload the input and output operators are given below.
+
+The relevant files are
+
+<strong class=var>aqueue.*</strong>.
+
+<br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+// overload &gt;&gt;
+
+template&lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, Queue&lt;T&gt;&amp; q)
+
+{// Input queue q from front to rear.
+
+   // input and verify queue size
+
+   int size;
+
+   cout &lt;&lt; "Enter size of queue" &lt;&lt; endl;
+
+   in &gt;&gt; size;
+
+   if (size &gt;= q.MaxSize) throw NoMem(); // fail
+
+
+
+   // we shall put the elements in queue[0:size-1]
+
+   q.front = q.MaxSize - 1;  // one counter clockwise
+
+   q.rear = size - 1;        // at last element
+
+
+
+   // input the queue elements and store in array
+
+   cout &lt;&lt; "Enter the elements from front to rear"
+
+        &lt;&lt; endl;
+
+   for (int i = 0; i &lt;= q.rear ; i++)
+
+      in &gt;&gt; q.queue[i];
+
+
+
+   return in;
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out,
+
+                    const Queue&lt;T&gt;&amp; q)
+
+{// Output the queue q from front to rear
+
+
+
+   // output queue size
+
+   int size = q.Size();
+
+   out &lt;&lt; "The queue has " &lt;&lt; size
+
+       &lt;&lt; " element(s)" &lt;&lt; endl;
+
+
+
+   // output queue elements
+
+   out &lt;&lt; "The element(s) from front to rear are"
+
+       &lt;&lt; endl;
+
+   int current = (q.front + 1) % q.MaxSize;
+
+   for (int i = 1; i &lt;= size ; i++) {
+
+      out &lt;&lt; q.queue[current] &lt;&lt; ' ';
+
+      current = (current + 1) % q.MaxSize;
+
+      }
+
+   out &lt;&lt; endl;
+
+
+
+   return out;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

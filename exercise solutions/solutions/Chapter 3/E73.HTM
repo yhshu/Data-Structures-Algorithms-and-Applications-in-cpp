@@ -1,0 +1,204 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 73<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The implementation varies depending on the relative cost
+
+of moving elements and changing pointers.  We shall make the
+
+assumption that the elements are long, and therefore it is undesirable
+
+to copy elements from one node into another.  Our sort code will
+
+change node pointers rather than move elements
+
+so as to obtain a sorted chain.  Since the time needed to change
+
+node pointers is
+
+independent of the size of an element, the run time of our
+
+sort code is also independent of element size.
+
+<br><br>
+
+The code to compute the ranks is
+
+very similar to Program 2.5.  The actual
+
+rearrangement is done by assigning the elements to bins
+
+according to their rank and then collecting the elements
+
+from the bins in rank order.
+
+The code is given below and in the files
+
+<code class=code>schain6.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+SimChain&lt;T&gt;&amp; SimChain&lt;T&gt;::RankSort()
+
+{// Sort *this using the rank sort method.
+
+
+
+   if (first == -1) return *this;  // empty chain
+
+
+
+   int n = Length();
+
+
+
+   // r[i] will be rank of element i+1
+
+   int *r = new int[n];
+
+   for (int i = 0; i &lt; n; i++)
+
+      r[i] = 0;  // initialize
+
+
+
+   // compute ranks
+
+   // compare all pairs of elements
+
+   int c = first;
+
+   for (int i = 0; i &lt; n; i++) {
+
+      // S.node[c].data is element i+1
+
+      int d = first;
+
+      for (int j = 0; j &lt; i; j++) {
+
+         // S.node[d].data is element j+1
+
+         if (S.node[d].data &lt;= S.node[c].data) r[i]++;
+
+         else r[j]++;
+
+         d = S.node[d].link;
+
+         }
+
+      c = S.node[c].link;
+
+      }
+
+
+
+   // distribute to bins by rank
+
+   int *bin = new int [n];
+
+   c = first;
+
+   for (int i = 0; i &lt; n; i++) {
+
+      bin[r[i]] = c;
+
+      c = S.node[c].link;
+
+      }
+
+
+
+   // collect from bins
+
+   first = bin[0];
+
+   int last = first;  // last node on chain
+
+   for (int i = 1; i &lt; n; i++)
+
+      last = S.node[last].link = bin[i];
+
+   S.node[last].link = -1;
+
+   
+
+   delete [] r;
+
+   delete [] bin;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<DL compact>
+
+<DT> (b)
+
+<DD>
+
+For an <em class=var>n</em>
+
+node input chain, the time taken to rank the elements is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+The ensuing assignment and collection from bins takes
+
+Theta(<em class=var>n</em>) time.
+
+Therefore, if an exception is not thrown, the complexity is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+This is the asymptotic complexity for all data including
+
+initially sorted lists.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,1000 @@
+.nr H1 4
+.oh "The Abstract Data Type" 
+.eh "Stacks"
+.CS
+STACKS
+.CE
+.NH 2
+THE ABSTRACT DATA TYPE
+.LP
+.sp
+A \fIstack\fR is an ordered list
+of elements.  One end of this list is designated the \fIbottom\fR
+and the other is called the \fItop\fR.  A stack with four elements
+is shown in ?F{stack}(a). New elements are always added at the top of the
+stack.  Suppose we wish to add the element \*(LQE\*(ZQ to the stack
+of ?F{stack}(a).  This element will have to be placed on top
+of the element \*(LQD\*(ZQ giving us the configuration of
+?F{stack}(b).  Deletions from a stack also take place from
+the top only.  Hence if we are to delete an element from the stack
+of ?F{stack}(b), it will be the element \*(LQE\*(ZQ.  Following
+the deletion, the configuration of ?F{stack}(a)
+results.  If three successive deletions are performed
+on the stack of ?F{stack}(b), the stack of ?F{stack}(c)
+results.
+.KF
+.hl
+.TS
+expand;
+l l l.
+ 	E\(<-@top@	 
+D\(<-@top@	D	 
+C	C	 
+B	B	B\(<-@top@
+A\(<-@bottom@	A\(<-@bottom@	A\(<-@bottom@
+.sp
+.T&
+c c c.
+(a)	(b)	(c)
+.TE
+.sp
+.hl
+\fB?F{stack}:\fR Stack configurations
+.KE
+.pp
+From the preceding discussion, we see that a stack
+is a LIFO (last in first out) list.  Lists of this type appear
+frequently in computing.
+The ADT stack is specified in ADT \n(H1.1.
+.KF
+.hl
+\fBADT\fR \fIStack\fR
+.br
+{
+\fBinstances\fR
+.br
+.AR
+ordered list of elements; one end is called the \fIbottom\fR;
+the other is the \fItop\fR;
+.AL
+\fBoperations\fR
+.AR
+@Create():@ Create an empty stack;
+.br
+@IsEmpty():@ Return 0 if stack is empty, return 1 otherwise;
+.br
+@IsFull():@ Return 1 if stack is full, return 0 otherwise;
+.br
+@Top(x):@ \kQReturn top element of stack in @x@;
+.br
+\h'|\nQu'return 0 if the operation fails, return 1 otherwise
+.br
+@Add(x):@ \kQAdd element \fIx\fR to the stack;
+.br
+\h'|\nQu'return 0 if the operation fails, return 1 otherwise
+.br
+@Delete(x):@ \kQDelete top element from stack and return it in \fIx\fR;
+.br
+\h'|\nQu'return 0 if the operation fails, return 1 otherwise
+.AL
+.AL
+}
+.br
+.hl
+\fBADT \n(H1.1:\fR The abstract data type stack
+.KE
+.oh "Formula-Based Representation"
+.NH 2
+FORMULA-BASED REPRESENTATION
+.LP
+.sp
+Since a stack is a linear list with the restriction that additions
+and deletions take place at the same end, we may use the linear list
+representation of Section 2.3.  The top element of the stack
+is stored in @element[length^-^1]@ and the bottom element
+in @element[0]@.
+The class \fIStack\fR defined in ?P{stackclass} is a derived
+class of @LinearList@ (Program 2.1).
+The functions \fIAdd\fR and \fIDelete\fR have been implemented by overloading
+the binary operators `+' and `-', respectively. The expression @s~+~x@
+will add element @x@ to the top of stack @s@ while the expression
+@s~-~x@ will delete the top element from the stack @s@ and return the
+deleted element in variable @x@.  Both functions return `0' if they are
+unable to perform the operation and `1' if the operation is actually performed.
+.KF
+.hl
+.nf
+.ft  CW
+template<class type>
+class Stack : protected LinearList <type> {
+// LIFO objects
+public:
+   Stack(int MaxStackSize = 10)
+     : LinearList<type> (MaxStackSize) {}
+   int IsEmpty() {return LinearList<type>::IsEmpty();}
+   int IsFull()
+      {return (Length() == MaxSize);}
+   int Top(type& x)
+      {return Find(Length(), x);}
+   int operator +(type& x) // add x to stack
+      {return Insert(Length(), x);}
+   int operator -(type& x) // delete x from stack
+      {return Delete(Length(), x);}
+};
+.ft R
+.fi
+.hl
+\fB?P{stackclass}:\fR Formula-based class \fIStack\fR
+.KE
+.uh "Efficiency Of @Stack@"
+.br
+The complexity of each of the stack operations is seen to be
+\(*H(1).  Notice that
+by deriving @Stack@ from @LinearList@, we have reduced the effort needed
+to code the class @Stack@.  Also, we have significantly improved our chances
+of obtaining a correct implementation as the methods for @LinearList@
+have already been tested and are known to be correct.  Unfortunately, this
+simplification has come at the cost of increased run time.  For example,
+to add an element to a stack, we first determine its @Length()@ and
+then invoke @Insert@ which checks if the insert is in range.  Following
+this, a \fBfor\fR loop overhead is paid to perform zero element moves.
+We can eliminate these overheads by tailoring the code to the
+class @Stack@.  This can be done by either starting afresh or by
+accessing the protected members of @LinearList@ to customize our
+codes.
+.pp
+Another potential difficulty is that the derived class @Stack@ is subject
+to all of the limitations of the class @LinearList@.  For instance,
+the operations \fBcout\fR and `==' need to be defined
+on members of the data type @type@ as these are used by the @LinearList@
+class members @Print@ and @Search@.
+.uh "A Customized Definition of @Stack@"
+.br
+?P{custom} gives the class definition for @Stack@ when we customize
+the @LinearList@ codes.  In a run time test which involved a \fBfor\fR
+with 100,000 stack add and delete operations, the code of
+?P{stackclass} took 42% more time than did the customized code
+of ?P{custom}.  This improvement in performance has however also
+come at some cost.
+.KF
+.nf
+.hl
+.ft CW
+template<class type>
+class Stack : protected LinearList <type> {
+public:
+   Stack(int MaxStackSize = 10)
+        : LinearList<type> (MaxStackSize) {}
+   int IsEmpty() {return LinearList<type>::IsEmpty();}
+   int IsFull() {return (length == MaxSize);}
+   int Top(type& x);
+   int operator +(type& x); // add x to stack
+   int operator -(type& x); // delete x from stack
+};
+template<class type>
+int Stack<type>::Top(type& x)
+{
+if (IsEmpty()) return 0; //Top fails
+x = element[length - 1];
+return 1; //Top succeeds
+}
+template<class type>
+int Stack<type>::operator+(type x)
+{//add x to stack
+if (IsFull()) return 0; //add fails
+element[length++] = x;
+return 1; //add succeeds
+}
+template<class type>
+int Stack<type>::operator-(type& x)
+{//delete top element and return in x
+if (IsEmpty()) return 0; //delete fails
+x = element[--length];
+return 1; //delete succeeds
+}
+.hl
+\fB?P{custom}:\fR Customized version of @Stack@
+.ft R
+.fi
+.KE
+Since the code of ?P{custom} accesses the non-public
+members of the class @LinearList@ it is prone to failure when changes are
+made to @LinearList@ as these changes are required only to
+preserve the integrity of the public members.  This problem can be
+overcome by extending the class @LinearList@ (Program 2.1)
+to include public members to add and delete at/from the
+right end of the list.
+Another problem is that the code of
+?P{custom} is somewhat more involved than that of ?P{stackclass}.
+So,
+it is expected to take longer to debug.
+.pp
+This illustrates some of the
+tradeoffs involved between software reuse and program efficiency.
+Interestingly, if we develop the code for the class @Stack@ afresh
+(i.e., @Stack@ is not derived from @LinearList@ as in ?P{custom}),
+and perform the run time experiment described above, the new code runs
+13% faster than the customized code of ?P{custom}! 
+With improvement in compiler technology, one may expect this difference in
+performance to diminish.
+.EX
+.EH
+.MB
+.RS
+.ip (a)
+Obtain the code for the C++ class @Stack@ without making use of the
+class @LinearList@.  I.e., start afresh and use an array @stack@
+to store the elements, an integer variable @top@ that points to the
+top element in the stack (initialized to @- 1@), and an integer
+variable @MaxSize@ that gives the largest number of elements the
+stack can hold.
+.ip (b)
+Write a program to measure the run time of an alternating sequence of
+@n@ stack add and delete operations.  Measure the times needed
+by Programs ?p{stackclass}, ?p{custom}, and your code of part (a).
+.ip (c)
+What can you say about the merits/demerits of the different software
+development styles used?
+.RE
+.EH
+Extend the stack ADT by adding functions to:
+.RS
+.ip (a)
+Determine the size (i.e., number of elements) of the stack.
+.ip (b)
+Input a stack.
+.ip (c)
+Print a stack.
+.RE
+Now extend the class definition of a formula-based stack to include
+code for these functions.
+.EH
+Extend the stack ADT by adding functions to:
+.RS
+.ip (a)
+Split a stack into two.  The first contains the bottom half elements and the second the remaining elements.
+.ip (b)
+Combine two stacks into one by placing all elements of the second stack
+on top of those in the first.  The relative order of elements from the
+second stack is unchanged.
+.RE
+Now extend the class definition of a formula-based stack to include
+code for these functions.
+.LP
+.oh "Linked Representation"
+.NH 2
+LINKED REPRESENTATION
+.LP
+.sp
+While the array representation of a stack considered in the previous
+section is both elegant and efficient, it is wasteful
+of space when multiple stacks are to co-exist.  The reasons are the same as
+those cited in Chapter 2 for the inefficiency of the separate arrays
+for separate lists
+representation.  An exception is
+when only two stacks are to co-exist.  Now, space and time efficiency can be
+maintained
+by pegging the bottom of one stack at position 0
+and the bottom of the other at position @MaxSize - 1@.  The two stacks
+grow towards the middle of the array (see ?F{twostacks}).  When more than
+two stacks are to be represented,
+the multiple lists in a single array representation may be adapted
+to the case of multiple stacks.  While this results in a
+space efficient implementation,
+the worst case add time becomes
+\*(OH(@ArraySize@) rather than \(*H(1).  The delete time remains \(*H(1).
+.KF
+.hl
+.PS
+h = .5i; w = .3i;
+X:[boxht = h; boxwid = w
+A: box shade 5
+B: box shade 5
+C: box shade 5
+D: box shade 5
+]
+boxwid = 5*w; box "@...@"; boxwid = w
+Y:[E: box shade 30;
+F: box shade 30
+G: box shade 30
+H: box shade 30
+]
+y = .1
+arrow from X.D.t+(0,.4) to X.D.t
+arrow from Y.E.t+(0,.4) to Y.E.t
+"\fItop\fR1" at X.D.t+(0,.4+y)
+"\fItop\fR2" at Y.E.t+(0,.4+y)
+"[0]" at X.A.t+(0,.2)
+"@ArraySize - 1@" at Y.H.t+(0,.2)
+"STACK 1" at X.b-(0,.2)
+"STACK 2" at Y.b-(0,.2)
+arrow right .5i from X.D.e
+arrow left .5i from Y.E.w
+.PE
+.hl
+\fB?F{twostacks}:\fR  Two stacks in an array
+.KE
+.pp
+Multiple stacks can be represented efficiently using a chain for each
+stack.
+This representation incurs a space penalty of one pointer field for each
+stack element.  However, each stack operation can be performed in
+\(*H(1) time.
+When using a chain to represent a stack, we must decide which end
+of the chain corresponds to the stack top.  If we associate the right
+end of the chain with the stack top, then stack additions
+and deletions are implemented using the
+chain operations @Insert(n, x)@
+and @Delete(n,x)@ where @n@ is the number of nodes in
+the chain.  Each of these chain operations takes \(*H(@n@) time.
+On the other hand, if we associate the left end of the chain with
+the stack top, then the chain operations to use are
+@Insert(0, x)@ and @Delete(1,x)@.  Each of these takes \(*H(1)
+time.  As a result of this, the left end of the chain represents the
+stack top.  The resulting class definition of a linked stack
+is given in ?P{lstackclass}.
+.KF
+.hl
+.nf
+.ft CW
+template<class type>
+class LinkedStack : protected Chain<type> {
+public:
+   int IsEmpty() {return Chain<type>::IsEmpty();}
+   int IsFull();
+   int Top(type& x) {return Find(1, x);}
+   int operator +(type& x) {return Insert(0, x);}
+   int operator -(type& x) {return Delete(1, x);}
+};
+
+template<class type>
+int LinkedStack<type>::IsFull()
+{
+ChainNode<type> *i;
+i = new ChainNode<type>;
+if (i) {delete i; return 0;};
+return 1;
+}
+.ft R
+.fi
+.hl
+\fB?P{lstackclass}:\fR Class definition for a linked stack
+.KE
+.pp
+The implementation of @IsFull@ is inelegant as the only way to know
+whether or not we can add an element to a stack is to see if enough
+space exists to create a node of type @Node@.  This is done by
+invoking \fBnew\fR and then deleting the created node as we do not
+intend to use it.
+As in the case of the class @Stack@ (?P{stackclass}), we can improve the
+run time performance by customizing the code.  The customized code
+is given in ?P{clstack}.
+.KF
+.hl
+.nf
+.ft CW
+template<class type>
+class LinkedStack : protected Chain<type>
+{
+public:
+   int IsEmpty() {return first == 0;}
+   int IsFull();
+   int Top(type& x);
+   int operator +(type x);
+   int operator -(type& x);
+};
+
+template<class type>
+int LinkedStack<type>::IsFull()
+{
+ChainNode<type> *i;
+i = new ChainNode<type>;
+if (i) {delete i; return 0;}
+return 1;
+}
+
+template<class type>
+int LinkedStack<type>::Top(type& x)
+{//set x to top element
+if (IsEmpty()) return 0; //Top fails
+x = first->data;
+return 1; //Top succeeds
+}
+.ft R
+.fi
+.hl
+\fB?P{clstack}:\fR Customized linked stack
+(continued on next page)
+.KE
+.KF
+.hl
+.nf
+.ft CW
+template<class type>
+int LinkedStack<type>::operator+(type& x)
+{//add x to stack
+ChainNode<type> *i;
+i = new ChainNode<type>;
+if (i) {i->data = x; i->link = first;
+        first = i; return 1;}
+return 0; // add fails 
+}
+
+template<class type>
+int LinkedStack<type>::operator-(type& x)
+{//delete top element and return in x
+if (IsEmpty()) return 0; //delete fails
+x = first->data;
+ChainNode<type> *i = first;
+first = first->link;
+delete i;
+return 1;
+}
+.ft R
+.fi
+.hl
+\fB?P{clstack}:\fR Customized linked stack
+(continued from previous page)
+.KE
+.pp
+The code of ?P{lstackclass} took 21% more time to execute
+a \fBfor\fR loop of 100,000 add and delete
+operations than did the customized code of ?P{clstack}.
+.EX
+.EH
+.MB
+.RS
+.ip (a)
+Obtain the code for the C++ class @LinkedStack@ without making use of the
+class @Chain@.
+.ip (b)
+Write a program to measure the run time of an alternating sequence of
+@n@ stack add and delete operations.  Measure the times needed
+by Programs ?p{lstackclass}, ?p{clstack}, and your code of part (a).
+.RE
+.EH
+Extend the class @LinkedStack@ to include the following stack operations:
+.RS
+.ip (a)
+Determine the size (i.e., number of elements) of the stack.
+.ip (b)
+Input a stack.
+.ip (c)
+Print a stack.
+.RE
+.EH
+Extend the class @LinkedStack@ to include the following operations:
+.RS
+.ip (a)
+Split a stack into two.  The first contains the bottom half elements and the second the remaining elements.
+.ip (b)
+Combine two stacks into one by placing all elements of the second stack
+on top of those in the first.  The relative order of elements from the
+second stack is unchanged.
+.RE
+.LP
+.oh "Applications"
+.NH 2
+APPLICATIONS
+.NH 3
+Parenthesis Matching
+.LP
+.sp
+In this problem, we are to match the left and right parentheses in a
+character string.  For example, the string (a*(b+c)+d) has left parentheses
+at positions one and four and right parentheses at positions eight and eleven.
+The left parenthesis at position one matches the right at position eleven
+while the left parenthesis at four matches the right parenthesis at eight.
+In the string (a+b))(, the right parenthesis at six has no matching
+left parenthesis and the left parenthesis at seven has no matching
+right parenthesis.  Our objective is to write a C++ program that inputs
+a string and outputs the pairs of matched parentheses as well as those
+parentheses for which there is no match.
+.pp
+We observe that if we scan the input string left-to-right then each right
+parenthesis is matched to the most recently seen unmatched left parenthesis.
+This motivates us to save the position of
+left parentheses on a stack as they are encountered
+in a left-to-right scan.  When a right parenthesis is encountered,
+it is matched to the left parenthesis (if any) at the top of the stack.
+The matched left parenthesis is deleted from the stack.  The complete C++
+program is given in ?P{paren}.  A sample input / output dialogue is given
+in ?F{paren}.  The time complexity of ?P{paren} is \(*H(@n@), where
+@n@ is the length of the input string.
+.KF
+.hl
+.nf
+.ft CW
+#include <iostream.h>
+#include <string.h>
+#include <stdio.h>
+#include "stack.h"
+const int MaxLength = 100; //max expression length
+void PrintMatchedPairs(char *expr);
+void main(void)
+{
+char expr[MaxLength];
+cout << "Type an expression of length at most "
+     << MaxLength << endl;
+cin.getline(expr, MaxLength);
+cout << "The pairs of matching parentheses in the expression" << endl;
+puts(expr);
+cout << "are" << endl;
+PrintMatchedPairs(expr);
+}
+
+void PrintMatchedPairs(char *expr)
+{
+Stack<int> s(MaxLength);
+int j, length = strlen(expr);
+for (int i = 1; i <= length; i++) {
+   if (expr[i - 1] == '(') s + i;
+   else if (expr[i - 1] == ')')
+	{if (s - j) cout << j << ' ' << i << endl;
+      else cout << "No match for right parenthesis at "
+                << i << endl;}
+   }
+while (!s.IsEmpty()) {
+   s - j;
+   cout << "No match for left parenthesis at " << j 
+        << endl;}
+}
+.fi
+.hl
+\fB?P{paren}:\fR Program to output matched parentheses
+.KE
+.KF
+.hl
+.nf
+Type an expression of length at most 100
+(d+(a+b)*c*(d+e)-f))(()
+The pairs of matching parentheses in the expression
+(d+(a+b)*c*(d+e)-f))(()
+are
+4 8
+12 16
+1 19
+No match for right parenthesis at 20
+22 23
+No match for left parenthesis at 21
+.fi
+.hl
+\fB?F{paren}:\fR Sample run of parenthesis matching program
+.KE
+.NH 3 
+Towers of Hanoi
+.LP
+.sp
+The \*(LQTowers of Hanoi\*(ZQ problem
+is fashioned after the ancient Tower of Brahma
+ritual.  According to legend, at the time the world was created there
+was a diamond tower (tower 1) with sixty four golden disks.  The disks were
+of decreasing size and were stacked on the tower in decreasing
+order of size bottom to top.
+Besides this tower there are two other diamond towers (towers 2 and 3).
+Since the time of creation,
+Brahman priests have been attempting to move the disks from
+tower 1 to tower 2 using tower 3 for intermediate storage.
+As the disks are very heavy, they can be moved only one at a time.
+In addition, at no time can a disk be on top of a smaller disk.
+According to legend, the world will come to an end when the
+priests have completed their task.
+.KF
+.hl
+.PS
+x = 1.3i; d=.9; e=.5
+A:[B:line right x
+   Y:B.c
+   line from Y to Y+(0,2)
+   line from Y-(d*x/2,0) to Y-(d*x/2,-.2)
+   line from Y+(d*x/2,0) to Y+(d*x/2,.2)
+   B:line from Y-(d*x/2,-.2) to Y+(d*x/2,.2)
+   Y:B.c
+   line from Y-(d*d*x/2,0) to Y-(d*d*x/2,-.2)
+   line from Y+(d*d*x/2,0) to Y+(d*d*x/2,.2)
+   B:line from Y-(d*d*x/2,-.2) to Y+(d*d*x/2,.2)
+   Y:B.c
+   line from Y-(d*d*d*x/2,0) to Y-(d*d*d*x/2,-.2)
+   line from Y+(d*d*d*x/2,0) to Y+(d*d*d*x/2,.2)
+   B:line from Y-(d*d*d*x/2,-.2) to Y+(d*d*d*x/2,.2)
+   Y:B.c+(0,1)
+   line from Y-(e*x/2,0) to Y-(e*x/2,-.2)
+   line from Y+(e*x/2,0) to Y+(e*x/2,.2)
+   line from Y-(e*x/2,0) to Y+(e*x/2,0)
+   B:line from Y-(e*x/2,-.2) to Y+(e*x/2,.2)]
+"Tower 1" at last [].s-(0,.2)
+B:[B:line right x
+   Y:B.c
+   line from Y to Y+(0,2)] with .nw at A.ne+(.3,0)
+"Tower 2" at last [].s-(0,.2)
+C:[B:line right x
+   Y:B.c
+   line from Y to Y+(0,2)] with .nw at B.ne+(.3,0)
+"Tower 3" at last [].s-(0,.2)
+.PE
+.hl
+\fB?F{14.2}:\fR  Towers of Hanoi
+.KE
+.pp
+In the \fITowers of Hanoi\fR problem\fR, we are given @n@ disks and three
+towers.  The disks are initially stacked on tower 1 in decreasing
+order of size bottom-to-top.  They are to be moved to tower 2, one disk
+at-a-time such that no disk is ever on top of a smaller one.
+You may wish to attempt a solution to this problem for
+@n@ = 2, 3, and 4 before reading further.
+.pp
+A very elegant solution results from the use of recursion.
+To get the largest disk to the bottom
+of tower 2, we move the remaining @n^-^1@ disks to tower 3 and then move
+the largest
+to tower 2.  Now, we are left with the task of moving the 
+@n^-^1@ disks from tower 3 to
+tower 2.  To do this we have available the towers 1 and 2.  The fact that
+tower 2 has a disk on it can be ignored as this disk is larger
+that the disks being moved from tower 3 and so any disk can
+be placed on top of it.
+Recursive C++ code for this solution is provided in ?P{hanoi}.
+The initial invocation is @TowersOfHanoi(n,1,2,3)@.
+The correctness of ?P{hanoi} is easily established.
+.KF
+.nf
+.hl
+.ft CW
+void TowersOfHanoi(int n, int x, int y, int z)
+{//Move the top n disks from tower x to tower y
+//Use tower z for intermediate storage
+if (n > 0) {
+   TowersOfHanoi(n-1, x, z, y);
+   cout << "Move top disk from tower " << x 
+        << " to top of tower " << y << endl;
+   TowersOfHanoi(n-1, z, y, x);}
+}
+.ft R
+.hl
+\fB?P{hanoi}:\fR Recursive function for Towers of Hanoi
+.fi
+.KE
+.pp
+Let @t(n)@ be the time taken by ?P{hanoi}.  We see that
+@t(n)@ is proportional to the number of lines of output
+generated.  This is equal to the number of disk moves performed.
+Examining ?P{hanoi}, we obtain the following recurrence
+for the number of moves, @moves(n)@:
+.sp
+@moves(n)~=~ left { ~~lpile {0 above {2moves(n-1)~+~1}} ~~~lpile {n=0 above n>0}@
+.sp
+This recurrence may be solved using the substitution method of
+Chapter 1.  The result is @moves(n)@ = @2 sup n ~-~1@.  One can show that
+this is, in fact, the least number of moves in which the disks can be moved. 
+Since @n@ = 60 in the Tower of Brahma,
+it will take the Brahman priests quite a few years to finish their task.
+From the solution to the above recurrence, we also obtain @t(n)@ =
+\(*H(@2 sup n@).
+.pp
+While the output from ?P{hanoi} is enough for us to manually move the
+disks, it isn't adequate if we wish to animate the move sequence
+on a computer display.  Another deficiency is that it doesn't explicitly
+specify the label of the disk that is to be moved.  So, if we make an error in
+following the move sequence output by ?P{hanoi}, this error may not be detected till several moves later.  To rectify these deficiencies, we may store the state
+of the three towers in memory.  This state information is easily displayed
+on a computer screen for animation purposes and is also useful to output the
+label of the disk being moved.
+.pp
+Since disks are removed from each tower in a last in first out manner,
+each tower may be represented as a stack.  The three towers together contain
+exactly @n@ disks at any time.  So, using linked stacks,
+we can get by with space for @n@ elements.  If formula-based stacks are used,
+towers 1 and 2 must have a capacity of @n@ disks each
+while tower 3 must have a capacity of @n^-^1@.
+So, space for a total of @3n^-^1@ disks is needed.
+As our earlier analysis has shown, the complexity of the Towers of Hanoi
+problem is exponential in @n@.  So, using a reasonable
+amount of computer time, the problem can be solved only for
+small values of @n@ (say @n@ \(<= 30).  For these small values of @n@,
+the difference in space required by the formula-based and
+linked representations is sufficiently small that either may be used.
+.pp
+The code of ?P{hanoi2} uses formula-based stacks.
+@TowersOfHanoi(n)@ is just a preprocessor for the recursive function
+@Hanoi::TowersOfHanoi@ which is modeled after the function of
+?P{hanoi}.  The preprocessor creates the three stacks @S[1^:^3]@
+that will store the states of the three towers.
+The disks are
+numbered 1 (smallest) through @n@ (largest).
+As a result, each stack is of type \fBint\fR.
+The preprocessor returns 0 in case enough space is not
+available to create these three stacks.
+When enough space is available, it invokes @Hanoi::TowersOfHanoi@
+and returns 1 after the necessary moves have been successfully output.
+.KF
+.nf
+.hl
+.ft CW
+class Hanoi {
+public:
+   void TowersOfHanoi(int n, int x, int y, int z);
+   Stack<int> *S[4];
+};
+
+void Hanoi::TowersOfHanoi(int n, int x, int y, int z)
+{//Move the top n disks from tower x to tower y
+//Use tower z for intermediate storage
+int i;
+if (n > 0) {
+   TowersOfHanoi(n-1, x, z, y);
+   (*S[x]) - i;  (*S[y]) + i;
+   cout << "Move disk " << i << " from tower " << x
+	<< " to tower " << y << endl;
+   TowersOfHanoi(n-1, z, y, x);}
+}
+
+int TowersOfHanoi(int n)
+{//preprocessor for Hanoi::TowersOfHanoi
+Hanoi X;
+X.S[1] = new Stack<int> (n);
+X.S[2] = new Stack<int> (n);
+X.S[3] = new Stack<int> (n - 1);
+if (!X.S[2] || !X.S[3]) return 0;
+for (int i = n; i > 0; i--) //initialize
+   (*X.S[1]) + i; //add disk i to tower 1
+X.TowersOfHanoi(n, 1, 2, 3);
+return 1;
+}
+.ft R
+.hl
+\fB?P{hanoi2}:\fR Towers of Hanoi using stacks
+.fi
+.KE
+.NH 3
+Rearranging Railroard Cars
+.LP
+.sp
+A freight train has @n@ railroard cars.  Each is to be
+left at a different station.  Assume that the @n@ stations are numbered
+1 through @n@ and that the freight train visits these in the
+order @n@ through 1.   The railroad cars are labeled by their
+destination.  To facilitate removal of the railroad cars from the
+train it is necessary to reorder the cars so that they are
+in the order 1 through @n@ front-to-back.  When the cars are
+in this order, the last car is detached at each station.
+The rearrangement of cars is done at a shunting yard which is
+comprised of an \fIinput track\fR, an \fIoutput track\fR, and
+@k@ holding tracks that lie between the input and output tracks.
+?F{shunt}(a) shows a shunting yard with @k@ = 3 holding
+tracks @H1@, @H2@, and @H3@.
+The @n@ cars of the freight train begin in the input track
+and are to end up in the output track in the order 1 through @n@
+right-to-left.
+In ?F{shunt}(a), we have @n@ = 9 and the cars are initially in the
+order 5, 8, 1, 7, 4, 2, 9, 6, 3 back-to-front.  ?F{shunt}(b)
+shows the cars rearranged in the desired order.
+.KF
+.hl
+.PS
+boxwid = 0.25i; boxht = boxwid;
+x = 0.9i
+y = .25i
+h = 0.5i
+A:[
+A:Here
+line thick 10 from A to A+(2*x+2*y,0)
+line thick 10 from A+(x,0) to A+(x,-h)
+line thick 10 from A+(x+y,0) to A+(x+y,-h)
+line thick 10 from A+(x+2*y,0) to A+(x+2*y,-h)
+"[581742963]" at A+(x/2,.2)
+"input track" at A+(x/2,-0.2)
+"output track" at A+(3/2*x+2*y,-0.2)
+"@H1@" at A+(x,-h-0.2)
+"@H2@" at A+(x+y,-h-0.2)
+"@H3@" at A+(x+2*y,-h-0.2)
+]
+"(a) Initial" at last [].s-(0,.5)
+B:[
+A:Here
+line thick 10 from A to A+(2*x+2*y,0)
+line thick 10 from A+(x,0) to A+(x,-h)
+line thick 10 from A+(x+y,0) to A+(x+y,-h)
+line thick 10 from A+(x+2*y,0) to A+(x+2*y,-h)
+"[987654321]" at A+(3/2*x+2*y,.2)
+"@H1@" at A+(x,-h-0.2)
+"@H2@" at A+(x+y,-h-0.2)
+"@H3@" at A+(x+2*y,-h-0.2)
+] with .nw at A.ne+(0.4,0)
+"(b) Final" at last [].s-(0,.5)
+.PE
+.hl
+\fB?F{shunt}:\fR A three track example
+.KE
+.pp
+To rearrange the cars, we examine the cars on the input track
+front-to-back.  If the car being examined is the next
+one in the output arrangement, it is moved directly to the
+output track.  If not, it is moved to a holding track and left there
+until it is time to place it in the output.
+The holding tracks operate in a LIFO manner as cars enter and leave
+these from the top of the track.
+When rearranging cars, the following moves are permitted:
+.US
+.np
+A car may be moved from the front (i.e., right end)
+of the input track to the top
+of one of the holding tracks or to the left end of the output track.
+.np
+A car may be moved from the top of a holding track to the left end of the output track.
+.US
+.pp
+\fIAll other moves are forbidden\fR.
+Consider the input arrangement of ?F{shunt}(a).  Car 3 is at the front.
+This cannot be output yet as it is to be preceded by cars 1 and 2.
+So, it is detached and moved to the holding track @H1@.
+The next car, car 6, is also to be moved to a holding track.
+If it is moved to @H1@, the rearrangement
+cannot be completed as car 3 will be below car 6.  However,
+car 3 is to be output before car 6 and so must leave @H1@ before car 6
+does.
+So, car 6 is put into @H2@.
+The next car, car 9 is put into @H3@ as putting it into either @H1@
+or @H2@ will make it impossible to complete the rearrangement.
+\fINotice that whenever the car labels in a holding track are not
+in increasing order top-to-bottom, the rearrangement cannot be completed\fR.
+The current state of the holding tracks is shown in ?F{tracks}(a).
+.KF
+.hl
+.PS
+boxwid = 0.25i; boxht = boxwid;
+d = .25i
+s = 0.1i
+A:[
+A:box shade 5
+box "3" at A
+B:box shade 5 with .w at A.e+(d,0)
+box "6" at B
+C:box shade 5 with .w at B.e+(d,0)
+box "9" at C
+"@H1@" at A.s-(0,0.2)
+"@H2@" at B.s-(0,0.2)
+"@H3@" at C.s-(0,0.2)
+]
+"(a)" at last [].s-(0,.5)
+B:[
+A:box shade 5
+box "3" at A
+B:box shade 5 with .w at A.e+(d,0)
+box "6" at B
+C:box shade 5 with .w at B.e+(d,0)
+box "9" at C
+D: box shade 10 with .b at A.t+(0,s)
+"2" at D
+E: box shade 10 with .b at B.t+(0,s)
+"4" at E
+F: box shade 10 with .b at C.t+(0,s)
+"7" at F
+"@H1@" at A.s-(0,0.2)
+"@H2@" at B.s-(0,0.2)
+"@H3@" at C.s-(0,0.2)
+] with .sw at A.se+(1,0)
+"(b)" at last [].s-(0,.5)
+.PE
+.hl
+\fB?F{tracks}:\fR Track states
+.KE
+.pp
+Car 2 is considered next.  While it can be moved into any of the holding tracks
+while satisfying the requirement that car labels in any holding track be
+in increasing order, moving it to @H1@ is preferred.  If it is moved to
+@H3@, then we have no place to move cars 7 and 8.  If we move it to @H2@,
+then the next car, car 4, will have to be moved to @H3@ and we will have
+no place for cars 5, 7, and 8.  \fIThe least restrictions on future
+car placement arises when the new car @u@ is moved to the holding track
+which has at its top a car with smallest label @v@ such that @v@ > @u@\fR.
+We shall use this \fIassignment rule\fR to select the holding track.
+.pp
+When car 4 is considered, the cars at the top of the three holding tracks
+are 2, 6, and 9.  Using our assignment rule, car 4 is moved to @H2@.
+Car 7 is then moved to @H3@.
+?F{tracks}(b) shows the current state of the holding tracks.
+The next car, car 1, is moved to the output track.
+It is now time to move car 2 from @H1@ to the output track.
+Next, car 3 is moved from @H1@ and then car 4 moved from @H2@.
+No other cars can be moved to the output at this time.
+.pp
+The next input car, car 8, is moved to @H1@.  Then car 5 is moved from
+the input track to the output track.  Following this, car 6 is moved from @H2@.
+Then car 7 is moved from @H3@, car 8 from @H1@, and car 9 from @H3@.
+.pp
+While three holding tracks are sufficient to rearrange the cars from
+the initial ordering of ?P{shunt}(a), more tracks are needed for other
+initial arrangements.  For example, the initial arrangement
+1, @n@, @n^-^1@, @...@, 2 requires @n^-^1@ holding tracks.
+.pp
+To implement the above rearrangement scheme, we use @k@ linked stacks
+to represent the @k@ holding tracks.  Linked stacks are used rather than
+formula-based ones as by doing so, the space required is that
+for only @n^-^1@ elements.
+Function @Railroard@ (?P{rail1}) outputs a sequence of move that
+results in rearranging @n@ cars with initial ordering @p[1^:^n]@.
+It attempts to do this using at most @k@ holding tracks.  In case it fails
+for lack of tracks, it returns 0.  If failure is due to lack of memory,
+it returns @-@1.  On success, it returns 1.
+.KF
+.nf
+.hl
+.ft CW
+int Railroad(int *p, int n, int k)
+{//k track rearrangement of car order p[1:n]
+//initialize holding tracks
+LinkedStack<int> *H;
+H = new LinkedStack<int> [k + 1];
+if (!H) return -1;
+//rearrange
+int NowOut = 1, minH = n+1, minS;
+for (int i = 1; i <= n; i++) {
+   if (p[i] == NowOut) {
+      cout << "Move car " << p[i] <<
+        " from input to output" << endl;
+      NowOut++;
+      while (minH == NowOut) {
+         Output(minH, minS, H, k, n);
+	 NowOut++;}}
+   else {//move to a holding track
+      int x = Hold(p[i], minH, minS, H, k, n);
+      if (x < 1) return x;}
+   }
+return 1;
+}
+.ft R
+.hl
+\fB?P{rail1}:\fR Railroad car rearrangement program
+.fi
+.KE
+.pp
+Function @Railroad@ begins by initializing the linked stack array @H@.
+@H[i]@ represents holding track @i@, @1~<=~i~<=~k@.  @NowOut@ is the label
+of the car that is to go to the output track next; @minH@ is the smallest
+label in any of the holding tracks, and @minS@ is the holding track
+(or stack) that contains the car with label @minH@.
+The \fBfor\fR loop maintains the invariant \fIat the start of this loop,
+the car with label @NowOut@ is not in a holding track\fR.
+.pp
+In iteration @i@ of the \fBfor\fR loop, car @p[i]@ is moved from the
+input track.  This car is to move to the output track
+only if @p[i]@ equals @NowOut@.  If car @p[i]@ is moved to the output track,
+@NowOut@ increases by one and it may be possible to move one or more of
+the cars in the holding tracks out.  This is done in the \fBwhile\fR
+loop.
+If car @p[i]@ cannot be moved to the output, then no car can be so moved.
+Consequently, @p[i]@ is added to a holding track using the stated
+track assignment rule.
+.pp
+The functions @Output@ and @Hold@ utilized by @Railroad@ are given
+in Programs ?p{rail.o} and ?p{rail.h} respectively.
+@Output@ outputs instructions to move a car from a holding track
+to the output track.  It also updates @minH@ and @minS@.
+The function @Hold@ puts car @c@ into a holding track using the track
+assignment rule.  It also outputs instructions to move the car
+to the chosen holding track and updates @minH@ and @minS@
+if necessary.
+.KF
+.nf
+.hl
+.ft CW
+void Output(int& minH, int& minS,
+        LinkedStack<int> *H, int k, int n)
+{//move from hold to output
+int x;
+H[minS] - x;
+cout << "Move car " << minH << " from holding track "
+     << minS << " to output" << endl;
+minH = n + 2;
+for (int i = 1; i <= k; i++)
+   if (H[i].Top(x) && x < minH) {
+      minH = x; minS = i;}
+}
+.ft R
+.hl
+\fB?P{rail.o}:\fR @Output@ function used in ?P{rail1}
+.fi
+.KE
+.KF
+.nf
+.hl

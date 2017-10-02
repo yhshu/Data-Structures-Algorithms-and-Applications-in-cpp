@@ -1,0 +1,134 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 10, Exercise 3<BR>
+
+<BR>
+
+</H1>
+
+The new code for the
+
+<code class=var>Replay</code> function is given below
+
+and in the file
+
+<code class=var>winner2.h</code>.
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void WinnerTree&lt;T&gt;::RePlay(int i,
+
+          int(*winner)(T a[], int b, int c))
+
+{// Replay matches for element i.
+
+   if (i &lt;= 0 || i &gt; n) throw OutOfBounds();
+
+
+
+   int p,   // match node
+
+       lc,  // left child of p
+
+       rc;  // right child of p
+
+
+
+   // find first match node and its children
+
+   if (i &lt;= LowExt) {// begin at lowest level
+
+   	p = (offset + i)/2;
+
+   	lc = 2*p - offset; // left child of p
+
+   	rc = lc+1;}
+
+   else {p = (i-LowExt+n-1)/2;
+
+         if (2*p == n-1) {lc = t[2*p];
+
+                          rc = i;}
+
+         else {lc = 2*p - n + 1 + LowExt;
+
+               rc = lc+1;}
+
+        }
+
+
+
+   int NewWinner = winner(e, lc, rc);
+
+   if (NewWinner != i &amp;&amp; NewWinner == t[p])
+
+      // no need to play additional matches
+
+      return;
+
+   t[p] = NewWinner;
+
+
+
+   // play remaining matches
+
+   p /= 2;  // move to parent
+
+   for (; p &gt;= 1; p /= 2) {
+
+      NewWinner = winner(e, t[2*p], t[2*p+1]);
+
+      if (NewWinner != i || NewWinner == t[p])
+
+         // no need to play additional matches
+
+         return;
+
+
+
+      t[p] = NewWinner;
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

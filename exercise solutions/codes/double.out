@@ -1,0 +1,23 @@
+Length = 0
+IsEmpty = 1
+List is 1  2  3  5  6  7  8  9  
+IsEmpty = 0
+First element is 1
+Eighth element is 9
+Fourth element is 5
+Length = 8
+8 is in position 7
+1 is in position 1
+10 is in position 0
+6 is in position 5
+Deleted element from position 1 is 1
+List is 2  3  5  6  7  8  9  
+Deleted element from position 7 is 9
+List is 2  3  5  6  7  8  
+Deleted element from position 3 is 5
+List is 2  3  6  7  8  
+Deleted elements are 8  2  7
+List is 3  6  
+Deleted elements are 3  6
+List is 
+List is 5  

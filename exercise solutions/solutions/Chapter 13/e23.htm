@@ -1,0 +1,506 @@
+
+
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 23<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Start by selecting the vertex with minimum degree.
+
+Select additional vertices for inclusion in the independent set
+
+in stages, one vertex is selected
+
+in each stage.  In each stage, determine those vertices that
+
+are not adjacent to any currently selected vertex.  These are the candidates
+
+from which the next vertex must be selected.  For each candidate determine
+
+how many other candidates it is adjacent to.  Select the vertex for which this
+
+number is minimum.
+
+<br><br>
+
+<dt> (b)
+
+<dd>
+
+The heuristic works, for example, on the four vertex graph with
+
+zero edges.  All vertices are included in the independent set.
+
+The heuristic fails, for example, on the six vertex graph with
+
+edges {(1,2), (1,3), (2,4), (2,5), (3,4), (3,5), (4,5), (4,6), (5,6)}.
+
+If the heuristic starts by selecting vertex 1, then only a two
+
+vertex independent set is found.  The max independent set is
+
+{2,3,6}.
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+To implement the algorithm of (a), we use an array
+
+<code class=code>C</code> to keep track of the candidate
+
+and selected vertices.
+
+<code class=code>C[i]</code> = 1 if vertex <code class=code>i</code>
+
+has been selected for the independent set;
+
+<code class=code>C[i]</code> = 0 if vertex <code class=code>i</code>
+
+cannot be selected for the independent set (this happens when vertex
+
+<code class=code>i</code> is adjacent to at least one
+
+of the selected vertices); and
+
+<code class=code>C[i]</code> = 2 if vertex <code class=code>i</code>
+
+is still a candidate for selection (this requires that vertex
+
+<code class=code>i</code> not be adjacent to any vertex that is
+
+already selected).
+
+Another array
+
+<code class=code>count</code> such that
+
+<code class=code>count[i]</code> is
+
+the number
+
+of candidate vertices that candidate vertex <code class=code>i</code>
+
+is adjacent to is also used.
+
+<br><br>
+
+At each stage, we select, for inclusion in the independent set, from vertices
+
+with
+
+<code class=code>C[i]</code> = 2 a vertex
+
+<code class=code>MinV</code> with minimum
+
+<code class=code>count</code> value.
+
+<code class=code>C[MinV]</code> becomes 1 and we must update
+
+the <code class=code>C</code> and <code class=code>count</code>
+
+values for the remaining candidates.  Former candidates
+
+that are adjacent to the newly added vertex
+
+<code class=code>MinV</code> are no longer candidates.
+
+Former candidates
+
+that are not adjacent to the newly added vertex
+
+<code class=code>MinV</code> remain candidates but their
+
+<code class=code>count</code> count value may decrease
+
+because some of the eliminated vertices may be adjacent to them.
+
+To update the <code class=code>count</code> values,
+
+we examine the vertices adjacent to all eliminated candidates
+
+and reduce the count of their adjacent vertices.
+
+<br><br>
+
+
+
+
+
+The code
+
+is given below and in the file
+
+<code class=code>und7.h</code>.
+
+A driver, test data, and output appear in the files
+
+<code class=code>indep.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+int Undirected::MaxIndependentSet(int V[])
+
+{// Find an independent set using the greedy method.
+
+ // Return the independent set size and put the independent
+
+ // set vertices in V[0:size-1]
+
+
+
+   InitializePos();
+
+   int n = Vertices();
+
+   int *C = new int [n+1];  // candidate array
+
+                            // i is candidate iff C[i] = 2
+
+   // count[i] is number of candidate vertices i
+
+   // is not adjacent to
+
+   int *count = new int [n+1];
+
+
+
+   // initialize candidate array
+
+   for (int i = 1; i &lt;= n; i++)
+
+      C[i] = 2;
+
+
+
+   // find vertex with min degree
+
+   int MinDegree = Degree(1);
+
+   int MinV = 1;
+
+   for (int i = 2; i &lt;= n; i++) {
+
+     int m = Degree(i);
+
+     if (m &lt; MinDegree) {
+
+        MinDegree = m;
+
+        MinV = i;}
+
+     }
+
+
+
+   // MinV is first vertex in independent set
+
+   C[MinV] = 1;
+
+
+
+   // define three chains for candidate and eliminated vertices
+
+   Chain&lt;int&gt; *Cand = new Chain&lt;int&gt;,
+
+              *New = new Chain&lt;int&gt;,
+
+              *Elim = new Chain&lt;int&gt;;
+
+
+
+   // vertices adjacent to MinV are no longer candidates
+
+   int v = Begin(MinV);
+
+   while (v) {
+
+      C[v] = 0;
+
+      v = NextVertex(MinV);
+
+      }
+
+
+
+   // create candidate chain
+
+   for (int i = 1; i &lt;= n; i++)
+
+      if (C[i] == 2) Cand-&gt;Insert(0,i);
+
+
+
+   // find next vertex to add to independent set 
+
+   // this is a candidate vertex which is adjacent to
+
+   // to the fewest other candidate vertices
+
+   MinDegree = n + 1;
+
+   // define a chain iterator to go down chain of candidates
+
+   ChainIterator&lt;int&gt; c;
+
+   int *u = c.Initialize(*Cand);
+
+   while (u) {
+
+      // vertex *u is a candidate
+
+      // find number of other candidates adjacent to it
+
+      v = Begin(*u);
+
+      count[*u] = 0;
+
+      while (v) {
+
+         // if v is a candidate, increment count[*u]
+
+         if (C[v] == 2) count[*u]++;
+
+         v = NextVertex(*u);
+
+         }
+
+
+
+      // is this better vertex to add next?
+
+      if (count[*u] &lt; MinDegree) {// yes it is
+
+         MinDegree = count[*u];
+
+         MinV = *u;}
+
+      u = c.Next();
+
+      }
+
+
+
+   // add additional vertices to clique
+
+   while (MinDegree &lt; n + 1) {
+
+      // MinV will be added to independent set and
+
+      // adjacent candidate vertices will be eliminated
+
+
+
+      // label eliminated candidates
+
+      v = Begin(MinV);
+
+      while (v) {
+
+         // v is to be eliminated, but first
+
+         // make sure it was a candidate
+
+         if (C[v] == 2) {
+
+            C[v] = 0;
+
+            Elim-&gt;Insert(0,v);
+
+            }
+
+         v = NextVertex(MinV);
+
+         }
+
+
+
+      // add MinV to independent set
+
+      C[MinV] = 1;
+
+
+
+      // now set up new candidates
+
+      u = c.Initialize(*Cand);
+
+      while (u) {
+
+         if (C[*u] == 2)
+
+           // *u remains a candidate
+
+           New-&gt;Insert(0,*u);
+
+         u = c.Next();
+
+         }
+
+      Cand-&gt;Erase();
+
+      Swap(Cand,New);
+
+
+
+      // update count to account for eliminated
+
+      // candidates and selection of MinV
+
+      u = c.Initialize(*Elim);
+
+      while (u) {
+
+         // *u has been eliminated
+
+         // reduce count of adjacent candidates
+
+         v = Begin(*u);
+
+         while (v) {
+
+            // easier to reduce everyone's count
+
+            count[v]--;
+
+            v = NextVertex(*u);
+
+            }
+
+         u = c.Next();
+
+         }
+
+      Elim-&gt;Erase();
+
+
+
+      // update MinV
+
+      MinDegree = n + 1;
+
+      u = c.Initialize(*Cand);
+
+      while (u) {
+
+         if (count[*u] &lt; MinDegree) {
+
+            MinDegree = count[*u];
+
+            MinV = *u;
+
+            }
+
+         u = c.Next();
+
+         }
+
+      }
+
+      
+
+   // put clique vertices into V
+
+   int s = -1;
+
+   for (int i = 1; i &lt;= n; i++)
+
+      if (C[i] == 1) V[++s] = i;
+
+       
+
+   delete [] C;
+
+   delete [] count;
+
+   DeactivatePos();
+
+   return s + 1;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+<dt> (d)
+
+<dd>
+
+
+
+When adjacency matrices are used,
+
+it takes O(<code class=var>n<sup>2</sup></code>)
+
+time to find the vertex with minimum degree as well as to determine
+
+the <code class=code>count</code> values.
+
+Each additional vertex that is added to the independent takes
+
+O(<code class=var>nd</code>) time, where <code class=code>d</code>
+
+is the number of candidates
+
+eliminated.  Since at most
+
+<code class=var>n - 1</code> vertices are eliminated over the entire
+
+execution of the algorithm,
+
+the total time is
+
+O(<code class=var>n<sup>2</sup></code>).
+
+<br><br>
+
+When adjacency lists are used, the complexity is
+
+O(<code class=var>n + e</code>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

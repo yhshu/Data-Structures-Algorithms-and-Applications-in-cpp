@@ -1,0 +1,272 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 5, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+The new class definition is given below.  Changes from Program 5.4 are shown
+
+in
+
+<font color=red>red</font>.
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class LinkedStack {
+
+   <font color=red>friend ostream&amp; operator&lt;&lt;
+
+          (ostream&amp;, const LinkedStack&lt;T&gt;&amp;);
+
+   friend istream&amp; operator&gt;&gt;
+
+          (istream&amp;, LinkedStack&lt;T&gt;&amp;);</font>
+
+   public:
+
+      LinkedStack() {top = 0;}
+
+      ~LinkedStack();
+
+      bool IsEmpty() const {return top == 0;}
+
+      bool IsFull() const;
+
+      T Top() const;
+
+      LinkedStack&lt;T&gt;&amp; Add(const T&amp; x);
+
+      LinkedStack&lt;T&gt;&amp; Delete(T&amp; x);
+
+      <font color=red>int Size() const;</font>
+
+   private:
+
+      Node&lt;T&gt; *top; // pointer to top node
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br>
+
+The codes for <strong class=var>Size</strong>
+
+and the overloading of the input and output operators are given below.
+
+These codes assume that << and >> are friends of
+
+<strong class=var>node.h</strong>.
+
+The relevant files are
+
+<strong class=var>estack.*</strong>.
+
+<br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+int LinkedStack&lt;T&gt;::Size() const
+
+{// Return the number of elements in the stack.
+
+   Node&lt;T&gt; *current = top;
+
+   int size = 0;
+
+   while (current) {// go down stack
+
+      size++;
+
+      current = current-&gt;link;
+
+      }
+
+
+
+   return size;
+
+}
+
+
+
+// overload &gt;&gt;
+
+template&lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in,
+
+                    LinkedStack&lt;T&gt;&amp; s)
+
+{// Input stack s from top to bottom.
+
+   // empty out current stack
+
+   while (s.top) {// delete nodes one by one
+
+      Node&lt;T&gt; *next;
+
+      next = s.top-&gt;link;
+
+      delete s.top;
+
+      s.top = next;
+
+      }
+
+
+
+   // input stack size
+
+   int size;
+
+   cout &lt;&lt; "Enter size of stack" &lt;&lt; endl;
+
+   in &gt;&gt; size;
+
+
+
+   if (!size) // empty stack
+
+      return in;
+
+
+
+   // nonempty stack
+
+   cout &lt;&lt; "Enter the elements from top to bottom"
+
+        &lt;&lt; endl;
+
+
+
+   // get top element
+
+   s.top = new Node&lt;T&gt;;
+
+   cin &gt;&gt; s.top-&gt;data;
+
+  
+
+   // set up for remaining elements
+
+   Node&lt;T&gt; *last = s.top;  // pointer to bottom
+
+                           // node in stack
+
+
+
+   // get remaining stack elements
+
+   // and link into chain
+
+   for (int i = 2; i &lt;= size ; i++) {
+
+      Node&lt;T&gt; *x = new Node&lt;T&gt;;  // create node
+
+      in &gt;&gt; x-&gt;data;             // set data field
+
+      last-&gt;link = x;            // link into chain
+
+      last = x;
+
+      }
+
+   last-&gt;link = 0;
+
+
+
+   return in;
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out,
+
+                    const LinkedStack&lt;T&gt;&amp; s)
+
+{// Output the stack s from top to bottom
+
+
+
+   // output stack size
+
+   out &lt;&lt; "The stack has " &lt;&lt; s.Size()
+
+       &lt;&lt; " element(s)" &lt;&lt; endl;
+
+
+
+   // output stack elements
+
+   out &lt;&lt; "The element(s) from top to bottom are"
+
+       &lt;&lt; endl;
+
+   Node&lt;T&gt; *current = s.top;
+
+   while (current) {
+
+      out &lt;&lt; current-&gt;data &lt;&lt; ' ';
+
+      current = current-&gt;link;
+
+      }
+
+   out &lt;&lt; endl;
+
+
+
+   return out;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

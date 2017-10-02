@@ -1,0 +1,100 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 25<BR>
+
+<BR>
+
+</H1>
+
+
+
+When the edge weights are &gt;= 0, there is always a next shortest
+
+path that is a one edge extension of an already generated shortest path
+
+provided there is a next shortest path.
+
+Suppose the next shortest path <em class=var>P</em> from
+
+vertex <code class=code>s</code> is to vertex <code class=code>v</code>.
+
+Let <code class=code>u</code> be the last vertex
+
+on this path such that we have already generated
+
+a shortest path to
+
+<code class=code>u</code>.
+
+<br><br>
+
+If <code class=code>u</code> immediately precedes
+
+<code class=code>v</code> on
+
+<em class=var>P</em>, then the next shortest path is
+
+a one-edge extension of an already generated path.
+
+<br><br>
+
+If <code class=code>u</code> does not immediately precede
+
+<code class=code>v</code> on
+
+<em class=var>P</em>, then the length of the
+
+subpath of <em class=var>P</em> from
+
+<code class=code>u</code> to
+
+<code class=code>v</code> must be zero because otherwise,
+
+the length of the subpath of
+
+<em class=var>P</em> from <code class=code>s</code>
+
+to <code class=code>u</code> is shorter than the length of
+
+<em class=var>P</em>.  Therefore,
+
+<em class=var>P</em> cannot be the next shortest path.
+
+<br><br>
+
+Since the length of the subpath to <code class=code>u</code>
+
+is the same as the length of the next shortest path, we can
+
+generate the shortest path to <code class=code>u</code> next
+
+instead of the path to <code class=code>v</code>.  Therefore,
+
+there is a next shortest path which a one-edge extension
+
+of an already generated shortest path.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

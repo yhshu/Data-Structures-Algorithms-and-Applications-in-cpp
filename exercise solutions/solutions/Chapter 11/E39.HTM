@@ -1,0 +1,300 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 39<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+
+
+The code for
+
+<code class=code>DeleteGE</code> is obtained by combining the code for
+
+<code class=code>FindGE</code>, which finds the element that is to be deleted,
+
+with the portion of the code of
+
+<code class=code>Delete</code>, which deletes an element once we know which node
+
+it is in.
+
+The resulting code is given below and
+
+in the file <code class=code>dbst2.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+DBSTree&lt;E,K&gt;&amp; DBSTree&lt;E,K&gt;::DeleteGE(const K&amp; k, E&amp; e)
+
+{// Put smallest element with value &gt;= k into e
+
+ // and delete this element from the search tree.
+
+ // Throw BadInput exception if there is no such element.
+
+
+
+   // first find the element to delete
+
+   BinaryTreeNode&lt;E&gt; *q = root,  // search pointer
+
+                     *pq = 0,    // parent of q
+
+                     *p = 0,     // pointer to smallest
+
+                                 // &gt;= k found so far
+
+                     *pp = 0;    // parent of p
+
+   // search the tree
+
+   while (q) {
+
+      // is q a candidate?
+
+      if (k &lt;= q-&gt;data) {// yes
+
+          p = q;  // q is a better candidate than old p
+
+          pp = pq;
+
+          // smaller elements in left subtree only
+
+          pq = q;
+
+          q = q-&gt;LeftChild;}
+
+      else  {// no, q-&gt;data too small, try right subtree
+
+          pq = q;
+
+          q = q-&gt;RightChild;}
+
+      }
+
+
+
+   if (!p) throw BadInput(); // not found
+
+
+
+   // save smallest element &gt;= k
+
+   e = p-&gt;data;
+
+
+
+   // proceed to delete this element from the tree
+
+
+
+   // handle case when p has two children
+
+   if (p-&gt;LeftChild &amp;&amp; p-&gt;RightChild) {// two children
+
+      // convert to zero or one child case
+
+      // find largest element in left subtree of p
+
+      BinaryTreeNode&lt;E&gt; *s = p-&gt;LeftChild,
+
+                        *ps = p;  // parent of s
+
+      while (s-&gt;RightChild) {// move to larger element
+
+         ps = s;
+
+         s = s-&gt;RightChild;}
+
+
+
+      // move largest from s to p
+
+      p-&gt;data = s-&gt;data;
+
+      p = s;
+
+      pp = ps;}
+
+
+
+   // p has at most one child
+
+   // save child pointer in c
+
+   BinaryTreeNode&lt;E&gt; *c;
+
+   if (p-&gt;LeftChild) c = p-&gt;LeftChild;
+
+   else c = p-&gt;RightChild;
+
+
+
+   // delete p
+
+   if (p == root) root = c;
+
+   else {// is p left or right child of pp?
+
+         if (p == pp-&gt;LeftChild)
+
+              pp-&gt;LeftChild = c;
+
+         else pp-&gt;RightChild = c;}
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<dt> (b)
+
+<dd>
+
+With the availability of the <code class=code>DeleteGE</code>
+
+function, we can combine the the invocations of
+
+<code class=code>FindGE</code>
+
+and
+
+<code class=code>Delete</code>
+
+made in Program 11.9 into a single step.
+
+The modifed version of <code class=code>BestFitPack</code>
+
+is given below and in the file
+
+<code class=code>bestfit2.cpp</code>.
+
+Changes from the original are shown in <font color=red>red</font>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void BestFitPack(int s[], int n, int c)
+
+{
+
+   int b = 0;                // number of bins used
+
+   DBSTree&lt;BinNode, int&gt; T;  // tree of bin capacities
+
+   
+
+   // pack objects one by one
+
+   for (int i = 1; i &lt;= n; i++) {// pack object i
+
+      BinNode e;  // corresponding node
+
+      <font color=red>// find and delete best bin from tree
+
+      try {T.DeleteGE(s[i], e);}
+
+      catch (BadInput)
+
+         {// no bin large enough
+
+          // start a new bin
+
+          e = *(new BinNode);
+
+          e.ID = ++b;
+
+          e.avail = c;}</font>
+
+   
+
+      cout &lt;&lt; "Pack object " &lt;&lt; i &lt;&lt; " in bin "
+
+           &lt;&lt; e.ID &lt;&lt; endl;
+
+
+
+      // update available capacity and put bin
+
+      // in tree unless avail capacity is zero
+
+      e.avail -= s[i];
+
+      if (e.avail) T.Insert(e);
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<dt> (c)
+
+<dd>
+
+The new code will run faster because we have eliminated the
+
+the front part of <code class=code>Delete</code> which
+
+searched for the element that is to be deleted.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

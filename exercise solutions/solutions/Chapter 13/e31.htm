@@ -1,0 +1,934 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 31<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We may prove that Prim's algorithm of Figure 13.14
+
+always constructs a minimum-cost spanning tree by
+
+using the transformation technique
+
+used for the loading problem as well as for the proof of
+
+correctness of Kruskal's method.  We need to establish the following:
+
+(1) Prim's method results in a spanning tree whenever a
+
+spanning tree exists, and (2)
+
+the spanning tree generated is of minimum cost.
+
+<br><br>
+
+
+
+Let <em class=var>G</em> be any weighted undirected graph
+
+(i.e., <em class=var>G</em>
+
+is an undirected network).
+
+From Section 12.11.3, we know that an undirected
+
+graph has a spanning tree iff it is connected.
+
+Prim's method fails only if there are no edges connecting
+
+vertices in <em class=var>TV</em> with those not in
+
+<em class=var>TV</em>, a condition that arises only if the
+
+graph is not connected.
+
+<br><br>
+
+
+
+Now let us prove that the constructed spanning
+
+tree <em class=var>T</em> is of minimum cost.
+
+Since <em class=var>G</em> has a finite number of spanning trees, it has at
+
+least one of minimum cost.  Let <em class=var>U</em> be such a minimum-cost spanning tree.
+
+Both <em class=var>T</em> and
+
+<em class=var>U</em> have exactly
+
+<em class=var>n-1</em> edges.  If
+
+<em class=var>T = U</em>,
+
+then <em class=var>T</em>
+
+is of minimum cost and we have nothing to prove.  Therefore, assume that
+
+<em class=var>T != U</em>.  Let
+
+<em class=var>k</em>,
+
+<em class=var>k &lt; n-1</em>, be such that the first
+
+<em class=var>k</em> edges added to
+
+<em class=var>T</em> are also in
+
+<em class=var>U</em> and the
+
+<em class=var>k+1</em>th edge added to
+
+<em class=var>T</em> is not in
+
+<em class=var>U</em>.
+
+<br><br>
+
+We shall show that <em class=var>T</em> and
+
+<em class=var>U</em> have the same cost by transforming
+
+<em class=var>U</em> into
+
+<em class=var>T</em>.  This transformation will be done
+
+in at most <em class=var>n-1-k</em>
+
+steps.  At each step the value of <em class=var>k</em> is increased
+
+by at least 1.
+
+Further, the cost of <em class=var>U</em> will not change
+
+as a result of the transformation.  Consequently,  after at most
+
+<em class=var>n-1-k</em> steps of
+
+transformation <em class=var>U</em> will have the same cost as the
+
+initial <em class=var>U</em> and will
+
+consist of exactly those edges that are in <em class=var>T</em>.  Therefore,
+
+<em class=var>T</em>
+
+is of minimum cost.
+
+<br><br>
+
+Each step of the transformation involves
+
+adding to <em class=var>U</em> one edge,
+
+<em class=var>e</em>, from
+
+<em class=var>T</em> and
+
+removing one edge, <em class=var>f</em>, from
+
+<em class=var>U</em>.
+
+The edges <em class=var>e</em> and <em class=var>f</em> are selected
+
+in the following way:
+
+<OL>
+
+<LI>
+
+Let <em class=var>e</em> be the <em class=var>k+1</em>th edge added to <em class=var>T</em>.  By definition of
+
+<em class=var>k</em>, this edge is not in <em class=var>U</em>.
+
+Let <em class=var>TV</em> be the set of vertices in the tree just before
+
+edge <em class=var>e</em> is added.
+
+Let <em class=var>R</em> be the set of remaining vertices.
+
+<em class=var>e</em> joins a vertex in
+
+<em class=var>TV</em> and one in
+
+<em class=var>R</em>.
+
+<LI>
+
+When <em class=var>e</em> is added to <em class=var>U</em>, a unique cycle
+
+is created.
+
+Let <em class=var>f</em>
+
+be an edge, other than <em class=var>e</em>, on this cycle that joins a vertex in
+
+<em class=var>TV</em> with one in <em class=var>R</em>.  Such an <em class=var>f</em> must exist as the edges on
+
+this cycle, other than <em class=var>e</em>, form a path between a vertex in
+
+<em class=var>TV</em>
+
+and one in <em class=var>R</em>.
+
+Note that <em class=var>f</em> is not one of the first
+
+<em class=var>k+1</em> edges added to
+
+<em class=var>T</em> because at the time
+
+<em class=var>e</em>, which is the
+
+<em class=var>k+1</em>th edge added to
+
+<em class=var>T</em>, is added there is no edge in
+
+<em class=var>T</em> that joins a vertex in
+
+<em class=var>TV</em> and one
+
+in <em class=var>R</em>.
+
+</OL>
+
+<br><br>
+
+From the way <em class=var>e</em> and <em class=var>f</em> are selected,
+
+it follows that <em class=var>V</em> =
+
+<em class=var>U + {e} - {f}</em>
+
+is a spanning tree and that at least the first <em class=var>k+1</em>
+
+edges added to <em class=var>T</em> are in
+
+<em class=var>V</em>.  We need to show that the cost of
+
+<em class=var>V</em> is the same as that of
+
+<em class=var>U</em>.
+
+Clearly, the cost of <em class=var>V</em> is the cost of
+
+<em class=var>U</em> plus the cost of edge
+
+<em class=var>e</em>
+
+minus the cost of edge <em class=var>f</em>.  If the cost of
+
+<em class=var>e</em> is less than the cost
+
+of <em class=var>f</em>, then the spanning tree
+
+<em class=var>V</em> has a smaller cost than the tree
+
+<em class=var>U</em>, which is impossible.  If
+
+<em class=var>e</em> has a higher cost than
+
+<em class=var>f</em>, then
+
+<em class=var>f</em> would have been added to
+
+<em class=var>T</em>
+
+before <em class=var>e</em> by Prim's algorithm.
+
+But it was not.  So edges <em class=var>e</em> and <em class=var>f</em>
+
+must have the same cost.
+
+Hence <em class=var>V</em> has the same cost
+
+as <em class=var>U</em>.
+
+<br><br>
+
+
+
+<dt> (b)
+
+<dd>
+
+It is possible to implement Prim's method so as to have complexity
+
+O(<code class=code>n<sup>2</sup></code>).  Such an implementation
+
+requires the use of the data structure Fibonacci Heap which we
+
+have not studied in this book.  So, we shall be content
+
+with an
+
+O(<code class=code>n<sup>2</sup> log n</code>) implementation.  This
+
+implementation uses a modified min heap.  Replacing the use
+
+of the modified min heap with a Fibonacci heap will result in an
+
+O(<code class=code>n<sup>2</sup></code>) complexity.
+
+<br><br>
+
+We begin by adding vertex 1 to the set of selected vertices, that is
+
+the vertices in <em class=var>TV</em>.  We go through
+
+<code class=code>n-1</code> stages.  In each of these, a new vertex
+
+is selected.  This vertex is the one that is nearest to an already
+
+selected vertex (i.e.,  it is a vertex that is not in <em class=var>TV</em>
+
+and is connected to a vertex in <em class=var>TV</em> with the
+
+least cost edge).  To make this selection, we define, for every
+
+vertex <em class=var>v</em> not in <em class=var>TV</em>, 
+
+a distance which equals the cost of the least cost edge
+
+that joins this vertex to any vertex in <em class=var>TV</em>.
+
+At each stage, the vertex with least distance is selected.
+
+<br><br>
+
+Suppose that vertex <em class=var>v</em> is selected, its inclusion
+
+into <em class=var>TV</em> may reduce the distance values of its
+
+adjacent vertices that are currently not in <em class=var>TV</em>.
+
+So we need to perform the operations select he minimum distance
+
+vertex and decrease some distance values.  Alhough these operations
+
+are done best using a Fibonacci heap, they are done fairly efficiently
+
+using a min heap which is augmented by an array
+
+<code class=code>location</code> to keep track of the
+
+location in <code class=code>heap[]</code> of the distance
+
+value of a vertex.
+
+<br><br>
+
+First we define two classes for vertex nodes as below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+class VertexNode1 {
+
+   friend UNetwork&lt;T&gt;;
+
+   public:
+
+      operator T () const {return distance;}
+
+   private:
+
+      T distance;    // distance to nearest tree vertex
+
+      int nbr;       // closest tree vertex
+
+};
+
+
+
+
+
+template &lt;class T&gt;
+
+class VertexNode2 {
+
+   friend UNetwork&lt;T&gt;;
+
+   friend ModifiedMinHeap&lt;T&gt;;
+
+   public:
+
+      operator T () const {return distance;}
+
+   private:
+
+      T distance;    // distance to nearest tree vertex
+
+      int ID;        // vertex ID
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+Next we define the class <code class=code>ModifiedMinHeap</code>
+
+as below.
+
+The method <code class=code>Decrease</code> raplaces the
+
+old distance of a vertex by a smaller one. <code class=code>x.ID</code>
+
+is the vertex and <code class=code>x.distance</code> is its
+
+new smaller distance value.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+class ModifiedMinHeap {
+
+   public:
+
+      ModifiedMinHeap(int MinHeapSize = 10);
+
+      ~ModifiedMinHeap() {delete [] heap;}
+
+      int Size() const {return CurrentSize;}
+
+      T Min() {if (CurrentSize == 0)
+
+                  throw OutOfBounds();
+
+               return heap[1];}
+
+      ModifiedMinHeap&lt;T&gt;&amp; Insert(const VertexNode2&lt;T&gt;&amp; x);
+
+      ModifiedMinHeap&lt;T&gt;&amp; DeleteMin(VertexNode2&lt;T&gt;&amp; x);
+
+      ModifiedMinHeap&lt;T&gt;&amp; Decrease(const VertexNode2&lt;T&gt;&amp; x);
+
+   private:
+
+      int CurrentSize, MaxSize;
+
+      VertexNode2&lt;T&gt; *heap; // element array
+
+      int *location;        // location array
+
+};
+
+
+
+template&lt;class T&gt;
+
+ModifiedMinHeap&lt;T&gt;::
+
+        ModifiedMinHeap(int MinHeapSize)
+
+{// Min heap constructor.
+
+   MaxSize = MinHeapSize;
+
+   heap = new VertexNode2&lt;T&gt; [MaxSize+1];
+
+   location = new int [MaxSize+1];
+
+   // initially, no element has a location
+
+   for (int i = 1; i &lt;= MinHeapSize; i++)
+
+      location[i] = 0;
+
+   CurrentSize = 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+ModifiedMinHeap&lt;T&gt;&amp; ModifiedMinHeap&lt;T&gt;::Insert
+
+                    (const VertexNode2&lt;T&gt;&amp; x)
+
+{// Insert x into the min heap.
+
+   if (CurrentSize == MaxSize)
+
+      throw NoMem(); // no space
+
+   if (x.ID &lt; 1 || x.ID &gt; MaxSize)
+
+      throw BadInput();
+
+
+
+   // find place for x
+
+   // i starts at new leaf and moves up tree
+
+   int i = ++CurrentSize;
+
+   while (i != 1 &amp;&amp; x &lt; heap[i/2]) {
+
+      // cannot put x in heap[i]
+
+      heap[i] = heap[i/2]; // move element down
+
+      location[heap[i].ID] = i;
+
+      i /= 2; // move to parent
+
+      }
+
+   heap[i] = x;
+
+   location[x.ID] = i;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+ModifiedMinHeap&lt;T&gt;&amp; ModifiedMinHeap&lt;T&gt;::DeleteMin
+
+                    (VertexNode2&lt;T&gt;&amp; x)
+
+{// Set x to min element and delete
+
+ // min element from heap.
+
+   // check if heap is empty
+
+   if (CurrentSize == 0)
+
+      throw OutOfBounds(); // empty
+
+
+
+   x = heap[1]; // min element
+
+   location[x.ID] = 0;
+
+
+
+   // restructure heap
+
+   VertexNode2&lt;T&gt; y = heap[CurrentSize--]; // last element
+
+
+
+   // find place for y starting at root
+
+   int i = 1,  // current node of heap
+
+       ci = 2; // child of i
+
+   while (ci &lt;= CurrentSize) {// find place to put y
+
+      // heap[ci] should be larger child of i
+
+      if (ci &lt; CurrentSize &amp;&amp;
+
+          heap[ci] &gt; heap[ci+1]) ci++;
+
+
+
+      // can we put y in heap[i]?
+
+      if (y &lt;= heap[ci]) break;  // yes
+
+
+
+      // no
+
+      heap[i] = heap[ci]; // move child up
+
+      location[heap[i].ID] = i;
+
+      i = ci;  // move down a level
+
+      ci *= 2;
+
+      }
+
+   heap[i] = y;
+
+   location[y.ID] = i;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+ModifiedMinHeap&lt;T&gt;&amp; ModifiedMinHeap&lt;T&gt;::Decrease
+
+                    (const VertexNode2&lt;T&gt;&amp; x)
+
+{// Decrease distance of x.ID to x.distance.
+
+   // check if x.ID in heap
+
+   if (!location[x.ID])
+
+      throw BadInput();
+
+
+
+   // make sure new distance is smaller
+
+   if (x.distance &gt;= heap[location[x.ID]].distance)
+
+      throw BadInput();
+
+
+
+   // find new place for x
+
+   // i starts at old location of x and moves up tree
+
+   int i = location[x.ID];
+
+   while (i != 1 &amp;&amp; x &lt; heap[i/2]) {
+
+      // cannot put x in heap[i]
+
+      heap[i] = heap[i/2]; // move element down
+
+      location[heap[i].ID] = i;
+
+      i /= 2; // move to parent
+
+      }
+
+   heap[i] = x;
+
+   location[x.ID] = i;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for Prim's method now takes the form
+
+given below and in the file
+
+<code class=code>unetwork.h</code>.
+
+A driver, test data, and output appear in the files
+
+<code class=code>prim.*</code>.
+
+The code for the vetex classes is in the file
+
+<code class=code>vnode.h</code> and the code for
+
+the modified min heap class is in the file
+
+<code class=code>modheap.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+bool UNetwork&lt;T&gt;::Prim(EdgeNode&lt;T&gt; t[])
+
+{// Find a min cost spanning tree using Prim's
+
+ // method.  Return false if not connected.  If
+
+ // connected, return min spanning tree in t[0:n-2].
+
+
+
+   int n = Vertices();
+
+   bool *selected = new bool [n+1];
+
+   VertexNode1&lt;T&gt; *VN1 = new VertexNode1&lt;T&gt; [n+1];
+
+
+
+   // start with vertex 1 in tree
+
+   // initilize distance and modified min heap
+
+   // of next candidates
+
+   VN1[1].distance = 0;
+
+   for (int i = 2; i &lt;= n; i++) {
+
+      VN1[i].distance = -1;
+
+      selected[i] = false;
+
+      }
+
+   InitializePos();  // graph iterator
+
+
+
+   // update distance for vertices adjacent to 1
+
+   // and insert these vertices into a modified
+
+   // min heap
+
+   int v;
+
+   T w;  // edge weight
+
+   VertexNode2&lt;T&gt; VN2;  // used for modified min heap
+
+   ModifiedMinHeap&lt;T&gt; *H;
+
+   H = new ModifiedMinHeap&lt;T&gt; (n);
+
+   First(1,v,w);
+
+   while (v) {
+
+      VN1[v].distance = w;
+
+      VN1[v].nbr = 1;
+
+      VN2.ID = v;
+
+      VN2.distance = w;
+
+      H-&gt;Insert(VN2);
+
+      Next(1,v,w);
+
+      }
+
+
+
+   // select n-1 edges for spanning tree
+
+   for (int i = 0; i &lt; n - 1; i++) {
+
+      // get nearest unselected vertex
+
+      try {H-&gt;DeleteMin(VN2);}
+
+      catch (OutOfBounds)
+
+         {// no next vertex
+
+          return false;
+
+         }
+
+
+
+      // select VN2.ID
+
+      EdgeNode&lt;T&gt; x;
+
+      int u = VN2.ID;
+
+      x.u = u;
+
+      x.v = VN1[u].nbr;
+
+      x.weight = VN1[u].distance;
+
+      t[i] = x;
+
+      selected[u] = true;
+
+
+
+      // update distances
+
+      First(u,v,w);
+
+      while (v) {
+
+         // VN1[v].distance may have changed
+
+         if (!selected[v]) {
+
+            if (VN1[v].distance == -1) {
+
+               // v not in min heap
+
+               VN1[v].distance = w;
+
+               VN1[v].nbr = u;
+
+               VN2.distance = w;
+
+               VN2.ID = v;
+
+               H-&gt;Insert(VN2);
+
+               }
+
+            else if (VN1[v].distance &gt; w) {
+
+                    // v is in the min heap
+
+                    VN1[v].distance = w;
+
+                    VN1[v].nbr = u;
+
+                    VN2.distance = w;
+
+                    VN2.ID = v;
+
+                    H-&gt;Decrease(VN2);
+
+                    }
+
+            }
+
+         Next(u,v,w);
+
+         }               
+
+      }   
+
+
+
+   DeactivatePos();
+
+   delete [] VN1;
+
+   delete [] selected;
+
+   delete H;
+
+   return true;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+
+
+The number of min heap insert and delete min operations
+
+is
+
+O(<code class=var>n</code>)
+
+and the number of decrease operations is
+
+O(<code class=var>e</code>).
+
+The total time spent on these operations is
+
+O(<code class=var>(n+e) log n</code>).
+
+The time spent on the rest of the code is
+
+O(<code class=var>n + e</code>) if adjacency lists are used and
+
+O(<code class=var>n<sup>2</sup></code>) if adjacency
+
+matrices are used.
+
+Since <code class=var>e</code> is
+
+O(<code class=var>n<sup>2</sup></code>), the total time is
+
+O(<code class=var>n<sup>2</sup> log n</code>).
+
+<br><br>
+
+When Fibonacci heaps are used, the time spent on the decrease
+
+key operations is
+
+O(<code class=var>e</code>) and the run time becomes
+
+O(<code class=var>n<sup>2</sup></code>) when adjacency matrices are used
+
+and
+
+O(<code class=var>n log n + e</code>) when adjacency lists are used.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

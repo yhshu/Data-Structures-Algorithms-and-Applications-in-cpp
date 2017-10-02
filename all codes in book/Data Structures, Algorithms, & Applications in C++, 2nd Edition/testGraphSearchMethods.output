@@ -1,0 +1,123 @@
+Enter number of edges in graph
+Enter weighted edge 1
+Enter weighted edge 2
+Enter weighted edge 3
+Enter weighted edge 4
+Enter weighted edge 5
+Enter weighted edge 6
+Graph 0 is
+Number of Vertices = 7
+Number of Edges = 6
+0  1  1  0  0  0  0  
+1  0  0  0  0  0  0  
+1  0  0  0  0  0  0  
+0  0  0  0  1  0  0  
+0  0  0  1  0  1  1  
+0  0  0  0  1  0  1  
+0  0  0  0  1  1  0  
+
+
+Graph 1 is
+Number of Vertices = 7
+Number of Edges = 6
+0  1  1  0  0  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  1  0  0  
+0  0  0  0  0  1  0  
+0  0  0  0  0  0  0  
+0  0  0  0  1  1  0  
+
+
+Graph 2 is
+Number of Vertices = 7
+Number of Edges = 6
+3  2  
+1  
+1  
+5  
+7  6  4  
+7  5  
+5  6  
+
+
+Graph 3 is
+Number of Vertices = 7
+Number of Edges = 6
+3  2  
+
+
+5  
+6  
+
+5  6  
+
+
+Graph 4 is
+Number of Vertices = 7
+Number of Edges = 6
+0  9  9  0  0  0  0  
+9  0  0  0  0  0  0  
+9  0  0  0  0  0  0  
+0  0  0  0  9  0  0  
+0  0  0  9  0  9  9  
+0  0  0  0  9  0  9  
+0  0  0  0  9  9  0  
+
+
+Graph 5 is
+Number of Vertices = 7
+Number of Edges = 6
+0  9  9  0  0  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  9  0  0  
+0  0  0  0  0  9  0  
+0  0  0  0  0  0  0  
+0  0  0  0  9  9  0  
+
+
+Graph 6 is
+Number of Vertices = 7
+Number of Edges = 6
+3 9   2 9   
+1 9   
+1 9   
+5 9   
+7 9   6 9   4 9   
+7 9   5 9   
+5 9   6 9   
+
+
+Graph 7 is
+Number of Vertices = 7
+Number of Edges = 6
+3 9   2 9   
+
+
+5 9   
+6 9   
+
+5 9   6 9   
+
+
+Doing bfs
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+
+Doing dfs
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+Reached values for vertices are 1 1 1 2 2 2 2 
+Reached values for vertices are 1 1 1 2 2 2 0 
+

@@ -1,0 +1,296 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+
+
+We use a single <code class=var>MaxHBLT</code> node
+
+with data field set to
+
+<code class=var>MinElement</code>
+
+as a substitute for the <code class=var>NULL</code>
+
+pointer.
+
+This simplifies the code for <code class=var>Meld</code>.
+
+As it turns out, the new code does not use <code class=code>MinElement</code>
+
+in any meaningful way and so we can eliminate this from
+
+our specification.
+
+<br><br>
+
+The new code is given below and in the file
+
+<code class=var>maxhblt2.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class MaxHBLT {
+
+   public:
+
+      MaxHBLT() {root = MinNode;}
+
+      ~MaxHBLT() {Free(root);}
+
+      T Max() {if (root == MinNode) throw OutOfBounds();
+
+               return root-&gt;data;}
+
+      MaxHBLT&lt;T&gt;&amp; Insert(const T&amp; x);
+
+      MaxHBLT&lt;T&gt;&amp; DeleteMax(T&amp; x);
+
+      MaxHBLT&lt;T&gt;&amp; Meld(MaxHBLT&lt;T&gt;&amp; x) {
+
+                Meld(root,x.root);
+
+                x.root = MinNode;
+
+                return *this;}
+
+      void Initialize(T a[], int n);
+
+      void Output() const {Output(root); cout &lt;&lt; endl;}
+
+   private:
+
+      void Free(HBLTNode&lt;T&gt; *t);
+
+      void Meld(HBLTNode&lt;T&gt;* &amp;x, HBLTNode&lt;T&gt;* y);
+
+      void Output(HBLTNode&lt;T&gt; *t) const;
+
+      HBLTNode&lt;T&gt; *root;            // pointer to tree root
+
+      static HBLTNode&lt;T&gt; *MinNode;  // node with MinElement
+
+      static T MinElement;          // no element &lt; MinElement
+
+};
+
+
+
+
+
+template&lt;class T&gt;
+
+void MaxHBLT&lt;T&gt;::Free(HBLTNode&lt;T&gt; *t)
+
+{// Delete all nodes in tree rooted at t.
+
+ // Use a postorder traversal.
+
+   if (t != MinNode) {Free(t-&gt;LeftChild);
+
+                      Free(t-&gt;RightChild);
+
+                      delete t;}
+
+}
+
+
+
+template&lt;class T&gt;
+
+void MaxHBLT&lt;T&gt;::Meld(HBLTNode&lt;T&gt;* &amp;x, HBLTNode&lt;T&gt;* y)
+
+{// Meld leftist trees with roots *x and *y.
+
+ // Return pointer to new root in x.
+
+   if (y == MinNode) return; // y is empty
+
+   if (x == MinNode)         // x is empty
+
+         {x = y;
+
+          return;}
+
+
+
+   // neither is empty
+
+   if (x-&gt;data &lt; y-&gt;data) Swap(x,y);
+
+   // now x-&gt;data &gt;= y-&gt;data
+
+   Meld(x-&gt;RightChild,y);
+
+   // see if subtrees to be swapped
+
+   // need not check for empty subtree
+
+   if (x-&gt;LeftChild-&gt;s &lt; x-&gt;RightChild-&gt;s)
+
+      Swap(x-&gt;LeftChild,x-&gt;RightChild);
+
+   x-&gt;s = x-&gt;RightChild-&gt;s + 1;
+
+}
+
+
+
+template&lt;class T&gt;
+
+MaxHBLT&lt;T&gt;&amp; MaxHBLT&lt;T&gt;::Insert(const T&amp; x)
+
+{// Insert x into the leftist tree.
+
+ // Create tree with one node.
+
+   if (x &lt; MinElement) throw BadInput();
+
+
+
+   HBLTNode&lt;T&gt; *q = new HBLTNode&lt;T&gt; (x,1,MinNode);
+
+   // meld q and original tree
+
+   Meld(root,q);
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+MaxHBLT&lt;T&gt;&amp; MaxHBLT&lt;T&gt;::DeleteMax(T&amp; x)
+
+{// Delete max element and put it in x.
+
+   if (root == MinNode) throw OutOfBounds();
+
+
+
+   // tree not empty
+
+   x = root-&gt;data;  // max element
+
+   HBLTNode&lt;T&gt; *L = root-&gt;LeftChild;
+
+   HBLTNode&lt;T&gt; *R = root-&gt;RightChild;
+
+   delete root;
+
+   root = L;
+
+   Meld(root,R);
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void MaxHBLT&lt;T&gt;::Initialize(T a[], int n)
+
+{// Initialize hblt with n elements.
+
+   Queue&lt;HBLTNode&lt;T&gt; *&gt; Q(n);
+
+   Free(root);  // delete old nodes
+
+   // initialize queue of trees
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      // create trees with one node each
+
+      HBLTNode&lt;T&gt; *q = new HBLTNode&lt;T&gt; (a[i],1,MinNode);
+
+      Q.Add(q);
+
+      }
+
+
+
+   // repeatedly meld from queue
+
+   HBLTNode&lt;T&gt; *b, *c;
+
+   for (int i = 1; i &lt;= n - 1; i++) {
+
+      // delete and meld two trees
+
+      Q.Delete(b).Delete(c);
+
+      Meld(b,c);
+
+      // put melded tree on queue
+
+      Q.Add(b);
+
+      }
+
+
+
+   if (n) Q.Delete(root);
+
+}
+
+
+
+template&lt;class T&gt;
+
+void MaxHBLT&lt;T&gt;::Output(HBLTNode&lt;T&gt; *t) const
+
+{
+
+   if (t != MinNode) {Output(t-&gt;LeftChild);
+
+           Output(t-&gt;RightChild);
+
+           cout &lt;&lt; t-&gt;data &lt;&lt; "  ";
+
+          }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

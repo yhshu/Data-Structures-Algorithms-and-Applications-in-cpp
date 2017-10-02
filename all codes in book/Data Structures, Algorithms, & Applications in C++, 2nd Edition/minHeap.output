@@ -1,0 +1,14 @@
+Heap size is 3
+Elements in array order are
+5  20  10  
+Heap size is 5
+Elements in array order are
+5  15  10  20  30  
+The min element is 5
+The min element is 10
+The min element is 15
+Heap size is 2
+Elements in array order are
+20  30  
+Elements in array order are
+1  2  3  6  5  4  7  8  9  

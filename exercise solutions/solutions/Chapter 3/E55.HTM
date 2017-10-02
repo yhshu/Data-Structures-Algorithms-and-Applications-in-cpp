@@ -1,0 +1,424 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 55<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can use the same code as used in Exercises 31, 39, 45, and 50.
+
+First, we must extend the class <code class=code>HDoubleCircular</code>
+
+developed in Exercise 52
+
+by adding the members
+
+<code class=code>Append</code>
+
+and
+
+<code class=code>Erase</code>, and create
+
+an iterator class for doubly-linked circular lists
+
+analogous to the
+
+iterator class for chains.
+
+The codes for the member functions and for the iterator
+
+class are
+
+given below and in the files
+
+<code class=code>hdblcirc.*</code> and
+
+<code class=code>hdbliter.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+HDoubleCircular&lt;T&gt;&amp; HDoubleCircular&lt;T&gt;::Insert(int k, const T&amp; x)
+
+{// Insert x after the k'th element.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+ // Pass NoMem exception if inadequate space.
+
+   if (k &lt; 0) throw OutOfBounds();
+
+
+
+   // p will eventually point to k'th node
+
+   DoubleNode&lt;T&gt; *p = head;
+
+   int index = 0;
+
+   for (; index &lt; k &amp;&amp; p-&gt;right != head;
+
+          index++)  // move p to k'th
+
+      p = p-&gt;right;
+
+   if (index != k) throw OutOfBounds(); // no k'th
+
+
+
+   // insert after p
+
+   DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   y-&gt;right = p-&gt;right;
+
+   y-&gt;right-&gt;left = y;
+
+   p-&gt;right = y;
+
+   y-&gt;left = p;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+HDoubleCircular&lt;T&gt;&amp; HDoubleCircular&lt;T&gt;::Append(const T&amp; x)
+
+{// Insert x at the end of the list.
+
+ // Pass NoMem exception if inadequate space.
+
+
+
+   // get a new node and insert it left
+
+   // of the head node
+
+   DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   y-&gt;right = head;
+
+   y-&gt;left = head-&gt;left;
+
+   y-&gt;left-&gt;right = y;
+
+   head-&gt;left = y;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void HDoubleCircular&lt;T&gt;::Erase()
+
+{// Delete all nodes other than the head node.
+
+   DoubleNode&lt;T&gt; *current = head-&gt;right,
+
+                               // current node
+
+                 *next;        // next node
+
+   while (current != head) {
+
+      next = current-&gt;right;
+
+      delete current;
+
+      current = next;
+
+      }
+
+
+
+   // empty list is left
+
+   head-&gt;right = head;
+
+   head-&gt;left = head;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class HDoubleCircularIterator {
+
+   public:
+
+      T* Initialize(const HDoubleCircular&lt;T&gt;&amp; c)
+
+            {location = c.head-&gt;right;
+
+             head = c.head;
+
+             if (location == head) return 0;
+
+             else return &amp;location-&gt;data;
+
+             }
+
+      T* Next()
+
+             {if (location-&gt;right == head)
+
+                 // no more elements
+
+                 return 0;
+
+             location = location-&gt;right;
+
+             return &amp;location-&gt;data;
+
+             }
+
+   private:
+
+      DoubleNode&lt;T&gt; *location,  // current element
+
+                    *head;      // head node
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+The sorted merge function uses doubly-linked
+
+circular list iterators to move through the
+
+input lists <code class=code>A</code> and
+
+<code class=code>B</code>.  At any time in the first <code class=code>while</code> loop below,
+
+we are positioned at the first unused element
+
+in each of the lists <code class=code>A</code> and
+
+<code class=code>B</code>.  The smaller of these is appended
+
+to the output list.  If the appended
+
+element came from <code class=code>A</code>, we move to the next
+
+element of <code class=code>A</code>.  Otherwise,
+
+we move to the next element of <code class=code>B</code>.
+
+<br><br>
+
+The code for the merge
+
+operation
+
+is given below and in the files
+
+<code class=code>dblcirc9.*</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void Merge(const HDoubleCircular&lt;T&gt;&amp; A,
+
+          const HDoubleCircular&lt;T&gt;&amp; B, HDoubleCircular&lt;T&gt;&amp; C)
+
+{// Merge from A and B to get C.
+
+   HDoubleCircularIterator&lt;T&gt; a,  // iterator for A
+
+                              b;  // iterator for B
+
+   T *DataA = a.Initialize(A);
+
+                    // pointer to an element of A
+
+   T *DataB = b.Initialize(B);
+
+                    // pointer to an element of B
+
+   C.Erase(); // empty out C
+
+
+
+   // merge until one of A and B is empty
+
+   while (DataA &amp;&amp; DataB) {
+
+      if (*DataA &lt;= *DataB) {// A goes next
+
+         C.Append(*DataA);
+
+         DataA = a.Next();}
+
+      else {// B is smaller
+
+         C.Append(*DataB);
+
+         DataB = b.Next();}
+
+      }
+
+
+
+   // append the rest
+
+   // at most one of A and B is nonempty now
+
+   if (DataA) while(DataA) {// A is not empty
+
+                 C.Append(*DataA);
+
+                 DataA = a.Next();
+
+                 }
+
+   else while(DataB) {// B is not empty
+
+           C.Append(*DataB);
+
+           DataB = b.Next();
+
+           }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+We shall do the analysis under the assumption that the merge
+
+is successful (i.e., no exception is thrown).
+
+In each iteration of the first
+
+<code class=code>while</code> loop, we move one node right
+
+either in <code class=code>A</code> or
+
+<code class=code>B</code>.  So, the complexity of this loop is O(length of
+
+<code class=code>A</code> +
+
+length of <code class=code>B</code>).  The complexity of the second <code class=code>while</code> loop
+
+is O(length of <code class=code>B</code>) and that of the third
+
+loop is O(length of <code class=code>A</code>).
+
+The call to <code class=code>Erase</code> takes
+
+Theta(length of initial <code class=code>C</code>) time.  Also,
+
+Omega(length of <code class=code>A</code> +
+
+length of <code class=code>B</code>) time is spent constructing the
+
+final <code class=code>C</code>.  So, the overall complexity is Theta(sum of initial lengths of the
+
+three lists <code class=code>A</code>,
+
+<code class=code>B</code>,
+
+and <code class=code>C</code>).
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+The codes and output are in the files <code class=code>dblcirc9.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+
+
+
+<dl compact>
+
+<dt> 
+
+<dd>
+

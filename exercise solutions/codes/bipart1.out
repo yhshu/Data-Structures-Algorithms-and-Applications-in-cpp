@@ -1,0 +1,16 @@
+Enter number of vertices in the graph
+Enter number of edges in the graph
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+The input graph is described below
+The graph has 5 vertices
+There is an edge from vertex 1 to vertex (vertices) 3  4  2  
+There is an edge from vertex 2 to vertex (vertices) 3  5  1  
+There is an edge from vertex 3 to vertex (vertices) 1  2  
+There is an edge from vertex 4 to vertex (vertices) 1  5  
+There is an edge from vertex 5 to vertex (vertices) 4  2  
+The graph is not bipartite

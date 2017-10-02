@@ -1,0 +1,188 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 51<BR>
+
+<BR>
+
+</H1>
+
+
+
+We can compute row
+
+<code class=code>TC[i][*]</code> for any
+
+<code class=code>i</code> by performing a depth-first or breadth-first
+
+search starting at vertex
+
+<code class=code>i</code>.  All vertices <code class=code>j</code>
+
+reached during this
+
+process have
+
+<code class=code>TC[i][j]</code> = 1.
+
+We need to be a bit careful about
+
+<code class=code>TC[i][i]</code>.
+
+<br><br>
+
+The code is given below and in the file <code class=code>network2.h</code>.
+
+Note that this code does not set
+
+<code class=code>TC[i][i]</code> correctly when the graph is undirected.
+
+Therefore, the code should really not be a member of
+
+<code class=code>Network</code> but rather a member of a class
+
+that contains functions intended only for directed graphs.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Network::TransitiveClosure(int **TC)
+
+{// Compute the transitive closure of a directed graph.
+
+ // Does not work correctly for undirected graphs.
+
+ // Should use Undirected::TransitiveClosure for
+
+ // such graphs.
+
+
+
+   InitializePos(); // init graph iterator array
+
+   int n = Vertices();
+
+   bool *reach = new bool [n+1];
+
+
+
+   // initialize TC
+
+   for (int i = 1; i &lt;= n; i++)
+
+      for (int j = 1; j &lt;= n; j++)
+
+         TC[i][j] = 0;
+
+
+
+   // compute TC row by row using depth first search
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      // initialize reach
+
+      for (int j = 1; j &lt;= n; j++)
+
+         reach[j] = false;
+
+      // set row i of TC
+
+      TCRow(i,i,TC,reach);
+
+   }
+
+
+
+   DeactivatePos(); // free graph iterator array
+
+}
+
+
+
+void Network::TCRow(int i, int v, int **TC, bool reach[])
+
+{// Use depth-first search to set row i of TC.
+
+ // Start search at vertex v.
+
+   reach[v] = true;
+
+   int u = Begin(v);
+
+   while (u) {// u is adj to v
+
+      if (!reach[u]) {// set TC[i][u]
+
+         TC[i][u] = 1;
+
+         TCRow(i, u, TC, reach);}
+
+      else // u is reachable from i
+
+         // need next line to catch TC[i][i]
+
+         TC[i][u] = 1;
+
+      u = NextVertex(v);
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+It takes Theta(<code class=code>n<sup>2</sup></code>) time to
+
+initialize the values of <code class=code>TC</code> in the two nested
+
+<code class=code>for</code> loops.  Each invocation of
+
+<code class=code>TCRow</code> takes O(<code class=code>n sup 2</code>)
+
+when adjacency matrices are used and
+
+O(<code class=code>n+e</code>)
+
+time if adjacency lists are used.
+
+The overall complexity is
+
+O(<code class=code>n<sup>3</sup></code>) when adjacency matrices are used
+
+and
+
+O(<code class=code>n(n+e)</code>)
+
+when adjacency lists are used.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

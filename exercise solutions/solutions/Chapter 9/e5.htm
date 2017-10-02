@@ -1,0 +1,216 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+
+
+The abstract data type <code class=var>MinPriorityQueue</code>
+
+is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+<strong class=var>AbstractDataType</strong> <em class=var>MinPriorityQueue</em> {
+
+   <strong class=var>instances</strong>
+
+      finite collection of elements, each has a priority
+
+   <strong class=var>operations</strong>
+
+      <em class=var>Create():</em> create an empty priority queue
+
+      <em class=var>Size():</em> return number of elements in the queue
+
+      <em class=var>Min():</em> return element with minimum priority
+
+      <em class=var>Insert(x):</em> insert <em class=var>x</em> into the queue
+
+      <em class=var>DeleteMin(x):</em> delete the element with minimum priority from the queue;
+
+         return this element in <em class=var>x</em>;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for the class <code class=var>MinPQ</code>
+
+is given below.  The relevant files
+
+are <code class=var>minpq.*</code>.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class MinPQ : private LinearList&lt;T&gt; {
+
+   public:
+
+      MinPQ(int MinPQSize = 10) :
+
+         LinearList&lt;T&gt; (MinPQSize) {}
+
+      int Size() {return Length();}
+
+      T Min();
+
+      MinPQ&lt;T&gt;&amp; Insert(const T&amp; x)
+
+         {LinearList&lt;T&gt;::Insert(Length(), x);
+
+          return *this;}
+
+      MinPQ&lt;T&gt;&amp; DeleteMin(T&amp; x);
+
+};
+
+
+
+template&lt;class T&gt;
+
+T MinPQ&lt;T&gt;::Min()
+
+{// Return min element.
+
+   int len = Length();             // size of queue
+
+   if (!len) throw OutOfBounds();  // queue is empty
+
+
+
+   // find min element by examining all
+
+   // elements in queue
+
+   T CurrentMin, x;
+
+   Find(1, CurrentMin);
+
+   for (int i = 2; i &lt;= len; i++) {
+
+      Find(i,x);
+
+      if (x &lt; CurrentMin) CurrentMin = x;
+
+      }
+
+
+
+   return CurrentMin;
+
+}
+
+      
+
+template&lt;class T&gt;
+
+MinPQ&lt;T&gt;&amp; MinPQ&lt;T&gt;::DeleteMin(T&amp; x)
+
+{// Set x to min element and delete
+
+ // min element from priority queue.
+
+   // check if queue is empty
+
+   int len = Length();
+
+   if (len == 0)
+
+      throw OutOfBounds(); // empty
+
+
+
+   // find min element and its index
+
+   // we could replace next two lines by code
+
+   // to find IndexOfMin by making a single
+
+   // pass over the queue elements
+
+   x = Min();
+
+   int IndexOfMin = Search(x);
+
+
+
+   // delete min element
+
+   Delete(IndexOfMin, x);
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The complexity of
+
+<code class=var>Insert</code> is Theta(1),
+
+and the complexity of <code class=var>DeleteMin</code>
+
+and
+
+<code class=var>Min</code>
+
+is Theta(<em class=var>n</em>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

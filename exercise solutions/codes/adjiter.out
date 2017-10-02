@@ -1,0 +1,67 @@
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter value to use for no edge
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+The graph has 6 edges.
+9 8 7 9 9 9 9 9 
+9 9 9 9 9 9 9 9 
+9 9 9 9 9 9 9 9 
+9 9 9 9 5 9 9 9 
+9 9 9 9 9 3 9 9 
+9 9 9 9 9 9 9 9 
+9 9 9 9 1 6 9 9 
+9 9 9 9 9 9 9 9 
+The vertices adjacent to vertex 1 are
+2  3  
+The vertices adjacent to vertex 2 are
+
+The vertices adjacent to vertex 3 are
+
+The vertices adjacent to vertex 4 are
+5  
+The vertices adjacent to vertex 5 are
+6  
+The vertices adjacent to vertex 6 are
+
+The vertices adjacent to vertex 7 are
+5  6  
+The vertices adjacent to vertex 8 are
+
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter value to use for no edge
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+The graph has 10 edges.
+9 9 9 9 9 3 
+2 9 9 9 9 6 
+9 2 9 9 4 7 
+1 2 9 9 4 9 
+9 5 9 9 9 9 
+9 9 9 9 9 9 
+
+The vertices adjacent to vertex 1 are
+6  
+The vertices adjacent to vertex 2 are
+1  6  
+The vertices adjacent to vertex 3 are
+2  5  6  
+The vertices adjacent to vertex 4 are
+1  2  5  
+The vertices adjacent to vertex 5 are
+2  
+The vertices adjacent to vertex 6 are
+

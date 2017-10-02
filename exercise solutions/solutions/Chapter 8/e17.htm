@@ -1,0 +1,162 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 17<BR>
+
+<BR>
+
+</H1>
+
+The root is the first node to be visited in preorder.  After
+
+we visit this node we must traverse the left subtree and then
+
+return to traverse the right subtree. To enable the return to
+
+the right subtree, we save a pointer to the root of this
+
+right subtree on a stack provided the right subtree is not empty.
+
+When we are traversing the left subtree of the root, its root is visited
+
+a pointer to its nonempty right subtree is saved on the stack, and we proceed
+
+to traverse its left subtree.  When we are done with the traversal of the left
+
+subtree, we move into its right subtree (if it is nonempty)
+
+or into the right subtree of the nearest ancestor that has a nonempty
+
+right subtree.  This is done
+
+by removing the right subtree root
+
+pointer from the top of the stack.
+
+<br><br>
+
+The code is given below and in the file
+
+<code class=var>ctraver.cpp</code>.
+
+A linked stack is used to simulate the recursion.
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void PreOrder(BinaryTreeNode&lt;T&gt; *t)
+
+{// Preorder traversal of *t.
+
+   LinkedStack&lt;BinaryTreeNode&lt;T&gt; *&gt; S;
+
+   BinaryTreeNode&lt;T&gt; *current = t;
+
+   while (true) {
+
+      // traverse subtree rooted at current
+
+      // in preorder
+
+  
+
+      // is subtree empty?
+
+      if (!current) {// yes it is
+
+         // get a subtree to traverse from
+
+         // the stack
+
+         try {S.Delete(current);}
+
+         catch (OutOfBounds)
+
+            {// no untraversed subtrees left
+
+             return;
+
+            }
+
+         }
+
+
+
+      // first visit the root
+
+      Visit(current);
+
+
+
+      // save pointer to right subtree for
+
+      // future traversal
+
+      if (current-&gt;RightChild)
+
+         S.Add(current-&gt;RightChild);
+
+
+
+      // move into left subtree
+
+      current = current-&gt;LeftChild;
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+<br><br>
+
+The stack never contains two pairs that correspond to nodes on the
+
+same level.  When we reach a leaf the stack contains
+
+pointers to nonempty right subtrees of nodes on the
+
+path from the
+
+root to that leaf.
+
+So the stack space needed
+
+as well as the overall space needed by the traversal is
+
+O(<em class=var>h</em>) where <em class=var>h</em> is the height
+
+of the binary tree that is being traversed.
+
+Notice that when a left skewed binary tree is traversed nothing
+
+is added to the stack.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

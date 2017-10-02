@@ -1,0 +1,302 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 10, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+To implement the next fit strategy using the pseudocode
+
+of Section 10.5.2, we must extend the class
+
+<code class = code>winner.h</code> to include a function
+
+<code class = code>Parent(i)</code> that returns the internal
+
+node which is the parent if the external node
+
+<code class = code>i</code>.
+
+The code for
+
+<code class = code>Parent(i)</code> is given below and in the
+
+file
+
+<code class = code>winner4.h</code>.
+
+<br><br>
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+int WinnerTree&lt;T&gt;::Parent(int i)
+
+{// Return parent of external node i.
+
+   if (i &lt; 1 || i &gt; n) throw BadInput();
+
+   if (i &lt;= LowExt) return (i + offset)/2;
+
+   return (i - LowExt +n - 1)/2;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for <code class = code>NextFit</code> is given below
+
+and in the file <code class=var>nextfit.cpp</code>.
+
+This code follows the pseudocode fairly closely.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void NextFitPack(int s[], int n, int c)
+
+{// Output next fit packing into bins of size c.
+
+ // n is the number of objects and s[] their size.
+
+
+
+   WinnerTree&lt;int&gt; *W = new WinnerTree&lt;int&gt; (n);
+
+   int *avail = new int [n+1]; // bins
+
+   
+
+   // initialize n bins and winner tree
+
+   for (int i = 1; i &lt;= n; i++)
+
+      avail[i] = c;  // initial available capacity
+
+   W-&gt;Initialize(avail, n, winner);
+
+   int last = 0; // bin used for last object packed
+
+   
+
+   // put objects in bins
+
+   for (int i = 1; i &lt;= n; i++) {// put s[i] in a bin
+
+      // see if there is a nonempty bin to the
+
+      // right of bin last that has enough capcity
+
+
+
+      // set j to next bin with enough capacity
+
+      int j = last + 1;
+
+      if (avail[j] &lt; s[i])
+
+         // there must be another bin j+1
+
+         if (avail[j+1] &gt;= s[i]) j++;
+
+         else {// move up the tree
+
+            // set p to parent of bin j
+
+            int p = W-&gt;Parent(j);
+
+            bool done = false;
+
+            if (p == n-1) {// special case
+
+               int q;
+
+               if (j%2) q = j + 1;
+
+               else q = j + 2;
+
+               // q must be &lt;= n
+
+               if (avail[q] &gt;= s[i]) {
+
+                  j = q;
+
+                  done = true;}
+
+               }
+
+            
+
+            if (!done) {
+
+               // move to nearest ancestor
+
+               // of p with enough capacity
+
+               p /= 2;
+
+               while (avail[W-&gt;Winner(p)] &lt; s[i])
+
+                  p /= 2;
+
+
+
+               // now move to leftmost child of p
+
+               // that has enough capacity
+
+               p *= 2;  // start search at left child
+
+               while (p &lt; n) {
+
+                  int winp = W-&gt;Winner(p);
+
+                  if (avail[winp] &lt; s[i])  // first bin is in
+
+                     p++ ;                 // right subtree
+
+                  p *= 2;   // move to left child
+
+                  }
+
+         
+
+               p /= 2;  // undo last left child move
+
+               if (p &lt; n) {// at a tree node
+
+                 j = W-&gt;Winner(p);
+
+                 // if j is right child, need to check
+
+                 // bin j-1.  No harm done by checking
+
+                 // bin j-1 even if j is left child.
+
+                 if (j &gt; 1 &amp;&amp; avail[j-1] &gt;= s[i])
+
+                    j--;
+
+                 }
+
+               else  // arises when n is odd
+
+                  j = W-&gt;Winner(p/2);
+
+               }
+
+           }  
+
+
+
+   // see if bin j is nonempty
+
+   if (avail[j] == c) {// empty bin, execute step 2
+
+      // find first bin with enough capacity
+
+      int p = 2;  // start search at left child of root
+
+      while (p &lt; n) {
+
+         int winp = W-&gt;Winner(p);
+
+         if (avail[winp] &lt; s[i])  // first bin is in
+
+            p++ ;                 // right subtree
+
+         p *= 2;   // move to left child
+
+         }
+
+
+
+      p /= 2;  // undo last left child move
+
+      if (p &lt; n) {// at a tree node
+
+        j = W-&gt;Winner(p);
+
+        // if j is right child, need to check
+
+        // bin j-1.  No harm done by checking
+
+        // bin j-1 even if j is left child.
+
+        if (j &gt; 1 &amp;&amp; avail[j-1] &gt;= s[i])
+
+           j--;
+
+        }
+
+      else  // arises when n is odd
+
+         j = W-&gt;Winner(p/2);
+
+      }
+
+
+
+      cout &lt;&lt; "Pack object " &lt;&lt; i &lt;&lt; " in bin "
+
+           &lt;&lt; j &lt;&lt; endl;
+
+      avail[j] -= s[i];  // update avail. capacity
+
+      W-&gt;RePlay(j, winner);
+
+      last = j;
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

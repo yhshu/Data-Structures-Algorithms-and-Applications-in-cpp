@@ -1,0 +1,354 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 25<BR>
+
+<BR>
+
+</H1>
+
+<P ALIGN=LEFT>
+
+We need to first decide whether we want to
+
+make the class <strong class=var>Chain</strong>
+
+a
+
+friend of <strong class=var>LinearList</strong>.
+
+If we do this, then our codes for
+
+<strong class=var>FromList</strong>
+
+and
+
+<strong class=var>ToList</strong>
+
+will run faster as these codes can access the private
+
+members
+
+<strong class=var>length</strong>
+
+and
+
+<strong class=var>element</strong>
+
+of
+
+<strong class=var>LinearList</strong>.
+
+The price we pay for this access to the private members of
+
+<strong class=var>LinearList</strong>
+
+is increased software maintenance cost.  For example,
+
+if we change the linear list representation to use the
+
+formula of Exercise 20, our codes for
+
+<strong class=var>FromList</strong>
+
+and
+
+<strong class=var>ToList</strong>
+
+must also be changed.  <em>When we make changes to the
+
+representation used by a class, we must examine its friends
+
+to see whether corresponding changes must be made to the codes
+
+for these friends.</em>
+
+<br><br>
+
+If we do not make the class
+
+<strong class=var>Chain</strong>
+
+a friend of
+
+<strong class=var>LinearList</strong>,
+
+then our implementation of
+
+<strong class=var>FromList</strong>
+
+and
+
+<strong class=var>ToList</strong>
+
+must work through the public members of
+
+<strong class=var>LinearList</strong>.
+
+The implementations will not run as fast as when we
+
+could access the private members of
+
+<strong class=var>LinearList</strong>, but the implementations
+
+will not need change when the implementation of
+
+<strong class=var>LinearList</strong> is changed.
+
+<br><br>
+
+We give codes for
+
+<strong class=var>FromList</strong>
+
+and
+
+<strong class=var>ToList</strong>
+
+first for the case when
+
+<strong class=var>Chain</strong>
+
+is a friend of
+
+<strong class=var>LinearList</strong>
+
+and then for the case when it is not.
+
+In either case, it is necessary to empty the target list
+
+(the chain in the case of
+
+<strong class=var>FromList</strong>
+
+and the formula-based list in the case of
+
+<strong class=var>ToList</strong>) before copying from the source
+
+to the target.  This emptying of the target list
+
+takes time linear in the initial length of the target list
+
+when the target list is a chain.  When the target list is a formula-based
+
+list, the emptying takes constant time if
+
+<strong class=var>Chain</strong>
+
+is a friend of
+
+<strong class=var>LinearList</strong>
+
+and linear time otherwise (in this case too, the time
+
+can be made constant by adding a public member to
+
+<strong class=var>LinearList</strong>
+
+that just sets
+
+<strong class=var>length</strong>
+
+to zero).
+
+The actual copying of elements from the source to the
+
+target takes linear time regardless of whether
+
+<strong class=var>Chain</strong>
+
+is or is not a friend of
+
+<strong class=var>LinearList</strong>.
+
+Therefore, the complexity of the codes is Theta(initial size of
+
+target list plus final size of target list) except for the
+
+<strong class=var>ToList</strong> implementation when
+
+<strong class=var>Chain</strong>
+
+is a friend of
+
+<strong class=var>LinearList</strong>.
+
+In the latter case, the complexity is
+
+Theta(size of
+
+target list).
+
+<br><br>
+
+The codes are in the files
+
+<strong class=var>vchain.*</strong> and
+
+<strong class=var>cchain.*</strong>.
+
+</P>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+
+
+// Chain is a friend of LinearList
+
+
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::FromList(LinearList&lt;T&gt;&amp; L)
+
+{// Construct a chain from L.
+
+   // first make *this empty
+
+   Erase();
+
+   
+
+   // copy elements from L
+
+   for (int i = 1; i &lt;= L.length; i++)
+
+      Append(L.element[i-1]);
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::ToList(LinearList&lt;T&gt;&amp; L)
+
+{// Construct L from *this.
+
+
+
+   // copy from *this
+
+   ChainNode&lt;T&gt; *current = first;
+
+   int i = 1; // index of current element
+
+   while (current &amp;&amp; i &lt;= L.MaxSize) {// copy current element
+
+      L.element[i-1] = current-&gt;data;
+
+      current = current-&gt;link;  // move to next node
+
+      i++;
+
+      }
+
+
+
+   if (current) throw NoMem();  // did not copy all
+
+   L.length = i-1;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+
+
+// Chain is not a friend of LinearList
+
+
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::FromList(LinearList&lt;T&gt;&amp; L)
+
+{// Construct a chain from L.
+
+   // first make *this empty
+
+   Erase();
+
+   
+
+   // copy elements from L
+
+   int len = L.Length();
+
+   for (int i = 1; i &lt;= len; i++) {
+
+      T x;
+
+      L.Find(i,x);
+
+      Append(x);
+
+      }
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::ToList(LinearList&lt;T&gt;&amp; L)
+
+{// Construct L from *this.
+
+   // first make L empty
+
+   int len = L.Length();
+
+   for (int i = len; i &gt; 0; i--) {
+
+      T x;
+
+      L.Delete(i,x);
+
+      }
+
+
+
+<HR class = coderule>
+
+</pre>
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

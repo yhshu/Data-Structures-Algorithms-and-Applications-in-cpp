@@ -1,0 +1,402 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 7, Exercise 17<BR>
+
+<BR>
+
+</H1>
+
+The code for the new class is given below and in the files
+
+<code class=var>sochaint.*</code>.  The tail node has been used to
+
+simplify the conditions in the <code class=var>while</code>
+
+loops.  As a result, the new code is expected to run faster than
+
+the code of <code class=var>SortedChain</code> (file <code class=var>
+
+sochain.h</code>).
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class SortedChainWithTail {
+
+   public:
+
+      SortedChainWithTail() {first = new SortedChainNode&lt;E,K&gt;;
+
+                             tail = first;}
+
+      ~SortedChainWithTail();
+
+      bool IsEmpty() const {return first == 0;}
+
+      int Length() const;
+
+      bool Search(const K&amp; k, E&amp; e) const;
+
+      SortedChainWithTail&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e);
+
+      SortedChainWithTail&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+      SortedChainWithTail&lt;E,K&gt;&amp; DistinctInsert(const E&amp; e);
+
+      void Output(ostream&amp; out) const;
+
+   private:
+
+      SortedChainNode&lt;E,K&gt; *first,  // pointer to first node
+
+                           *tail;   // pointer to tail node
+
+};
+
+
+
+template&lt;class E, class K&gt;
+
+SortedChainWithTail&lt;E,K&gt;::~SortedChainWithTail()
+
+{// Destructor.  Delete all nodes.
+
+   // delete all but tail
+
+   SortedChainNode&lt;E,K&gt; *next;
+
+   while (first != tail) {
+
+      next = first-&gt;link;
+
+      delete first;
+
+      first = next;
+
+      }
+
+   // now delete tail also
+
+   delete tail;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+int SortedChainWithTail&lt;E,K&gt;::Length() const
+
+{// Size of list.
+
+   SortedChainNode&lt;E,K&gt; *p = first;
+
+   int len = 0;
+
+   while (p != tail) {
+
+      len++;
+
+      p = p-&gt;link;
+
+      }
+
+   return len;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool SortedChainWithTail&lt;E,K&gt;::Search(const K&amp; k, E&amp; e) const
+
+{// Put element that matches k in e.
+
+ // Return false if no match.
+
+
+
+   SortedChainNode&lt;E,K&gt; *p = first;
+
+   
+
+   // search for match with k
+
+   // first put k in tail
+
+   tail-&gt;data = k;
+
+
+
+   while (p-&gt;data &lt; k)
+
+      p = p-&gt;link;
+
+
+
+   // verify match
+
+   if (p != tail &amp;&amp; p-&gt;data == k) // yes, found match
+
+      {e = p-&gt;data; return true;}
+
+   return false; // no match
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+SortedChainWithTail&lt;E,K&gt;&amp; SortedChainWithTail&lt;E,K&gt;
+
+                  ::Delete(const K&amp; k, E&amp; e)
+
+{// Delete element that matches k.
+
+ // Put deleted element in e.
+
+ // Throw BadInput exception if no match.
+
+
+
+   SortedChainNode&lt;E,K&gt; *p = first,
+
+                        *tp = 0; // trail p
+
+   
+
+   // search for match with k
+
+   // first put k in tail
+
+   tail-&gt;data = k;
+
+
+
+   while (p-&gt;data &lt; k) {
+
+      tp = p;
+
+      p = p-&gt;link;
+
+      }
+
+
+
+   // verify match
+
+   if (p &amp;&amp; p-&gt;data == k) {// found a match
+
+           e = p-&gt;data;    // save data
+
+
+
+           // remove p from chain
+
+           if (tp) tp-&gt;link = p-&gt;link;
+
+           else first = p-&gt;link;  // p is first node
+
+
+
+           delete p;
+
+           return *this;}
+
+
+
+   throw BadInput();// no match
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+SortedChainWithTail&lt;E,K&gt;&amp; SortedChainWithTail&lt;E,K&gt;::
+
+                          Insert(const E&amp; e)
+
+{// Insert e, throw an exception if no space.
+
+
+
+   SortedChainNode&lt;E,K&gt; *p = first,
+
+                        *tp = 0; // trail p
+
+
+
+   // move tp so that e can be inserted after tp
+
+   // first put e in tail
+
+   tail-&gt;data = e;
+
+   while (p-&gt;data &lt; e) {
+
+      tp = p;
+
+      p = p-&gt;link;
+
+      }
+
+
+
+   // setup a new node *q for e
+
+   SortedChainNode&lt;E,K&gt;
+
+         *q = new SortedChainNode&lt;E,K&gt;;
+
+   q-&gt;data = e;
+
+
+
+   // insert node just after tp
+
+   q-&gt;link = p;
+
+   if (tp) tp-&gt;link = q;
+
+   else first = q;  // insert as first node
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+SortedChainWithTail&lt;E,K&gt;&amp; SortedChainWithTail&lt;E,K&gt;
+
+                 ::DistinctInsert(const E&amp; e)
+
+{// Insert e only if no element with same key
+
+ // currently in list.
+
+ // Throw BadInput exception if duplicate.
+
+
+
+   SortedChainNode&lt;E,K&gt; *p = first,
+
+                        *tp = 0; // trail p
+
+
+
+   // move tp so that e can be inserted after tp
+
+   // first put e in tail
+
+   tail-&gt;data = e;
+
+   while (p-&gt;data &lt; e) {
+
+      tp = p;
+
+      p = p-&gt;link;
+
+      }
+
+
+
+   // check if duplicate
+
+   if (p != tail &amp;&amp; p-&gt;data == e) throw BadInput();
+
+
+
+   // not duplicate, set up node for e
+
+   SortedChainNode&lt;E,K&gt;
+
+         *q = new SortedChainNode&lt;E,K&gt;;
+
+   q-&gt;data = e;
+
+
+
+   // insert node just after tp
+
+   q-&gt;link = p;
+
+   if (tp) tp-&gt;link = q;
+
+   else first = q;  // insert as first node
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+void SortedChainWithTail&lt;E,K&gt;::Output(ostream&amp; out) const
+
+{// Insert the chain elements into the stream out.
+
+   SortedChainNode&lt;E,K&gt; *p;
+
+   for (p = first; p != tail; p = p-&gt;link)
+
+      out &lt;&lt; p-&gt;data &lt;&lt; "  ";
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class E, class K&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out,
+
+                    const SortedChainWithTail&lt;E,K&gt;&amp; x)
+
+   {x.Output(out); return out;}
+
+
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

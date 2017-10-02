@@ -1,0 +1,49 @@
+Enter number of rows, columns, and #terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Enter row, column, and value of term 5
+Enter row, column, and value of term 6
+Matrix a is
+rows = 4 columns = 5
+nonzero terms = 6
+a(1,3) = 2
+a(2,5) = 3
+a(3,1) = 4
+a(3,4) = 5
+a(4,2) = 1
+a(4,5) = 2
+Enter number of rows, columns, and #terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Enter row, column, and value of term 5
+Matrix b is
+rows = 4 columns = 5
+nonzero terms = 5
+a(1,2) = 1
+a(1,3) = 3
+a(3,1) = 4
+a(3,2) = 3
+a(3,4) = -5
+The transpose of a is
+rows = 5 columns = 4
+nonzero terms = 6
+a(1,3) = 4
+a(2,4) = 1
+a(3,1) = 2
+a(4,3) = 5
+a(5,2) = 3
+a(5,4) = 2
+The sum of a and b is
+rows = 4 columns = 5
+nonzero terms = 7
+a(1,2) = 1
+a(1,3) = 5
+a(2,5) = 3
+a(3,1) = 8
+a(3,2) = 3
+a(4,2) = 1
+a(4,5) = 2

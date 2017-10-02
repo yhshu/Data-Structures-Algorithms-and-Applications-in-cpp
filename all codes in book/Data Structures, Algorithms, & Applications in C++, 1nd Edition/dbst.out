@@ -1,0 +1,17 @@
+Elements in ascending order are
+1 a  6 b  6 c  8 d  8 e  
+Delete of 4 fails 
+Elements in ascending order are
+1 a  6 b  6 c  8 d  8 e  
+Delete of 8 succeeds 
+8 d
+Elements in ascending order are
+1 a  6 b  6 c  8 e  
+Delete of 6 succeeds 
+6 b
+Elements in ascending order are
+1 a  6 c  8 e  
+Delete of 6 succeeds 
+Elements in ascending order are
+1 a  8 e  
+Smallest key >= 4 is 8

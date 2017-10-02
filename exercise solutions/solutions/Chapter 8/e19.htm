@@ -1,0 +1,222 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 19<BR>
+
+<BR>
+
+</H1>
+
+Suppose we are told that the preorder and inorder listings of
+
+a binary tree are <code class=var>PreList[0:6]</code> =
+
+[0, 1, 3, 5, 2, 4, 6] and <code class=var>InList[0:6]</code> =
+
+[3, 5, 1, 0, 2, 6, 4].
+
+From the definition of preorder we know that <code class=var>Prelist[0]</code>
+
+= 0
+
+is the root.  From the definition of inorder we know that in inorder the
+
+root is preceded by its left subtree and followed by its right subtree.
+
+So <code class=var>InList[0:2]</code> is the inorder listing of the
+
+left subtree and
+
+<code class=var>InList[4:6]</code> is the inorder listing of the
+
+right subtree.  The left and right subtrees can now be constructed
+
+recursively using this information.
+
+<br><br>
+
+To implement the above strategy efficiently it is useful
+
+to construct an array <code class=var>InMap[]</code>
+
+with the property that <code class=var>InMap[i]</code>
+
+gives the location of <code class=var>PreList[i]</code> in
+
+<code class=var>InList[i]</code>.  For the example above
+
+<code class=var>InMap[0:6]</code> = [3, 2, 0, 1, 4, 6, 5].
+
+This mapping array enables us to quickly find the location of
+
+<code class=var>PreList[i]</code> in
+
+<code class=var>InList[]</code>.
+
+<br><br>
+
+If we make the assumption that the data elements of an
+
+<code class=var>n</code> node binary tree are 0, 1, ...,
+
+<code class=var>n</code>-1, we can construct <code class=var>InMap</code>
+
+in linear time as below.
+
+<HR class = coderule>
+
+<pre class = code>
+
+// construct InMap
+
+// first construct inverse of InList
+
+int *Inverse = new int [n];
+
+for (int i = 0; i &lt; n; i++)
+
+   Inverse[InList[i]] = i;
+
+// now construct InMap
+
+for (int i = 0; i &lt; n; i++)
+
+   InMap[i] = Inverse[PreList[i]];
+
+delete [] Inverse;
+
+<hr class=coderule>
+
+</pre>
+
+
+
+When we cannot make this assumption we can construct
+
+<code class=var>InMap</code> by sorting both
+
+<code class=var>InList</code> and
+
+<code class=var>PreList</code>.  This sort will take linear time
+
+if the range of data values is small (in this case bin sort
+
+(see Chapter 3) can be used) and the sort will take
+
+O(<code class = var>n</code> log <code class=var>n</code>) time 
+
+when we must sort using the general purpose sorts of Chapters 9 (heap
+
+sort) and 14 (merge sort).
+
+<br><br>
+
+The code to build the binary tree is given below and in the file
+
+<code class=var>build1.cpp</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+BinaryTreeNode&lt;int&gt;* BuildFromPreAndIn
+
+      (int InMap[], int StartIn, int EndIn,
+
+       int PreList[], int &amp;StartPre)
+
+{// Return pointer to root of constructed binary
+
+ // whose inorder list is
+
+ // InList[InMap[StartIn]:InMap[EndIn]]
+
+ // and whose preorder list is PreList[StartPre ...].
+
+
+
+   if (StartIn &gt; EndIn) return 0;  // empty
+
+  
+
+   // create a node for the root and set its data field
+
+   BinaryTreeNode&lt;int&gt; *root = new BinaryTreeNode&lt;int&gt;;
+
+   int element = PreList[StartPre];
+
+   // verify that element is in the
+
+   // proper subtree
+
+   int InLocation = InMap[StartPre++];
+
+   if (InLocation &lt; StartIn ||
+
+       InLocation &gt; EndIn) throw BadInput();
+
+   root-&gt;data = element;
+
+
+
+   // construct left subtree recursively
+
+   root-&gt;LeftChild = BuildFromPreAndIn(InMap, StartIn,
+
+                     InLocation-1, PreList, StartPre);
+
+
+
+   // construct right subtree recursively
+
+   root-&gt;RightChild = BuildFromPreAndIn(InMap,
+
+                      InLocation+1, EndIn,
+
+                      PreList, StartPre);
+
+
+
+   return root;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+The complexity of <code class=var>BuildFromPreAndIn</code>
+
+is Theta(<code class=var>n</code>).  So the overall
+
+complexity of the construction process is determined
+
+by the complexity of constructing <code class=var>InMap</code>.
+
+In general, this takes
+
+O(<code class = var>n</code> log <code class=var>n</code>) time .
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

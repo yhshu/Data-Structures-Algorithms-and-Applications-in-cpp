@@ -1,0 +1,49 @@
+Enter a 25 edge 17 vertex bipartite graph
+enter edge 1
+enter edge 2
+enter edge 3
+enter edge 4
+enter edge 5
+enter edge 6
+enter edge 7
+enter edge 8
+enter edge 9
+enter edge 10
+enter edge 11
+enter edge 12
+enter edge 13
+enter edge 14
+enter edge 15
+enter edge 16
+enter edge 17
+enter edge 18
+enter edge 19
+enter edge 20
+enter edge 21
+enter edge 22
+enter edge 23
+enter edge 24
+enter edge 25
+The undirected graph is
+13  8  9  7  6  4  
+5  6  8  4  
+12  8  14  15  10  
+17  2  1  
+16  2  
+16  2  1  
+1  
+16  3  2  1  
+17  1  
+17  3  
+17  
+16  3  
+1  
+16  3  
+16  3  
+6  15  14  8  12  5  
+9  11  10  4  
+
+Enter vertex labels
+
+The vertex labels are 1  1  1  2  2  2  2  2  2  2  2  2  2  2  2  1  1  
+The cover is 16  1  17  

@@ -1,0 +1,82 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 67<BR>
+
+<BR>
+
+</H1>
+
+The code is given below and in the files
+
+<code class=code>sciter.*</code>.
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class SimChainIterator {
+
+   public:
+
+      T* Initialize(const SimChain&lt;T&gt;&amp; c)
+
+            {location = c.first;
+
+             S = &amp;c.S;
+
+             if (location == -1) return 0;
+
+             return &amp;S-&gt;node[location].data;
+
+             }
+
+      T* Next()
+
+            {if (location == -1) return 0;
+
+             location = S-&gt;node[location].link;
+
+             if (location == -1) return 0;
+
+             return &amp;S-&gt;node[location].data;
+
+             }
+
+   private:
+
+      SimSpace&lt;T&gt; *S;  // pointer to simulated space for chain
+
+      int location;    // node index in simulated space
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

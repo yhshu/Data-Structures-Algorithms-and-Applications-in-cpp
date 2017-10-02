@@ -1,0 +1,174 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+We shall show that for every pair (<em class=var>u,v</em>) of distinct vertices
+
+in <em class=var>V</em>, there exists a
+
+<em class=var>u</em>
+
+to <em class=var>v</em> path in
+
+<em class=var>G</em> that does not use the
+
+edge (<em class=var>i,j</em>).  Hence, this path is
+
+also present in <em class=var>H</em> =
+
+(<em class=var>V</em>,
+
+<em class=var>E</em> -
+
+{(<em class=var>i,j</em>)} and so
+
+<em class=var>H</em> is connected.
+
+<br><br>
+
+Let <em class=var>u</em> and
+
+<em class=var>v</em> be two arbitrary but distinct vertices in
+
+<em class=var>V</em>.  Since
+
+<em class=var>G</em> is connected,
+
+<em class=var>G</em> contains a
+
+<em class=var>u</em>
+
+to <em class=var>v</em> path,
+
+<em class=var>P</em>.
+
+Let <em class=var>x</em> be the number
+
+of times <em class=var>P</em> uses the edge
+
+(<em class=var>i,j</em>) in the direction
+
+<em class=var>i</em> to
+
+<em class=var>j</em>.  Let
+
+<em class=var>y</em> be the number of times this edge is used in the direction
+
+<em class=var>j</em> to
+
+<em class=var>i</em>.  Observe that
+
+<em class=var>x</em> =
+
+<em class=var>y</em> = 0 iff
+
+<em class=var>P</em> does not use this edge.  Since,
+
+(<em class=var>i,j</em>) is on a cycle of
+
+<em class=var>G</em>, there exists a simple path
+
+<em class=var>C</em> of the form:
+
+<br><br>
+
+<em class=var>C</em> =
+
+<em class=var>i, j, i<sub>1</sub>, i<sub>2</sub>, ..., i<sub>k</sub> , i</em>
+
+<br><br>
+
+A <em class=var>u</em> to
+
+<em class=var>v</em> path that does not use the edge
+
+(<em class=var>i,j</em>) may be obtained
+
+from <em class=var>P</em> as follows:
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Replace each use of the edge (<em class=var>i,j</em>) in the direction
+
+<em class=var>i</em> to
+
+<em class=var>j</em> by the path
+
+<em class=var>i</em>,
+
+<em class=var>i<sub>k</sub>, ..., i<sub>2</sub>, i<sub>1</sub>, j</em>.
+
+<dt> (b)
+
+<dd>
+
+Replace each use of the edge (<em class=var>i,j</em>) in the direction
+
+<em class=var>j</em>
+
+to <em class=var>i</em>
+
+by the path <em class=var>j</em>,
+
+<em class=var>i<sub>1</sub>, i<sub>2</sub>, ..., i<sub>k</sub>, i</em>.
+
+</dl>
+
+<br><br>
+
+Hence, <em class=var>G</em> contains a
+
+<em class=var>u</em> to
+
+<em class=var>v</em> path that does not use the edge
+
+(<em class=var>i,j</em>).  This path is therefore a
+
+<em class=var>u</em> to
+
+<em class=var>v</em> path in
+
+<em class=var>H</em>.  So,
+
+<em class=var>H</em> is
+
+connected.
+
+
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

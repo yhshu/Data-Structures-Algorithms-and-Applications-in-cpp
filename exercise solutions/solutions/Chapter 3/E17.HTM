@@ -1,0 +1,214 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 17<BR>
+
+<BR>
+
+</H1>
+
+<DL Compact>
+
+<DT> (a)
+
+<DD>
+
+The merge can be done by examining the elements of the two input
+
+lists <code class=code>A</code> and
+
+<code class=code>B</code> from first to last.
+
+The smaller element is copied into
+
+the result list.
+
+The member function is given below and in the file
+
+<code class=code>llist10.h</code>.  Variables
+
+<code class=code>ca</code> and
+
+<code class=code>cb</code> act as cursors that move through
+
+<code class=code>A</code> and
+
+<code class=code>B</code> from first to last.
+
+<code class=code>ct</code> is a
+
+cursor that keeps track of the location for the
+
+next element of the result.  The code throws an exception if it is
+
+unsuccesful.  This happens iff there isn't enough space in the
+
+result list.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+LinearList&lt;T&gt;&amp; LinearList&lt;T&gt;::
+
+    Merge(const LinearList&lt;T&gt;&amp; A, const LinearList&lt;T&gt;&amp; B)
+
+{// Merge the two sorted lists A and B
+
+   int al = A.Length();
+
+   int bl = B.Length();
+
+   if (al + bl &gt; MaxSize) throw NoMem();
+
+               // inadequate space for result
+
+
+
+   int ca = A.first; // cursor for A
+
+   int cb = B.first; // cursor for B
+
+   int ct = 0;       // cursor for *this
+
+
+
+   // we shall create result in element[0:al + bl - 1]
+
+   first = 0;
+
+   last = al + bl - 1;
+
+
+
+   // merge from A and B to *this until
+
+   // either A or B is exhausted
+
+   int na = 0;  // number merged from A
+
+   int nb = 0;  // number merged from B
+
+   while ((na &lt;= al) &amp;&amp; (nb &lt;= bl))
+
+      if (A.element[ca] &lt;= B.element[cb]) {
+
+         element[ct++] = A.element[ca];
+
+         ca = (ca + 1) % A.MaxSize;
+
+         na++;
+
+         }
+
+      else {element[ct++] = B.element[cb];
+
+            cb = (cb + 1) % B.MaxSize;
+
+            nb++;
+
+            }
+
+
+
+   // take care of left overs
+
+   if (na &gt; al)  // A is finished
+
+      for (int q = nb + 1; q &lt;= bl; q++) {
+
+         element[ct++] = B.element[cb];
+
+         cb = (cb + 1) % B.MaxSize;
+
+         }
+
+   else for (int q = na + 1; q &lt;= al; q++) {
+
+           element[ct++] = A.element[q];
+
+           ca = (ca + 1) % B.MaxSize;
+
+           }
+
+
+
+   return *this;
+
+}
+
+</pre>
+
+<HR class=coderule><BR>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+When there is inadequate space for the result, an exception is thrown
+
+and the complexity is Theta(1).  Assume we have enough space.
+
+In each iteration of the <code class=code>while</code>
+
+loop the value of <code class=code>ct</code> increases
+
+by one.  On exiting this loop, <code class=code>ct</code>
+
+&lt; <code class=code>al+bl</code>.
+
+The time spent in the <code class=code>for</code>
+
+loops is either O(<code class=code>al</code>)
+
+or O(<code class=code>bl</code>).  So, the complexity is
+
+O(<code class=code>al+bl</code>).
+
+Also, since all <code class=code>al+bl</code> elements are moved into the result list, the
+
+complexity is Omega(<code class=code>al+bl</code>).  As a result, the complexity is
+
+Theta(<code class=code>al+bl</code>).
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>llist10.cpp</code>.
+
+The output is in the file
+
+<code class=code>llist10.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

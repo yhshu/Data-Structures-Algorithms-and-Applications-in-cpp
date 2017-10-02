@@ -1,0 +1,1158 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 19<BR>
+
+<BR>
+
+</H1>
+
+
+
+Although we can develop <code class=code>AVLtree</code>
+
+as a derived class of the binary search tree class
+
+<code class=code>BSTree</code> or of the binary tree class
+
+<code class=code>BinaryTree</code>, we shall
+
+develop <code class=code>AVLtree</code> as a base class.
+
+<br><br>
+
+The shortest and simplest codes result from the use of recursion.
+
+However, since our primary motivation to use AVL trees is run time
+
+efficiency, we shall develop the codes as iterative ones.
+
+The codes we develop follow the development in the text
+
+very closely.  A faster implementation can be obtained by
+
+using a head node as the parent of the root
+
+and a tail node in place of the <code class=code>NULL</code>
+
+pointer.
+
+The use of a parent pointer field in each node will also speed the
+
+code.
+
+<br><br>
+
+First we develop a class <code class=code>AVLNode</code>
+
+for the nodes in an AVL tree.  The code is given below
+
+and in the file <code class=code>avlnode.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class E, class K&gt;
+
+class AVLNode {
+
+   friend AVLtree&lt;E,K&gt;;
+
+   public:
+
+      AVLNode() {LeftChild = RightChild = 0;}
+
+      AVLNode(const E&amp; e)
+
+            {data = e; bf = 0; LeftChild = RightChild = 0;}
+
+   private:
+
+      E data;
+
+      int bf;                   // balance factor
+
+      AVLNode&lt;E,K&gt; *LeftChild,  // left subtree
+
+                   *RightChild; // right subtree
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The interface for the class <code class=code>AVLtree</code>
+
+is given below and in the file <code class=code>avl.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class AVLtree {
+
+   public:
+
+      AVLtree() {root = 0;}
+
+      ~AVLtree() {Erase(root);}
+
+      bool Search(const K&amp; k, E&amp; e) const;
+
+      AVLtree&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+      AVLtree&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e);
+
+      void Ascend() {InOutput(root);
+
+                     cout &lt;&lt; endl;}
+
+   protected:
+
+      AVLNode&lt;E,K&gt; *root;  // root node
+
+      void Erase(AVLNode&lt;E,K&gt; *t);
+
+      void InOutput(AVLNode&lt;E,K&gt; *t);
+
+      void FixBF(AVLNode&lt;E,K&gt; *,
+
+                 AVLNode&lt;E,K&gt;*, const E&amp;);
+
+      void RRrotate(AVLNode&lt;E,K&gt; *,
+
+                    AVLNode&lt;E,K&gt;*, AVLNode&lt;E,K&gt; *);
+
+      void LLrotate(AVLNode&lt;E,K&gt; *,
+
+                    AVLNode&lt;E,K&gt;*, AVLNode&lt;E,K&gt; *);
+
+      void RLrotate(AVLNode&lt;E,K&gt; *,
+
+                    AVLNode&lt;E,K&gt;*, AVLNode&lt;E,K&gt; *);
+
+      void LRrotate(AVLNode&lt;E,K&gt; *,
+
+                    AVLNode&lt;E,K&gt;*, AVLNode&lt;E,K&gt; *);
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<code class=code>Erase</code> deletes the nodes in an
+
+AVL tree by performing a postorder traversal.
+
+The code is given below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::Erase(AVLNode&lt;E,K&gt; *t)
+
+{// Delete all nodes in AVL tree with root t.
+
+ // Use a postorder traversal.
+
+   if (t) {Erase(t-&gt;LeftChild);
+
+           Erase(t-&gt;RightChild);
+
+           delete t;
+
+          }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code to search for an element is the same as for
+
+searching in an unbalanced binary search tree.
+
+This code is given below.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool AVLtree&lt;E,K&gt;::Search(const K&amp; k, E &amp;e) const
+
+{// Search for element that matches k.
+
+
+
+   // pointer p starts at the root and moves through
+
+   // the tree looking for an element with key k
+
+   AVLNode&lt;E,K&gt; *p = root;
+
+   while (p) // examine p-&gt;data
+
+      if (k &lt; p-&gt;data) p = p-&gt;LeftChild;
+
+      else if (k &gt; p-&gt;data) p = p-&gt;RightChild;
+
+           else {// found element
+
+                 e = p-&gt;data;
+
+                 return true;}
+
+   return false;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+To assist in the development of the code for the insert operation,
+
+we first develop protected functions to adjust balance factors
+
+and to perform the different types of rotations
+
+needed to restore balance.
+
+These functions are protected members rather than private ones because
+
+derived classes we shall create later need access to them.
+
+The function <code class=code>FixBF</code> is used to
+
+change the balance factors of nodes on the path form
+
+a node <code class=var>q</code> to (but not including) the newly inserted node
+
+<code class=var>r</code>.  The balance factors of all these nodes
+
+was 0 prior to the insertion.
+
+<code class=code>e</code> is the newly inserted element.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::FixBF(AVLNode&lt;E,K&gt; *q,
+
+                         AVLNode&lt;E,K&gt; *r, const E &amp;e)
+
+{// Balance factors from q to r were originally 0.
+
+ // They need to be changed to +1 or -1.
+
+ // Use e to find path from q to r.
+
+
+
+   while (q != r)
+
+      if (e &lt; q-&gt;data) {
+
+         // height of left subtree has increased
+
+         q-&gt;bf = 1;
+
+         q = q-&gt;LeftChild;}
+
+      else {
+
+         // height of right subtree has increased
+
+         q-&gt;bf = -1;
+
+         q = q-&gt;RightChild;}
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The functions to perform the four different types of rotations
+
+are given below.  They do the pointer and balance factor changes
+
+required by Figures 11.8 (LL rotation), 11.9 (LR rotation),
+
+and the corresponding figures for RR and RL rotations (see solution to
+
+Exercise 16).
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::LLrotate(AVLNode&lt;E,K&gt; *PA,
+
+                   AVLNode&lt;E,K&gt; *A, AVLNode&lt;E,K&gt; *B)
+
+{// LL rotation around A.  PA is parent of A
+
+ // and B left child of A.
+
+
+
+   // restructure subtree at A
+
+   A-&gt;LeftChild = B-&gt;RightChild;
+
+   B-&gt;RightChild = A;
+
+   if (PA) // A is not the root
+
+           if (A == PA-&gt;LeftChild)
+
+              PA-&gt;LeftChild = B;
+
+           else PA-&gt;RightChild = B;
+
+   else root = B;
+
+
+
+   // set balance factors
+
+   A-&gt;bf = B-&gt;bf = 0;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::RRrotate(AVLNode&lt;E,K&gt; *PA,
+
+                   AVLNode&lt;E,K&gt; *A, AVLNode&lt;E,K&gt; *B)
+
+{// RR rotation around A.  PA is parent of A
+
+ // and B right child of A.
+
+
+
+   // restructure subtree at A
+
+   A-&gt;RightChild = B-&gt;LeftChild;
+
+   B-&gt;LeftChild = A;
+
+   if (PA) // A is not the root
+
+           if (A == PA-&gt;LeftChild)
+
+              PA-&gt;LeftChild = B;
+
+           else PA-&gt;RightChild = B;
+
+   else root = B;
+
+
+
+   // set balance factors
+
+   A-&gt;bf = B-&gt;bf = 0;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::LRrotate(AVLNode&lt;E,K&gt; *PA,
+
+                   AVLNode&lt;E,K&gt; *A, AVLNode&lt;E,K&gt; *B)
+
+{// LR rotation around A.  PA is parent of A
+
+ // and B left child of A.
+
+
+
+   AVLNode&lt;E,K&gt; *C = B-&gt;RightChild;
+
+
+
+   // restructure subtree at A
+
+   A-&gt;LeftChild = C-&gt;RightChild;
+
+   B-&gt;RightChild = C-&gt;LeftChild;
+
+   C-&gt;LeftChild = B;
+
+   C-&gt;RightChild = A;
+
+   if (PA) // A is not the root
+
+           if (A == PA-&gt;LeftChild)
+
+              PA-&gt;LeftChild = C;
+
+           else PA-&gt;RightChild = C;
+
+   else root = C;
+
+
+
+   // set balance factors
+
+   int b = C-&gt;bf;
+
+   if (b == 1) {B-&gt;bf = 0;
+
+                A-&gt;bf = -1;}
+
+   else if (b) {B-&gt;bf = 1;
+
+                A-&gt;bf = 0;}
+
+        else // b = 0
+
+           B-&gt;bf = A-&gt;bf = 0;
+
+   C-&gt;bf = 0;
+
+
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::RLrotate(AVLNode&lt;E,K&gt; *PA,
+
+                   AVLNode&lt;E,K&gt; *A, AVLNode&lt;E,K&gt; *B)
+
+{// RL rotation around A.  PA is parent of A
+
+ // and B left child of A.
+
+
+
+   AVLNode&lt;E,K&gt; *C = B-&gt;LeftChild;
+
+
+
+   // restructure subtree at A
+
+   A-&gt;RightChild = C-&gt;LeftChild;
+
+   B-&gt;LeftChild = C-&gt;RightChild;
+
+   C-&gt;LeftChild = A;
+
+   C-&gt;RightChild = B;
+
+   if (PA) // A is not the root
+
+           if (A == PA-&gt;LeftChild)
+
+              PA-&gt;LeftChild = C;
+
+           else PA-&gt;RightChild = C;
+
+   else root = C;
+
+
+
+   // set balance factors
+
+   int b = C-&gt;bf;
+
+   if (b == 1) {B-&gt;bf = -1;
+
+                A-&gt;bf = 0;}
+
+   else if (b) {B-&gt;bf = 0;
+
+                A-&gt;bf = 1;}
+
+        else // b = 0
+
+           B-&gt;bf = A-&gt;bf = 0;
+
+   C-&gt;bf = 0;
+
+
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for the insert operation is given below.
+
+The first part of the code searches for the place to insert
+
+the new element using a process identical to that used
+
+to insert an element into an unbalanced search tree
+
+(Program 11.3).
+
+In this part, we also keep track of the most recently
+
+seen node whose current balance factor is +1 or -1.
+
+Following the insertion, this node is the candidate node
+
+for the <em class=var>A</em> node around which a rotation
+
+(if necessary) is to be performed.
+
+The nature of the imbalance (if any) at <em class=var>A</em>
+
+is determined, and the appropriate rotation performed.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+AVLtree&lt;E,K&gt;&amp; AVLtree&lt;E,K&gt;::Insert(const E&amp; e)
+
+{// Insert e if not duplicate.
+
+   AVLNode&lt;E,K&gt; *p = root,  // search pointer
+
+                *pp = 0,    // parent of p
+
+                *A = 0,     // node with bf != 0
+
+                *PA;        // parent of A
+
+   // find place to insert
+
+   // also record most recent node with bf != 0
+
+   // in A and its parent in PA
+
+   while (p) {// examine p-&gt;data
+
+      if (p-&gt;bf) {// new candidate for A node
+
+        A = p;
+
+        PA = pp;}
+
+      pp = p;
+
+      // move p to a child
+
+      if (e &lt; p-&gt;data) p = p-&gt;LeftChild;
+
+      else if (e &gt; p-&gt;data) p = p-&gt;RightChild;
+
+           else throw BadInput(); // duplicate
+
+      }
+
+
+
+   // get a node for e and attach to pp
+
+   AVLNode&lt;E,K&gt; *r = new AVLNode&lt;E,K&gt; (e);
+
+   if (root) {// tree not empty
+
+      if (e &lt; pp-&gt;data) pp-&gt;LeftChild = r;
+
+      else pp-&gt;RightChild = r;}
+
+   else {// insertion into empty tree
+
+         root = r;
+
+         return *this;}
+
+
+
+   // see if we must rebalance or simply change
+
+   // balance factors
+
+   if (A) // possible rebalancing needed
+
+          if (A-&gt;bf &lt; 0) // bf = -1 before insertion
+
+             if (e &lt; A-&gt;data) {// insertion in left subtree
+
+                // height of left subtree has increased by 1
+
+                // new bf of A is 0, no rebalancing
+
+                A-&gt;bf = 0;
+
+                // fix bf on path from A to r
+
+                FixBF(A-&gt;LeftChild,r,e);}
+
+             else {// insertion in right subtree
+
+                // bf of A is -2, rebalance
+
+                AVLNode&lt;E,K&gt; *B = A-&gt;RightChild;
+
+                if (e &gt; B-&gt;data) {// RR case
+
+                   FixBF(B-&gt;RightChild,r,e);
+
+                   RRrotate(PA,A,B);}
+
+                else {// RL case
+
+                   FixBF(B-&gt;LeftChild,r,e);
+
+                   RLrotate(PA,A,B);}
+
+                }
+
+          else // bf = +1 before insertion
+
+             if (e &gt; A-&gt;data) {// insertion in right subtree
+
+                // height of right subtree has increased by 1
+
+                // new bf of A is 0, no rebalancing
+
+                A-&gt;bf = 0;
+
+                // fix bf on path from A to r
+
+                FixBF(A-&gt;RightChild,r,e);}
+
+             else {// insertion in left subtree
+
+                // bf of A is +2, rebalance
+
+                AVLNode&lt;E,K&gt; *B = A-&gt;LeftChild;
+
+                if (e &lt; B-&gt;data) {// LL case
+
+                   FixBF(B-&gt;LeftChild,r,e);
+
+                   LLrotate(PA,A,B);}
+
+                else {// LR case
+
+                   FixBF(B-&gt;RightChild,r,e);
+
+                   LRrotate(PA,A,B);}
+
+                }
+
+   else // A is NULL, no rebalancing
+
+      FixBF(root,r,e);
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code to delete an element has two parts.  The first part is very
+
+similar to the code used to delete an element from an
+
+unbalanced binary search tree (Program 11.4).
+
+That code is augmented by code to save the path from the root
+
+to the parent of the physically deleted node.  This path is saved
+
+on a stack because we will be traversing this path backwards during
+
+the resturcturing phase.  We have opted for a formula-based
+
+stack of size 100.  Such a stack will have overflow problems only
+
+when the AVL tree has more than 101 levels; an event that requires
+
+much more than 2<sup>60</sup> elements and hence exceptionally
+
+unlikely to occur.  Note that formula-based stacks are
+
+faster than linked stacks because no calls to
+
+<code class=code>new</code> and <code class=code>delete</code>
+
+are made.
+
+<br><br>
+
+The rebalancing code follows the discussion in the text very closely.
+
+It also makes use of the fact that the following
+
+pairs of rotations are indentical LL and R1, LR and R-1,
+
+RR and L-1, and RL and L1.  It also uses the fact that
+
+LL and R0 and RR and L0 rotations differ only in the final balance
+
+factors.  See the solution to Exercise 18 for the figures
+
+for L0, L1, and L-1 rotations.
+
+The L0 and R0 cases would run a bit faster if we remove the
+
+code to set the balance factors of <em class=var>A</em> and <em class=var>B</em>
+
+from <code class=code>LLrotate</code> and <code class=code>RRrotate</code>
+
+and insert code at the appropriate places in
+
+<code class=code>Insert</code> and
+
+<code class=code>Delete</code> to do this.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+AVLtree&lt;E,K&gt;&amp; AVLtree&lt;E,K&gt;::Delete(const K&amp; k, E&amp; e)
+
+{// Delete element with key k and put it in e.
+
+ // Throw BadInput exception if there is no element
+
+ // with key k.
+
+
+
+   // define a stack to hold path taken from root
+
+   // to physically deleted node
+
+   // we will not run out of stack space unless
+
+   // the number of elements is much more than 2^60
+
+   Stack&lt;AVLNode&lt;E,K&gt;*&gt; S(100);
+
+
+
+   // set p to point to node with key k
+
+   AVLNode&lt;E,K&gt; *p = root; // search pointer
+
+   while (p &amp;&amp; p-&gt;data != k){// move to a child of p
+
+      S.Add(p);
+
+      if (k &lt; p-&gt;data) p = p-&gt;LeftChild;
+
+      else p = p-&gt;RightChild;
+
+      }
+
+   if (!p) throw BadInput(); // no element with key k
+
+
+
+   e = p-&gt;data;  // save element to delete
+
+
+
+   // restructure tree
+
+   // handle case when p has two children
+
+   if (p-&gt;LeftChild &amp;&amp; p-&gt;RightChild) {// two children
+
+      // convert to zero or one child case
+
+      // find largest element in left subtree of p
+
+      S.Add(p);
+
+      AVLNode&lt;E,K&gt; *s = p-&gt;LeftChild;
+
+      while (s-&gt;RightChild) {// move to larger element
+
+         S.Add(s);
+
+         s = s-&gt;RightChild;}
+
+
+
+      // move largest from s to p
+
+      p-&gt;data = s-&gt;data;
+
+      p = s;}
+
+
+
+   // p has at most one child
+
+   // save child pointer in c
+
+   AVLNode&lt;E,K&gt; *c;
+
+   if (p-&gt;LeftChild) c = p-&gt;LeftChild;
+
+   else c = p-&gt;RightChild;
+
+
+
+   // delete p
+
+   if (p == root) root = c;
+
+   else {// is p a left or right child?
+
+         if (p == S.Top()-&gt;LeftChild)
+
+              S.Top()-&gt;LeftChild = c;
+
+         else S.Top()-&gt;RightChild = c;}
+
+   E f = p-&gt;data; // f may not equal e
+
+   delete p;
+
+
+
+   // rebalance tree and correct balance factors
+
+   // use stack to retrace path to root
+
+   // set q to parent of deleted node
+
+   AVLNode&lt;E,K&gt; *q;
+
+   try {S.Delete(q);}
+
+   catch (OutOfBounds)
+
+      {return *this;} // root was deleted
+
+
+
+   while (q)
+
+      if (f &lt;= q-&gt;data) {
+
+         // deleted from left subtree of q
+
+         // height of left subtree reduced by 1
+
+         q-&gt;bf--;
+
+         if (q-&gt;bf == -1) // height of q is unchanged
+
+                          // nothing more to do
+
+                          return *this;
+
+         if (q-&gt;bf == -2) {// q is unbalanced
+
+            // classify imbalance and rotate
+
+            AVLNode&lt;E,K&gt; *B = q-&gt;RightChild,
+
+                         *PA;  // q is A node
+
+                               // PA is parent of A
+
+            try {S.Delete(PA);}
+
+            catch (OutOfBounds)
+
+               {PA = 0;}       // A is root
+
+            
+
+            switch (B-&gt;bf) {
+
+               case 0:    // L0 imbalance
+
+                  RRrotate(PA,q,B);
+
+                  B-&gt;bf = 1;
+
+                  q-&gt;bf = -1;  // q is A node
+
+                  return *this;
+
+               case 1:    // L1 imbalance
+
+                  RLrotate(PA,q,B);
+
+                  break;  // must continue on path to root
+
+               case -1:   // L-1 imbalance
+
+                  RRrotate(PA,q,B);
+
+               }
+
+            q = PA;
+
+            }
+
+         else {// q-&gt;bf is 0
+
+            try {S.Delete(q);}
+
+            catch (OutOfBounds)
+
+               {return *this;}
+
+            }
+
+        }
+
+      else {// f &gt; q-&gt;data
+
+         // deleted from right subtree of q
+
+         // height of right subtree reduced by 1
+
+         q-&gt;bf++;
+
+         if (q-&gt;bf == 1) // height of q is unchanged
+
+                          // nothing more to do
+
+                          return *this;
+
+         if (q-&gt;bf == 2) {// q is unbalanced
+
+            // classify imbalance and rotate
+
+            AVLNode&lt;E,K&gt; *B = q-&gt;LeftChild,
+
+                         *PA;  // q is A node
+
+                               // PA is parent of A
+
+            try {S.Delete(PA);}
+
+            catch (OutOfBounds)
+
+               {PA = 0;}       // A is root
+
+            
+
+            switch (B-&gt;bf) {
+
+               case 0:    // R0 imbalance
+
+                  LLrotate(PA,q,B);
+
+                  B-&gt;bf = -1;
+
+                  q-&gt;bf = 1;  // q is A node
+
+                  return *this;
+
+               case 1:    // R1 imbalance
+
+                  LLrotate(PA,q,B);
+
+                  break;  // must continue on path to root
+
+               case -1:   // R-1 imbalance
+
+                  LRrotate(PA,q,B);
+
+               }
+
+            q = PA;
+
+            }
+
+         else {// q-&gt;bf is 0
+
+            try {S.Delete(q);}
+
+            catch (OutOfBounds)
+
+               {return *this;}
+
+            }
+
+        }
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The elements can be output in ascending order by performing
+
+an inorder traversal as below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void AVLtree&lt;E,K&gt;::InOutput(AVLNode&lt;E,K&gt; *t)
+
+{// Output in ascending order.
+
+ // Use an inorder traversal.
+
+   if (t) {InOutput(t-&gt;LeftChild);
+
+           cout &lt;&lt; t-&gt;data &lt;&lt; " ";
+
+           InOutput(t-&gt;RightChild);
+
+          }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+The complexity of <code class=code>Search</code>,
+
+<code class=code>Insert</code>,
+
+and
+
+<code class=code>Delete</code> is O(<em class=var>h</em>),
+
+where <em class=var>h</em> is the height of the input tree.
+
+Since the tree is an AVL tree, its height is
+
+Theta(<em class=var>log n</em>).
+
+The <code class=code>Ascend</em> operation performs
+
+an inorder traversal which takes Theta(<em class=var>n</em>) time.
+
+
+
+<br><br>
+
+All codes and test data can be found in the files
+
+<code class=code>avl.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

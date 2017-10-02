@@ -1,0 +1,516 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 10, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The code to replay a match when the winner has changed
+
+is simpler than the corresponding code for a winner tree.
+
+The new code is given below and in the file
+
+<code class=var>loser.h</code>.
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void LoserTree&lt;T&gt;::RePlay
+
+          (int(*winner)(T a[], int b, int c))
+
+{// Replay matches for previous winner.
+
+   // make sure loser tree has been initialized
+
+   if (n &lt; 2) throw OutOfBounds();
+
+
+
+   int p;   // match node
+
+
+
+   // find first match node
+
+   int i = t[0];    // e[i] is previous winner
+
+   if (i &lt;= LowExt) // begin at lowest level
+
+   	p = (offset + i)/2;
+
+   else p = (i-LowExt+n-1)/2;
+
+
+
+   int LastWinner = i;
+
+
+
+   // play matches
+
+   for (; p &gt;= 1; p /= 2) {
+
+      // play match at t[p]
+
+      int NewWinner = winner(e, LastWinner, t[p]);
+
+      // update loser if this has changed
+
+      if (t[p] == NewWinner) {
+
+         // e[t[p]] is no longer a loser
+
+         t[p] = LastWinner;
+
+         LastWinner = NewWinner;}
+
+      }
+
+
+
+   // put overall winner in t[0]
+
+   t[0] = LastWinner;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+<dt> (b)
+
+<dd>
+
+With the given strategy, we first create a winner tree and then
+
+examine the nodes <code class=code>t[1:n-1]</code> resetting
+
+each
+
+<code class=code>t[i]</code> to the loser of the match played
+
+at this node.  To determine the loser of the match played at
+
+<code class=code>t[i]</code>,
+
+we must first determine
+
+the two players who palyed here. These two players can be determined
+
+by accessing the two children of
+
+<code class=code>t[i]</code>.  Note that one or both of these children
+
+may be external nodes.  If a child is an internal node, then
+
+the winner recorded at the internal node is a player; otherwise
+
+the external node is a player.
+
+<br><br>
+
+We can tentatively compute the child index <code class=code>c</code> as either
+
+<code class=code>2*i</code> or
+
+<code class=code>2*i + 1</code> depending on whether we
+
+are looking for the left or the right child of
+
+<code class=code>i</code>.
+
+To determine <code class=code>Player</code> such that
+
+<code class=code>e[Player]</code> is either the winner of the
+
+match played at <code class=code>t[c]</code> or is the external node
+
+at this child of
+
+<code class=code>t[i]</code> we must invert Equation 10.1, which
+
+currently tells us how to go from an external node to its parent.
+
+Doing this inversion yields the following code:
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+if (c &lt;= n - 1) Player = t[c];
+
+else // child is an external node
+
+   if (c &lt;= offset)
+
+      Player = c + LowExt - n + 1;
+
+   else Player = c - offset;
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+Once we have identified the two players of the match at
+
+<code class=code>t[i]</code>, we can determine the
+
+loser by comparing with the known winner of the match
+
+played at this node.
+
+The code to initialize a loser tree is given below and in the file
+
+<code class=code>loser.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void LoserTree&lt;T&gt;::Initialize(T a[], int size,
+
+             int(*winner)(T a[], int b, int c))
+
+{// Initialize loser tree t for array a.
+
+   if (size &gt; MaxSize || size &lt; 2)
+
+      throw BadInput();
+
+   n = size;
+
+   e = a;
+
+
+
+   // compute  s = 2^log (n-1)
+
+   int i, s;
+
+   for (s = 1; 2*s &lt;= n-1; s += s);
+
+
+
+   LowExt = 2*(n-s);
+
+   offset = 2*s-1;
+
+
+
+   // first record winners in t[1:n-1]
+
+   // play matches for lowest-level external nodes
+
+   for (i = 2; i &lt;= LowExt; i += 2)
+
+      Play((offset+i)/2, i-1, i, winner);
+
+
+
+   // handle remaining external nodes
+
+   if (n % 2) {// special case for odd n, play
+
+               // internal and external node
+
+      Play(n/2, t[n-1], LowExt+1, winner);
+
+      i = LowExt+3;}
+
+   else i = LowExt+2;
+
+
+
+   // i is left-most remaining external node
+
+   for (; i &lt;= n; i += 2)
+
+      Play((i-LowExt+n-1)/2, i-1, i, winner);
+
+
+
+   // record overall winner in t[0]
+
+   t[0] = t[1];
+
+
+
+   // now make a level-order traversal of t
+
+   // replacing winners by losers
+
+   for (int i = 1; i &lt; n; i++) {
+
+      // set t[i] to loser of match played at t[i]
+
+      int lc = 2 * i;   // left child of i
+
+      int rc = lc + 1;  // right child of i
+
+      // eventually e[LeftPlayer] denotes left player
+
+      // of match and t[i] and e[RightPlayer] denotes
+
+      // other player
+
+      int LeftPlayer, RightPlayer;
+
+      // determine LeftPlayer
+
+      if (lc &lt;= n - 1) LeftPlayer = t[lc];
+
+      else // left child is an external node
+
+         if (lc &lt;= offset)
+
+            LeftPlayer = lc + LowExt - n + 1;
+
+         else LeftPlayer = lc - offset;
+
+
+
+      // determine RightPlayer
+
+      if (rc &lt;= n - 1) RightPlayer = t[rc];
+
+      else // right child is an external node
+
+         if (rc &lt;= offset)
+
+            RightPlayer = rc + LowExt - n + 1;
+
+         else RightPlayer = rc - offset;
+
+
+
+      // determine loser of match
+
+      if (LeftPlayer == t[i])
+
+         // RightPlayer is loser
+
+         t[i] = RightPlayer;
+
+      else // LeftPlayer is loser
+
+         t[i] = LeftPlayer;
+
+      }
+
+
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<dt> (c)
+
+<dd>
+
+To use the startegy of Program 10.3 we must modify the function
+
+<code class=code>Play</code> so that it records losers at nodes where
+
+a match is played and so that it records the winner of the last
+
+match played in the parent of the node at which this
+
+last match is played. The new code is given below and in the file
+
+<code class=code>loser2.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void LoserTree&lt;T&gt;::Initialize(T a[], int size,
+
+             int(*winner)(T a[], int b, int c))
+
+{// Initialize loser tree t for array a.
+
+   if (size &gt; MaxSize || size &lt; 2)
+
+      throw BadInput();
+
+   n = size;
+
+   e = a;
+
+
+
+   // compute  s = 2^log (n-1)
+
+   int i, s;
+
+   for (s = 1; 2*s &lt;= n-1; s += s);
+
+
+
+   LowExt = 2*(n-s);
+
+   offset = 2*s-1;
+
+
+
+   // play matches starting at
+
+   // lowest-level external nodes
+
+   for (i = 2; i &lt;= LowExt; i += 2)
+
+      Play((offset+i)/2, i-1, i, winner);
+
+
+
+   // handle remaining external nodes
+
+   if (n % 2) {// special case for odd n, play
+
+               // internal and external node
+
+      Play(n/2, t[(n-1)/2], LowExt+1, winner);
+
+      i = LowExt+3;}
+
+   else i = LowExt+2;
+
+
+
+   // i is left-most remaining external node
+
+   for (; i &lt;= n; i += 2)
+
+      Play((i-LowExt+n-1)/2, i-1, i, winner);
+
+
+
+}
+
+
+
+template&lt;class T&gt;
+
+void LoserTree&lt;T&gt;::Play(int p, int lc, int rc,
+
+	 int(*winner)(T a[], int b, int c))
+
+{// Play matches beginning at t[p].
+
+ // lc and rc are the children of t[p].
+
+   int CurrentWinner = winner(e, lc, rc);
+
+   if (CurrentWinner == lc)
+
+      // loser is rc
+
+      t[p] = rc;
+
+   else // loser is lc
+
+      t[p] = lc;
+
+
+
+   // more matches possible if at right child
+
+   while (p &gt; 1 &amp;&amp; p % 2) {// at a right child
+
+      // parent of p has opponent information
+
+      p /= 2;  // go to parent
+
+      int NewWinner = winner(e, t[p], CurrentWinner);
+
+      if (NewWinner != CurrentWinner) {
+
+         // loser is CurrentWinner
+
+         t[p] = CurrentWinner;
+
+         CurrentWinner = NewWinner;}
+
+      }
+
+
+
+   // record winner of last match in t[p/2]
+
+   t[p/2] = CurrentWinner;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+</dl>
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,12 @@
+enter number of edges in graph
+enter edge 1
+enter edge 2
+enter edge 3
+enter edge 4
+enter edge 5
+enter edge 6
+Doing bfs from vertex 1 labeling 1
+Doing bfs from vertex 4 labeling 2
+Doing bfs from vertex 2 labeling 3
+Reached values for vertices are
+1 1 1 2 2 2 3 

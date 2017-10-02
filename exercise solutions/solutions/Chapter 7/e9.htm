@@ -1,0 +1,340 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 7, Exercise 9<BR>
+
+<BR>
+
+</H1>
+
+For this structure, the keys are integers in the range zero through
+
+<code class=var>MaxKey</code>.
+
+Let <code class=var>MaxN</code> denote the maximum number of elements
+
+that are to be in the dictionary at any time.
+
+The specification of the class is given below.
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class E&gt;
+
+class IdealHashTable {
+
+public:
+
+   IdealHashTable(int maxKey, int maxN); 
+
+   ~IdealHashTable() {delete [] ht;
+
+                      delete [] ele;}
+
+   bool Search(int k, E&amp; e);
+
+   IdealHashTable&lt;E&gt;&amp; Insert(const E&amp; e);
+
+   IdealHashTable&lt;E&gt;&amp; Delete(int k, E&amp; e);
+
+private:
+
+   E *ele;      // array of elements
+
+   int *ht,     // hash table
+
+       MaxKey,  // largest allowable key
+
+       MaxN,    // max number of elements
+
+       LastE;   // last used position of ele[]
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+The constructor creates the two arrays <code class=var>ht</code>
+
+and <code class=var>ele</code> and sets the
+
+initial configuration which represents an empty hash table (i.e.,
+
+<code class=var>LastE</code> = -1).  The destructor simply frees the space taken by
+
+the arrays <code class=var>ht</code>
+
+and <code class=var>ele</code>.  The constructor code is given below while
+
+the destructor is defined inline above.
+
+<br><br>
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E&gt;
+
+IdealHashTable&lt;E&gt;::IdealHashTable(int maxKey, int maxN)
+
+{// Create a hash table ht with maxKey + 1 buckets
+
+ // and an array ele[] with capacity maxN.
+
+   MaxKey = maxKey;
+
+   MaxN = maxN;
+
+   ht = new int [MaxKey+1];
+
+   ele = new E [MaxN];
+
+   LastE = -1; // last used spot in ele[]
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+The code to search for an element with key <code class=var>k</code> is given below.
+
+We first verify that <code class=var>k</code> is in the
+
+prescribed range [0, <code class=var>MaxKey</code>].
+
+If it is, then we examine our data structure.  The home bucket is
+
+<code class=var>ht[k]</code>.
+
+If <code class=var>ht[k]</code> is not in the range
+
+[0, <code class=var>LastE</code>], it is assumed to
+
+be garbage and so we conclude that the dictionary contains no element
+
+with this key.  When <code class=var>ht[k]</code> is in the specified range, it is a pointer
+
+to an element in <code class=var>ele</code>.
+
+That is, to element <code class=var>ele[ht[k]]</code>.  This element
+
+is examined to see if its key is <code class=var>k</code>.  If so, the search is successful.
+
+If not, the search fails as there is no element in the
+
+dictionary with the desired key.  The code is given below.
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E&gt;
+
+bool IdealHashTable&lt;E&gt;::Search(int k, E&amp; e)
+
+{// Put element with key k into e.
+
+ // Return false if there is no element with key k.
+
+   if (k &lt; 0 || k &gt; MaxKey)
+
+      return false; // key out of range
+
+   
+
+   if (ht[k] &lt; 0 || ht[k] &gt; LastE || ele[ht[k]] != k)
+
+      return false; // key not in table
+
+   
+
+   e = ele[ht[k]];
+
+   return true;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+To insert an element, we first perform a search to verify that the
+
+dictionary currently contains no element with the same key.
+
+Also, we verify that there is space in <code class=var>ele</code> for an additional element.
+
+If both tests pass, the element is appended to the list of elements
+
+already in <code class=var>ele</code> and a pointer to this position recorded in the home bucket
+
+<code class=var>ht[k]</code>.  The code is given below.  This code assumes that the assignment
+
+operator = has been overloaded so that statements
+
+of the form <code class=var>int</code> =
+
+<code class=var>element</code> result in the extraction
+
+of the key of the element.
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E&gt;
+
+IdealHashTable&lt;E&gt;&amp; IdealHashTable&lt;E&gt;::
+
+                   Insert(const E&amp; e)
+
+{// Insert e into the table.  Throw an exception
+
+ // if the key is out of range, a duplicate,
+
+ // or if there is no space.
+
+   int k = e; // extract key
+
+   if (k &lt; 0 || k &gt; MaxKey)
+
+      throw BadInput(); // key out of range
+
+
+
+   E x;
+
+   if (Search(k,x))
+
+      throw BadInput(); // duplicate
+
+
+
+   if (LastE == MaxN - 1)
+
+      throw NoMem();    // no space
+
+
+
+   // put e into the table
+
+   ele[++LastE] = e;    // put in element
+
+   ht[k] = LastE;       // set index to element
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+To delete an element, we first verify that the dictionary contains an
+
+element with the specified key <code class=var>k</code>.
+
+If so, this is at <code class=var>ele[ht[k]]</code>.
+
+When the element is deleted from here, the vacancy created may be filled
+
+by moving the element at <code class=var>ele[LastE</code>] to this spot.
+
+<br><br>
+
+
+
+<hr class=coderule>
+
+<pre class=code>
+
+template&lt;class E&gt;
+
+IdealHashTable&lt;E&gt;&amp; IdealHashTable&lt;E&gt;::
+
+                   Delete(int k, E&amp; e)
+
+{// Delete element with key k.
+
+ // Put deleted element into e.
+
+ // Throw BadInput if no matching element.
+
+   if (!Search(k,e))
+
+      throw BadInput(); // no matching element
+
+   
+
+   // delete from table and fill vacancy with
+
+   // last element in ele[]
+
+   ele[ht[k]] = ele[LastE--]; // relocate last
+
+                              // element to vacancy
+
+   int key = ele[ht[k]]; // key of moved element
+
+   ht[key] = ht[k]; // new location of moved element
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+Each function is readily seen to have complexity Theta(1).
+
+The relevant files are <code class=var>ihash.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

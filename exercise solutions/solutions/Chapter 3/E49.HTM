@@ -1,0 +1,374 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 49<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can use the same code as used in Exercise 29 to meld two chains,
+
+in Exercise 38 to meld two circular lists (without head nodes),
+
+and in Exercise 44 to meld two circular lists with headnodes.
+
+First, we must extend the class <code class=code>DoubleCircular</code>
+
+developed in Exercise 47
+
+by adding the members
+
+<code class=code>Append</code>
+
+and
+
+<code class=code>Erase</code>, and create
+
+an iterator class for doubly-linked circular lists
+
+analogous to the
+
+iterator class for chains.
+
+The codes for the member functions and for the iterator
+
+class are
+
+given below and in the files
+
+<code class=code>dblcirc2.*</code> and
+
+<code class=code>dbliter.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+DoubleCircular&lt;T&gt;&amp; DoubleCircular&lt;T&gt;::Append(const T&amp; x)
+
+{// Insert x at the end of the list.
+
+ // Pass NoMem exception if inadequate space.
+
+
+
+   // get a new node and set its fields
+
+   // and set pointer coming from left
+
+   DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   if (last) {// list not empty
+
+              y-&gt;right = last-&gt;right;
+
+              y-&gt;right-&gt;left = y;
+
+              last-&gt;right = y;
+
+              y-&gt;left = last;
+
+              }
+
+   else {// list is empty
+
+         y-&gt;right = y;
+
+         y-&gt;left = y;
+
+         }
+
+
+
+   // y is new last node
+
+   last = y;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void DoubleCircular&lt;T&gt;::Erase()
+
+{// Delete all nodes.
+
+   if (!last) return;         // list is empty
+
+
+
+   // delete all nodes
+
+   DoubleNode&lt;T&gt; *current = last-&gt;right,
+
+                               // current node
+
+                 *next;        // next node
+
+   while (current != last) {
+
+      next = current-&gt;right;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   delete last;
+
+   last = 0;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class DoubleCircularIterator {
+
+   public:
+
+      T* Initialize(const DoubleCircular&lt;T&gt;&amp; c)
+
+            {location = c.last;
+
+             last = c.last;
+
+             if (!location) return 0;
+
+             location = last-&gt;right;
+
+             return &amp;location-&gt;data;
+
+             }
+
+      T* Next()
+
+             {if (location == last)
+
+                 // no more elements
+
+                 return 0;
+
+             location = location-&gt;right;
+
+             return &amp;location-&gt;data;
+
+             }
+
+   private:
+
+      DoubleNode&lt;T&gt; *location,  // current element
+
+                    *last;      // last element in list
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<dl compact>
+
+<dt> 
+
+<dd>
+
+To complete the meld in linear time, we use two iterators <code class=code>a</code>
+
+and <code class=code>b</code>
+
+to march through the doubly-linked circular lists <code class=code>A</code>
+
+and <code class=code>B</code> respectively.  When we exhaust
+
+one list, the balance of the remaining list
+
+is copied over to <code class=code>C</code>.
+
+<br><br>
+
+
+
+The code for the alternating meld
+
+operation
+
+is given below and in the files
+
+<code class=code>dblcirc3.*</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void Alternate(const DoubleCircular&lt;T&gt;&amp; A,
+
+          const DoubleCircular&lt;T&gt;&amp; B, DoubleCircular&lt;T&gt;&amp; C)
+
+{// Meld alternately from A and B to get C.
+
+   // initialize
+
+   DoubleCircularIterator&lt;T&gt; a,  // iterator for A
+
+                             b;  // iterator for B
+
+   T *DataA = a.Initialize(A);   // first element of A
+
+   T *DataB = b.Initialize(B);   // first of B
+
+   C.Erase(); // empty C
+
+
+
+   // create result
+
+   while (DataA &amp;&amp; DataB) {
+
+      C.Append(*DataA);
+
+      C.Append(*DataB);
+
+      DataA = a.Next();
+
+      DataB = b.Next();
+
+      }
+
+
+
+   // append the rest
+
+   // at most one of A and B can be nonempty now
+
+   while(DataA) {
+
+      C.Append(*DataA);
+
+      DataA = a.Next();
+
+      }
+
+
+
+   while(DataB) {
+
+      C.Append(*DataB);
+
+      DataB = b.Next();
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+
+
+The call to <code class=code>Erase</code> takes an amount of time that is linear in the
+
+length of the initial <code class=code>C</code>.
+
+Each call to <code class=code>Initialize</code>,
+
+<code class=code>Append</code>,
+
+and <code class=code>Next</code> takes Theta(1) time.
+
+So the time spent in all of the <code class=code>while</code> loops is linear in the
+
+sum of the lengths of the lists <code class=code>A</code>,
+
+<code class=code>B</code>,
+
+and <code class=code>C</code>.  As a result, the
+
+complexity of <code class=code>Alternate</code> is linear in the sum of the
+
+lengths of the three initial lists
+
+<code class=code>A</code>,
+
+<code class=code>B</code>,
+
+and <code class=code>C</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

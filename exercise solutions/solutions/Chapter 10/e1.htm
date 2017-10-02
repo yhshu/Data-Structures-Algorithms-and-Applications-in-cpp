@@ -1,0 +1,90 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 10, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We replace the use of a winner tree with a min heap.  The root of the min
+
+heap contains the next element to be output, either as part of the
+
+current run or as the first element of the next run.
+
+When the min element is output, it is replaced by the next element
+
+in the input.  The replacement of the current min element with
+
+the next input element can be done efficiently using the change
+
+min operation which is the counterpart of the change max operation
+
+defined for max heaps in Exercise 9.8.
+
+Using a <em class = var>p</em> element min heap, each element of a run
+
+can be produced in O(<em class = var>log p</em>) time.
+
+This time includes the time to replace the next element in the run
+
+with a new element from the output. By comparison, the time
+
+required by a winner tree is
+
+Theta(<em class = var>log p</em>).
+
+
+
+<dt>(b)
+
+<dd>
+
+When a winner tree is used, each element replacement requires
+
+<em class = var>log p</em> element compares.
+
+When a min heap is used, this operation can take up to
+
+<em class = var>2log p</em> element compares.
+
+When element compares are expensive relative to other operations,
+
+the winner tree will have a better worst-case performance.
+
+When element compares are not expensive, we will need to
+
+program the two approaches and determine, experimentally,
+
+which is better.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

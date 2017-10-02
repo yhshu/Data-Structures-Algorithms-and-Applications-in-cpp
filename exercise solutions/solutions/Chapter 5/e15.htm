@@ -1,0 +1,260 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 5, Exercise 15<BR>
+
+<BR>
+
+</H1>
+
+We define a class <code class=var>Node</code> with integer
+
+field <code class=var>element</code> and pointer field
+
+<code class=var>link</code>.  This is the data type of the nodes
+
+that will be on the chains as well as on the linked stack.
+
+The code given below closely follows that of Program 5.12.
+
+This code appears in the file <code class=var>equiv1.cpp</code>.
+
+Its complexity is the same as that of Program 5.12.  However,
+
+it is expected to run faster than Program 5.12 by a constant
+
+factor.
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+class Node {
+
+   friend void main(void);
+
+   private:
+
+      int element;
+
+      Node *link;  // pointer to Node
+
+};
+
+
+
+void main(void)
+
+{// Offline equivalenece classes.
+
+   int n, r;
+
+
+
+   // input n and r
+
+   cout &lt;&lt; "Enter number of elements" &lt;&lt; endl;
+
+   cin &gt;&gt; n;
+
+   if (n &lt; 2) {cerr &lt;&lt; "Too few elements" &lt;&lt; endl;
+
+               exit(1);}
+
+   cout &lt;&lt; "Enter number of relations" &lt;&lt; endl;
+
+   cin &gt;&gt; r;
+
+   if (r &lt; 1) {cerr &lt;&lt; "Too few relations" &lt;&lt; endl;
+
+               exit(1);}
+
+
+
+   // create an array of n of pointers
+
+   // to first nodes in chains
+
+   Node **first;  // 1D array of pointers to Node
+
+   try {first = new Node* [n+1];}
+
+   catch (NoMem) {cerr &lt;&lt; "Out of memory" &lt;&lt; endl;
+
+                  exit(1);}
+
+
+
+   // initialize chains to empty
+
+   for (int i = 1; i &lt;= n; i++)
+
+      first[i] = 0;
+
+              
+
+   // input the r relations and put on chains
+
+   for (int i = 1; i &lt;= r; i++) {
+
+      cout &lt;&lt; "Enter next relation/pair" &lt;&lt; endl;
+
+      int a, b;
+
+      cin &gt;&gt; a &gt;&gt; b;
+
+      Node *x;
+
+      // get a node for chain a 
+
+      x = new Node;
+
+      x-&gt;element = b;
+
+
+
+      // insert at front of chain a 
+
+      x-&gt;link = first[a];
+
+      first[a] = x;
+
+
+
+      // get a node for chain b
+
+      x = new Node;
+
+      x-&gt;element = a;
+
+
+
+      // insert at front of chain b
+
+      x-&gt;link = first[b];
+
+      first[b] = x;
+
+      }
+
+   
+
+   // initialize to output classes
+
+   Node *top = 0;   // pointer to top of stack
+
+   bool *out;
+
+   try {out = new bool [n+1];}
+
+   catch (NoMem) {cerr &lt;&lt; "Out of memory" &lt;&lt; endl;
+
+                  exit(1);}
+
+   for (int i = 1; i &lt;= n; i++)
+
+      out[i] = false;
+
+   
+
+   // output classes
+
+   for (int i = 1; i &lt;= n; i++)
+
+     if (!out[i]) {// start of a new class
+
+        cout &lt;&lt; "Next class is: " &lt;&lt; i &lt;&lt; ' ';
+
+        out[i] = true;
+
+
+
+        int j = i;
+
+        do {
+
+           // elements on chain j  are in
+
+           // same class; process the chain
+
+           Node *q = first[j];
+
+           while (q) // q-&gt;element is in same class
+
+              if (!out[q-&gt;element]) {
+
+                    cout &lt;&lt; q-&gt;element &lt;&lt; ' ';
+
+                    out[q-&gt;element] = true;
+
+
+
+                    // save pointer to next node
+
+                    Node *next = q-&gt;link;
+
+                    
+
+                    // add q-&gt;element to stack
+
+                    q-&gt;link = top;
+
+                    top = q;
+
+
+
+                    // set q to next node on chain
+
+                    q = next;}
+
+              else q = q-&gt;link;
+
+           if (!top) break;
+
+           // set to process a chain from the stack
+
+           j = top-&gt;element;
+
+           top = top-&gt;link;
+
+           } while (true);
+
+        cout &lt;&lt; endl;
+
+        }
+
+
+
+   cout &lt;&lt; endl &lt;&lt; "End of class list" &lt;&lt; endl;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,178 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 37<BR>
+
+<BR>
+
+</H1>
+
+
+
+Suppose we have the 12 elements [6, 7, 2, 5, 6, 2, 5, 7, 6, 2, 5, 5].
+
+The distinct elements and their frequencies can be determined
+
+by first sorting the elements to get the array
+
+[2, 2, 2, 5, 5, 5, 5, 6, 6, 6, 7, 7].  The number of 2s can be determined
+
+by scanning the sorted elements from left to right looking for the
+
+first element that is not 2.  This element, 5, is in position 3.  So there
+
+are three 2s.  To determine the number of 5s, we scan rightwards from
+
+the location <em class=var>c</em> = 3 of the first 5 to the
+
+location <em class=var>j</em> = 7 of the first element that is not a 5.
+
+The number of 5s is <em class=var>j - c</em> = 4.
+
+<br><br>
+
+The code below uses this strategy to determine the distinct elements
+
+and their frequencies.  Since we use a heap sort to sort the elements and
+
+since heap sort sorts elements in array positions [1:<em class=var>n</em>],
+
+we input the elements into positions [1:<em class=var>n</em>]
+
+of an array rather than into positions [0:<em class=var>n</em>-1].
+
+The code together with test data and output
+
+appears
+
+in the files <code class=code>histo2.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+// histogramming by sorting
+
+
+
+#include &lt;iostream.h&gt;
+
+#include &lt;stdlib.h&gt;
+
+#include "hsort.h"
+
+
+
+void main(void)
+
+{// Histogram using a search tree.
+
+   int *E; // 1D array of elements
+
+   int n;  // number of elements
+
+   cout &lt;&lt; "Enter number of elements" &lt;&lt; endl;
+
+   cin &gt;&gt; n;
+
+
+
+   // create the array E[0:n+1]
+
+   try {E = new int [n+1];}
+
+   catch (...)
+
+      {cout &lt;&lt; "Insufficient Memory" &lt;&lt; endl;
+
+       exit(1);}
+
+
+
+   // input elements into the array E
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      cout &lt;&lt; "Enter element " &lt;&lt; i &lt;&lt; endl;
+
+      cin &gt;&gt; E[i];
+
+      }
+
+
+
+   // sort the elements
+
+   HeapSort(E,n);  
+
+
+
+   // output distinct elements and their counts
+
+   cout &lt;&lt; "Distinct elements and frequencies are"
+
+        &lt;&lt; endl;
+
+   int c = 1;  // cursor into E
+
+   while (c &lt;= n) {
+
+      // new element at E[c]
+
+      // scan over elements equal to E[c]
+
+      int j = c + 1;
+
+      while (j &lt;= n &amp;&amp; E[j] == E[c])
+
+         j++;
+
+
+
+      // number of elements equal to E[c] is j - c
+
+      cout &lt;&lt; E[c] &lt;&lt; " " &lt;&lt; (j - c) &lt;&lt; "    ";
+
+
+
+      // set c to next new element
+
+      c = j;
+
+   }
+
+   cout &lt;&lt; endl;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

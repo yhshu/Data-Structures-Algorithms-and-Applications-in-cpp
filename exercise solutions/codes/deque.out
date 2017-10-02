@@ -1,0 +1,14 @@
+The deque from front to rear is
+The queue has 3 element(s)
+The element(s) from front to rear are
+1 2 3 
+
+3 deleted from rear
+4 added to front and 2 deleted from rear
+4 deleted from front
+1 deleted from front
+The deque from front to rear is
+The queue has 0 element(s)
+The element(s) from front to rear are
+
+

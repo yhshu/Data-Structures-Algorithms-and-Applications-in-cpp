@@ -1,0 +1,166 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 5, Exercise 3<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+It would be good to read the solution to Exercise 3.1 first.
+
+In the new implementation the functions
+
+<strong class=var>IsFull</strong>,
+
+<strong class=var>Add</strong>,
+
+and
+
+<strong class=var>Delete</strong> are changed as shown below.
+
+Changes are in <font color=red>red</font>.
+
+The relevant files are <strong class=var>cstack.*</strong>.
+
+</dl>
+
+<br><br>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+<font color=red>
+
+template&lt;class T&gt;
+
+bool Stack&lt;T&gt;::IsFull() const
+
+{// Check if stack is full.
+
+
+
+   if (top &lt; MaxTop) return false;
+
+   // see if array expansion possible
+
+   try {
+
+      T *temp = new T [2 * MaxTop + 1];
+
+      // expansion is possible
+
+      delete temp;
+
+      return false;
+
+      }
+
+   catch (...) {
+
+      // expansion is not possible
+
+      return true;}
+
+}</font>
+
+
+
+template&lt;class T&gt;
+
+Stack&lt;T&gt;&amp; Stack&lt;T&gt;::Add(const T&amp; x)
+
+{// Add x to stack.
+
+   if (top == MaxTop) {<font color=red>// double capacity
+
+      MaxTop = 2 * MaxTop + 1;
+
+      ChangeSize1D(stack,  top+1, MaxTop+1);</font>
+
+      }
+
+   stack[++top] = x;
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Stack&lt;T&gt;&amp; Stack&lt;T&gt;::Delete(T&amp; x)
+
+{// Delete top element and return in x.
+
+   if (IsEmpty()) throw OutOfBounds(); // delete fails
+
+   x = stack[top--];
+
+   <font color=red>if ((top + 1 &lt;= (MaxTop + 1)/4) &amp;&amp; MaxTop &gt; 0) {
+
+      // halve the capacity
+
+      MaxTop = (MaxTop - 1)/2;
+
+      ChangeSize1D(stack, top + 1, MaxTop + 1);
+
+      }</font>
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The proof is the same as that for Exercise 3.1(b).
+
+Also read the comments in the solution to Exercise 3.1 about
+
+letting the user specify an initial size and expanding array
+
+capacity only
+
+if we need to exceed this initial size.
+
+</dl>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

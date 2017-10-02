@@ -1,0 +1,21 @@
+Enter number of vertices and edges
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+The undirected graph is
+0  1  0  1  0  0  0  
+1  0  1  1  1  1  0  
+0  1  0  0  1  1  0  
+1  1  0  0  1  0  0  
+0  1  1  1  0  1  0  
+0  1  1  0  1  0  0  
+0  0  0  0  0  0  0  
+The max clique size is 4
+The vertex selection vector is 0  1  1  0  1  1  0  

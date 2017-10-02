@@ -1,0 +1,184 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 47<BR>
+
+<BR>
+
+</H1>
+
+We can find the depth-first spanning tree by initiating a depth-first
+
+search at vertex <code class=code>i</code>.  Whenever a new
+
+vertex is reached, the edge used to reach this vertex is saved
+
+in the array <code class=code>DT</code>.  When the depth-first search
+
+is complete, we can verify whether or not the edges saved
+
+in <code class=code>DT</code> define a spanning tree by checking
+
+if the number of edges in <code class=code>DT</code> is
+
+<code class=code>n-1</code>.
+
+<br><br>
+
+A suitable data type for the elements of <code class=code>DT</code>
+
+is <code class=code>Edge</code> which is defined below and in the file
+
+<code class=code>edge.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+class Edge {
+
+   friend ostream&amp; operator&lt;&lt;(ostream&amp;, Edge);
+
+   friend class Undirected;
+
+   friend void main(void);
+
+   private:
+
+      int u, v;  // edge endpoints
+
+};
+
+
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, Edge x)
+
+   {out &lt;&lt; x.u &lt;&lt; ' ' &lt;&lt; x.v; return out;}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for<code class=code>DSpanningTree</code> is given
+
+below and in the file
+
+<code class=code>und2.h</code>. The files used to test this code are
+
+<code class=code>dfstree.*</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+bool Undirected::DSpanningTree(int i, Edge DT[])
+
+{// Find a depth-first spanning tree beginning
+
+ // at vertex i.  Put spanning tree edges in DT[0:n-2].
+
+ // Return false if there is no spanning tree.
+
+   // perform a depth-first search from vertex i
+
+   // saving edges used to reach new vertices
+
+   InitializePos();     // init graph iterator array
+
+   int n = Vertices();
+
+
+
+   // define and initialize the array reach
+
+   bool *reach = new bool [n+1];
+
+   for (int j = 1; j &lt;= n; j++)
+
+      reach[j] = false;
+
+
+
+   int edges = 0; // number of spanning tree edges so far
+
+
+
+   dSpanningTree(i, reach, edges, DT); // do the dfs
+
+
+
+   DeactivatePos(); // free graph iterator array
+
+   delete reach;
+
+
+
+   // spanning tree found only if edges = n - 1
+
+   if (edges == n-1) return true;
+
+   return false;
+
+}
+
+
+
+void Undirected::dSpanningTree(int v, bool reach[],
+
+                               int&amp; edges, Edge DT[])
+
+{// Actual depth-first search code.
+
+   reach[v] = true;
+
+   int u = Begin(v);
+
+   while (u) {// u is adj to v
+
+      if (!reach[u]) {// a new vertex
+
+         // add (u,v) to the spanning tree
+
+         DT[edges].u= v;
+
+         DT[edges++].v = u;
+
+         dSpanningTree(u, reach, edges, DT);}
+
+      u = NextVertex(v);
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

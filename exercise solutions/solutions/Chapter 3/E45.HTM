@@ -1,0 +1,1064 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 4, Exercise 45<BR>
+
+<BR>
+
+</H1>
+
+
+
+<DL compact>
+
+<dt> (a)
+
+<DD>
+
+The code for the retrieve function is given below.
+
+The strategy is to first verify that the input row
+
+and column indexes are valid.  Then we search the
+
+head node chain for the head node for row
+
+<code class=var>i</code>.
+
+If such a head node does not exist, the matrix element
+
+we are searching for is zero.
+
+If the head node exists, we search the chain for row
+
+<code class=var>i</code> for a node with
+
+column value
+
+<code class=var>j</code>.  Again, if we do not find
+
+such a node, the value to return is zero.
+
+If we do find such a node, we return the value
+
+that is in this node.
+
+</dl>
+
+<PRE class = code>
+
+<HR class = coderule>
+
+template &lt;class T&gt;
+
+T LinkedMatrix&lt;T&gt;::Retrieve(int i, int j) const
+
+{// Return the (i,j) element of the matrix.
+
+   // first make sure i and j are valid
+
+   if (i &lt; 1 || j &lt; 1 || i &gt; rows || j &gt; cols)
+
+       throw OutOfBounds();
+
+
+
+   // find chain for row i, using an iterator
+
+   // p for the head node chain
+
+   ChainIterator&lt;HeadNode&lt;T&gt; &gt; p;
+
+
+
+   // define h to point to current head node
+
+   HeadNode&lt;T&gt; *h = p.Initialize(a);
+
+
+
+   // advance h to head node for row i
+
+   while (h &amp;&amp; h-&gt;row &lt; i)
+
+      h = p.Next();
+
+  
+
+   if (!h || h-&gt;row &gt; i) // no row chain for row i
+
+      return 0;
+
+
+
+   // search the row chain for column j element,
+
+   // using a row chain iterator q
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; q;
+
+ 
+
+   // define r to point to current row chain node
+
+   CNode&lt;T&gt; *r = q.Initialize(h-&gt;a);
+
+ 
+
+   // advance r to node with column value j
+
+   while (r &amp;&amp; r-&gt;col &lt; j)
+
+      r = q.Next();
+
+    
+
+   if (!r || r-&gt;col &gt; j) // no node for (i,j) element
+
+      return 0;
+
+   else return r-&gt;value;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+<dl compact>
+
+<dt>(b)
+
+<dd>
+
+The strategy is to first verify that <code class=var>i</code>
+
+and <code class=var>j</code> are valid row and column
+
+indexes for the given matrix.  If they are not,
+
+we throw an <code class=var>OutOfBounds</code> exception.
+
+If the row and column indexes are valid, we proceed to store
+
+the element.  The case when the new element has value zero
+
+cannot be dispensed with right away because the matrix
+
+may currently have a nonzero element at position (<code class=var>i,j</code>).
+
+If such an element exists, we must remove it from the representation.
+
+<br><br>
+
+To store the new element, we must first
+
+find the head node for the
+
+chain for row <code class=var>i</code>.
+
+If this head node does not exist, then a new row chain
+
+is to be created provided the value of the new element is not zero.
+
+If this head node exists, we must check the chain for row
+
+<code class=var>i</code> and determine whether there is already
+
+an element on this chain with column index <code class=var>j</code>.
+
+If such an element exists, it must be changed to the new value (again,
+
+if the new value is zero, the old element is simply deleted).
+
+If such an element does not exist and new element is nonzero; the new element
+
+element is inserted.
+
+<br><br>
+
+The code is given below.  The code works within the limitations
+
+of the classes
+
+<code class=var>Chain</code> and
+
+<code class=var>ChainIterator</code>.  Consequently, we
+
+scan chains twice; once to discover that an insert
+
+or delete is to made, and again to actually make the
+
+insertion or deletion.  By extending the classes
+
+<code class=var>Chain</code> and
+
+<code class=var>ChainIterator</code> suitably, we can avoid
+
+the second scan.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+LinkedMatrix&lt;T&gt;&amp; LinkedMatrix&lt;T&gt;::
+
+                 Store(const T&amp; x, int i, int j)
+
+{// Store x as (i,j) element of the matrix.
+
+   // first make sure i and j are valid
+
+   if (i &lt; 1 || j &lt; 1 || i &gt; rows || j &gt; cols)
+
+       throw OutOfBounds();
+
+
+
+   // find chain for row i, using an iterator
+
+   // p for the head node chain
+
+   ChainIterator&lt;HeadNode&lt;T&gt; &gt; p;
+
+
+
+   // define h to point to current head node
+
+   // and hCount to be distance from start 
+
+   HeadNode&lt;T&gt; *h = p.Initialize(a);
+
+   int hCount = 0;
+
+
+
+   // advance h to head node for row i
+
+   while (h &amp;&amp; h-&gt;row &lt; i) {
+
+      h = p.Next();
+
+      hCount++;
+
+      }
+
+  
+
+   if (!h || h-&gt;row &gt; i) {// no row chain for row i
+
+      // do not store a zero element
+
+      if (x == 0) return *this;
+
+
+
+      // create new row chain
+
+      HeadNode&lt;T&gt; H;  // head node for the row chain
+
+      H.row = i;
+
+
+
+      // create row chain node for new element
+
+      CNode&lt;T&gt; *c = new CNode&lt;T&gt;;
+
+      c-&gt;col = j;
+
+      c-&gt;value = x;
+
+      // append row chain node to head node
+
+      H.a.Append(*c);
+
+
+
+      // insert row chain into head node chain
+
+      a.Insert(hCount, H);
+
+      H.a.Zero();  // save from chain destructor
+
+      return *this;}
+
+
+
+   // chain for row i exists
+
+   // search the row chain for column j element,
+
+   // using a row chain iterator q
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; q;
+
+ 
+
+   // define r to point to current row chain node
+
+   // and rCount to be distance from start 
+
+   CNode&lt;T&gt; *r = q.Initialize(h-&gt;a);
+
+   int rCount = 0;
+
+ 
+
+   // advance r to node with column value j
+
+   while (r &amp;&amp; r-&gt;col &lt; j) {
+
+      r = q.Next();
+
+      rCount++;}
+
+    
+
+   if (!r || r-&gt;col &gt; j) {// no node for (i,j) element
+
+      // do not store a zero element
+
+      if (x == 0) return *this;
+
+      // create row chain node for new element
+
+      CNode&lt;T&gt; *c = new CNode&lt;T&gt;;
+
+      c-&gt;col = j;
+
+      c-&gt;value = x;
+
+      // insert row chain node into row chain
+
+      h-&gt;a.Insert(rCount, *c);
+
+      return *this;}
+
+
+
+   // there is already an (i,j) element, change it
+
+   CNode&lt;T&gt; z;
+
+   h-&gt;a.Delete(rCount+1, z);
+
+   if (x == 0) {// check if row chain empty
+
+                if (h-&gt;a.IsEmpty()) {
+
+                    // delete row chain
+
+                    HeadNode&lt;T&gt; H;
+
+                    a.Delete(hCount+1, H);}
+
+                return *this;}
+
+   // insert new value for (i,j)
+
+   z.value = x;
+
+   h-&gt;a.Insert(rCount, z);
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+<dl compact>
+
+<dt> (c)
+
+<dd>
+
+To add two sparse matrices, we must go down the head node chains of each
+
+using chain iterators.  Suppose we are currently positioned
+
+at row <code class=var>i</code> of one matrix and row
+
+<code class=var>j</code> of the other.  If
+
+<code class=var>i</code> &lt;
+
+<code class=var>j</code> then we can simply copy row
+
+<code class=var>i</code> of the first matrix into the result matrix and
+
+advance to the next row of the first matrix.
+
+If <code class=var>i</code> &gt;
+
+<code class=var>j</code> then we can copy row
+
+<code class=var>j</code> of the second matrix into the result matrix
+
+and advance to the next row of the second matrix.
+
+If <code class=var>i</code> =
+
+<code class=var>j</code> then we must go down the two rows
+
+adding terms from the same column and copying all
+
+other terms.
+
+<br><br>
+
+To implement the above strategy, we first write two private
+
+member functions for the class <code class=var>LinkedMatrix</code>.
+
+The first private member copies an entire row
+
+and the second one adds two rows together.
+
+The code for these two private members is given below.
+
+This code is followed by the code for the add function.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<pre class=code>
+
+template &lt;class T&gt;
+
+HeadNode&lt;T&gt;* LinkedMatrix&lt;T&gt;::Copy(HeadNode&lt;T&gt; *h) const
+
+{// Return a copy of row defined by h.
+
+
+
+   // copy the head node
+
+   HeadNode&lt;T&gt; *hCopy = new HeadNode&lt;T&gt;;
+
+   hCopy-&gt;row = h-&gt;row;
+
+
+
+   // use a chain iterator to traverse row nodes
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; q;
+
+   CNode&lt;T&gt; *r = q.Initialize(h-&gt;a);
+
+   while (r) {
+
+      // copy and append the term
+
+      hCopy-&gt;a.Append(*r);
+
+      // advance to next term in row
+
+      r = q.Next();
+
+      }
+
+   return hCopy;
+
+}
+
+      
+
+template &lt;class T&gt;
+
+HeadNode&lt;T&gt;* LinkedMatrix&lt;T&gt;::AddRows
+
+    (HeadNode&lt;T&gt; *ah, HeadNode&lt;T&gt;* bh) const
+
+{// Add the matrix rows ah and bh and return
+
+ // a pointer to the result.
+
+
+
+   // create head node for result
+
+   HeadNode&lt;T&gt; *sum = new HeadNode&lt;T&gt;;
+
+   sum-&gt;row = ah-&gt;row;
+
+
+
+   // define chain iterators for the two chains
+
+   // and initialize
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; aIter, bIter;
+
+   CNode&lt;T&gt; *aTerm = aIter.Initialize(ah-&gt;a),
+
+            *bTerm = bIter.Initialize(bh-&gt;a);
+
+   
+
+   // go down the chains copying terms
+
+   while (aTerm &amp;&amp; bTerm)
+
+      if (aTerm-&gt;col &gt; bTerm-&gt;col) {
+
+         // copy bTerm
+
+         sum-&gt;a.Append(*bTerm);
+
+         bTerm = bIter.Next();}
+
+      else if (aTerm-&gt;col &lt; bTerm-&gt;col) {
+
+              // copy aTerm
+
+              sum-&gt;a.Append(*aTerm);
+
+              aTerm = aIter.Next();}
+
+           else {// add values and append
+
+                 T x = aTerm-&gt;value + bTerm-&gt;value;
+
+                 if (x) {// x != 0
+
+                         CNode&lt;T&gt; p;
+
+                         p.col = aTerm-&gt;col;
+
+                         p.value = x;
+
+                         sum-&gt;a.Append(p);}
+
+                 aTerm = aIter.Next();
+
+                 bTerm = bIter.Next();}
+
+              
+
+   // copy remaining terms
+
+   while (aTerm) {
+
+      sum-&gt;a.Append(*aTerm);
+
+      aTerm = aIter.Next();
+
+      }
+
+   while (bTerm) {
+
+      sum-&gt;a.Append(*bTerm);
+
+      bTerm = bIter.Next();
+
+      }
+
+
+
+   if (sum-&gt;a.IsEmpty()) {delete sum;
+
+                          return 0;}
+
+   else return sum;
+
+}
+
+ 
+
+
+
+template &lt;class T&gt;
+
+void LinkedMatrix&lt;T&gt;::Add(const LinkedMatrix&lt;T&gt; &amp;b,
+
+              LinkedMatrix&lt;T&gt; &amp;c) const
+
+{// Compute c = (*this) + b.
+
+
+
+   // verify compatibility
+
+   if (rows != b.rows || cols != b.cols)
+
+     throw SizeMismatch(); // incompatible matrices
+
+
+
+   // set characteristics of result c
+
+   c.rows = rows;
+
+   c.cols = cols;
+
+   c.a.Erase();  // delete nodes in c
+
+
+
+   // define iterators for head node chains
+
+   // of *this and b and initialize
+
+   ChainIterator&lt;HeadNode&lt;T&gt; &gt; tHeadIter, bHeadIter;
+
+   HeadNode&lt;T&gt; *th = tHeadIter.Initialize(a);
+
+   HeadNode&lt;T&gt; *bh = bHeadIter.Initialize(b.a);
+
+
+
+   // go down the head node chains
+
+   // until we fall off one of them
+
+   while (th &amp;&amp; bh)
+
+      // compare row numbers
+
+      if (th-&gt;row &lt; bh-&gt;row) {
+
+         // copy row of *this and append to c.a
+
+         c.a.Append(*Copy(th));
+
+         // advance to next row of *this
+
+         th = tHeadIter.Next();}
+
+      else if (th-&gt;row &gt; bh-&gt;row) {
+
+              // copy row of b and append to c.a
+
+              c.a.Append(*Copy(bh));
+
+              // advance to next row of b
+
+              bh = bHeadIter.Next();}
+
+            else {// rows are the same, add and
+
+                  // append to c.a
+
+                  HeadNode&lt;T&gt; *x = AddRows(th, bh);
+
+                  if (x)  {// append to head node chain
+
+                           a.Append(*x);
+
+                           // save row nodes from destructor
+
+                           // and delete head node as it has
+
+                           // been copied by Append
+
+                           x-&gt;a.Zero();
+
+                           delete x;
+
+                           }
+
+                  th = tHeadIter.Next();
+
+                  bh = bHeadIter.Next();
+
+                  }
+
+
+
+   // take care of remaining rows
+
+   // at most one of *this and b has unprocessed rows
+
+   while (th) {// copy a row of *this
+
+      c.a.Append(*Copy(th));
+
+      // advance to next row of *this
+
+      th = tHeadIter.Next();
+
+      }
+
+         
+
+   while (bh) {// copy a row of b
+
+      c.a.Append(*Copy(bh));
+
+      // advance to next row of *this
+
+      bh = bHeadIter.Next();
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+<dl compact>
+
+<dt> (d)
+
+<dd>
+
+The code to subtract two sparse matrices is very similar to
+
+that to add two sparse matrices.  This time we need an additional
+
+private member that changes the sign of terms as it copies
+
+a row of terms and also one that subtracts two rows of
+
+terms.  The codes for these additional private members
+
+as well as the code to do the subtraction is given below.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<pre class=code>
+
+template &lt;class T&gt;
+
+HeadNode&lt;T&gt;* LinkedMatrix&lt;T&gt;::MinusCopy(HeadNode&lt;T&gt; *h) const
+
+{// Return a copy of the negative of row defined by h.
+
+
+
+   // copy the head node
+
+   HeadNode&lt;T&gt; *hCopy = new HeadNode&lt;T&gt;;
+
+   hCopy-&gt;row = h-&gt;row;
+
+
+
+   // use a chain iterator to traverse row nodes
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; q;
+
+   CNode&lt;T&gt; *r = q.Initialize(h-&gt;a);
+
+   while (r) {// copy a node and append
+
+      CNode&lt;T&gt; c;
+
+      c.col = r-&gt;col;
+
+      c.value = -r-&gt;value;
+
+      // append to row chain copy
+
+      hCopy-&gt;a.Append(c);
+
+      // advance to next node
+
+      r = q.Next();
+
+      }
+
+   return hCopy;
+
+}
+
+      
+
+
+
+template &lt;class T&gt;
+
+HeadNode&lt;T&gt;* LinkedMatrix&lt;T&gt;::SubRows
+
+    (HeadNode&lt;T&gt; *ah, HeadNode&lt;T&gt;* bh) const
+
+{// Subtract the matrix rows ah and bh and return
+
+ // a pointer to the result.
+
+
+
+   // create head node for result
+
+   HeadNode&lt;T&gt; *sum = new HeadNode&lt;T&gt;;
+
+   sum-&gt;row = ah-&gt;row;
+
+
+
+   // define chain iterators for the two chains
+
+   // and initialize
+
+   ChainIterator&lt;CNode&lt;T&gt; &gt; aIter, bIter;
+
+   CNode&lt;T&gt; *aTerm = aIter.Initialize(ah-&gt;a),
+
+            *bTerm = bIter.Initialize(bh-&gt;a);
+
+   
+
+   // go down the chains copying terms
+
+   while (aTerm &amp;&amp; bTerm)
+
+      if (aTerm-&gt;col &gt; bTerm-&gt;col) {
+
+         // copy negative of bTerm
+
+         CNode&lt;T&gt; y;
+
+         y.col = bTerm-&gt;col;
+
+         y.value = -bTerm-&gt;value;
+
+         sum-&gt;a.Append(y);
+
+         bTerm = bIter.Next();}
+
+      else if (aTerm-&gt;col &lt; bTerm-&gt;col) {
+
+              // copy aTerm
+
+              sum-&gt;a.Append(*aTerm);
+
+              aTerm = aIter.Next();}
+
+           else {// subtract values and append
+
+                 T x = aTerm-&gt;value - bTerm-&gt;value;
+
+                 if (x) {// x != 0
+
+                         CNode&lt;T&gt; p;
+
+                         p.col = aTerm-&gt;col;
+
+                         p.value = x;
+
+                         sum-&gt;a.Append(p);}
+
+                 aTerm = aIter.Next();
+
+                 bTerm = bIter.Next();}
+
+              
+
+   // copy remaining terms
+
+   while (aTerm) {
+
+      sum-&gt;a.Append(*aTerm);
+
+      aTerm = aIter.Next();
+
+      }
+
+   while (bTerm) {
+
+      CNode&lt;T&gt; y;
+
+      y.col = bTerm-&gt;col;
+
+      y.value = -bTerm-&gt;value;
+
+      sum-&gt;a.Append(y);
+
+      bTerm = bIter.Next();
+
+      }
+
+
+
+   if (sum-&gt;a.IsEmpty()) {delete sum;
+
+                          return 0;}
+
+   else return sum;
+
+}
+
+ 
+
+
+
+template &lt;class T&gt;
+
+void LinkedMatrix&lt;T&gt;::Subtract(const LinkedMatrix&lt;T&gt; &amp;b,
+
+              LinkedMatrix&lt;T&gt; &amp;c) const
+
+{// Compute c = (*this) - b.
+
+
+
+   // verify compatibility
+
+   if (rows != b.rows || cols != b.cols)
+
+     throw SizeMismatch(); // incompatible matrices
+
+
+
+   // set characteristics of result c
+
+   c.rows = rows;
+
+   c.cols = cols;
+
+   c.a.Erase();  // delete nodes in c
+
+
+
+   // define iterators for head node chains
+
+   // of *this and b and initialize
+
+   ChainIterator&lt;HeadNode&lt;T&gt; &gt; tHeadIter, bHeadIter;
+
+   HeadNode&lt;T&gt; *th = tHeadIter.Initialize(a);
+
+   HeadNode&lt;T&gt; *bh = bHeadIter.Initialize(b.a);
+
+
+
+   // go down the head node chains
+
+   // until we fall off one of them
+
+   while (th &amp;&amp; bh)
+
+      // compare row numbers
+
+      if (th-&gt;row &lt; bh-&gt;row) {
+
+         // copy row of *this and append to c.a
+
+         c.a.Append(*Copy(th));
+
+         // advance to next row of *this
+
+         th = tHeadIter.Next();}
+
+      else if (th-&gt;row &gt; bh-&gt;row) {
+
+              // copy negative of row of b
+
+              // and append to c.a
+
+              c.a.Append(*MinusCopy(bh));
+
+              // advance to next row of b
+
+              bh = bHeadIter.Next();}
+
+            else {// rows are the same, subtract and
+
+                  // append to c.a
+
+                  HeadNode&lt;T&gt; *x = SubRows(th, bh);
+
+                  if (x)  {// append to head node chain
+
+                           a.Append(*x);
+
+                           // save row nodes from destructor
+
+                           // and delete head node as it has
+
+                           // been copied by Append
+
+                           x-&gt;a.Zero();
+
+                           delete x;
+
+                           }
+
+                  th = tHeadIter.Next();
+
+                  bh = bHeadIter.Next();
+
+                  }
+
+
+
+   // take care of remaining rows
+
+   // at most one of *this and b has unprocessed rows
+
+   while (th) {// copy a row of *this
+
+      c.a.Append(*Copy(th));
+
+      // advance to next row of *this
+
+      th = tHeadIter.Next();
+
+      }
+
+         
+
+   while (bh) {// copy minus of a row of b
+
+      c.a.Append(*MinusCopy(bh));
+
+      // advance to next row of *this
+
+      bh = bHeadIter.Next();
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+The relevant files are <code class=var>lsmatrix.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

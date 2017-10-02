@@ -1,0 +1,574 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 59<BR>
+
+<BR>
+
+</H1>
+
+The implementations vary depending on the relative cost
+
+of moving elements and changing pointers.  We shall make the
+
+assumption that the elements are long, and therefore it is undesirable
+
+to copy elements from one node into another.  Our sort codes will
+
+change node pointers rather than move elements
+
+so as to obtain a sorted chain.  Since the time needed to change
+
+node pointers is
+
+independent of the size of an element, the run time of our
+
+sort codes is also independent of element size.
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The bubble sort code mimics the array-based code of Program 2.9.
+
+It may be modified to obtain an early-terminating version.
+
+The code is given below and in the files
+
+<code class=code>nchain.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::BubbleSort()
+
+{// Sort *this using the bubble sort method.
+
+   if (!first) return *this;       // empty list
+
+
+
+   // define cursors
+
+   ChainNode&lt;T&gt; *AfterLast = 0,    // node after last one
+
+                *current,          // curent node
+
+                *next,             // node right of current
+
+                *previous;         // node left of current
+
+
+
+   // bubble sort
+
+   while (first-&gt;link != AfterLast) {
+
+      // more than one element remains
+
+      // do a bubbling pass
+
+      current = first;
+
+      next = first-&gt;link;
+
+      previous = 0;
+
+      while (next != AfterLast)
+
+         // compare current and next and
+
+         // swap nodes if necessary
+
+         if (current-&gt;data &gt; next-&gt;data) {
+
+            // swap the nodes
+
+            if (previous) previous-&gt;link = next;
+
+            else first = next;
+
+            current-&gt;link = next-&gt;link;
+
+            next-&gt;link = current;
+
+            previous = next;
+
+            next = current-&gt;link;
+
+            }
+
+         else {// move cursors forward one node
+
+               previous = current;
+
+               current = next;
+
+               next = next-&gt;link;
+
+               }
+
+         //  need to go only as far as previous
+
+         AfterLast = current;
+
+      }
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<DL compact>
+
+<DT>
+
+<DD>
+
+Each bubbling pass takes
+
+Theta(<em class=var>i</em>) time, where <em class=var>i</em> is the number of nodes on the
+
+portion of the chain from <code class=code>first</code>
+
+to <code class=code>AfterLast</code>.
+
+For an <em class=var>n</em>
+
+node input chain, the time needed is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+This is the asymptotic complexity for all data including
+
+initially sorted lists.
+
+There is some variability in the actual run time because the number
+
+of node swaps made in each bubbling pass varies from
+
+0 to
+
+Theta(<em class=var>n</em>).
+
+<br>
+
+<br>
+
+Although the code takes
+
+Theta(<em class=var>n<sup>2</sup></em>) time on all data, the actual run time is
+
+maximum when all possible node swaps take place.
+
+This happens when the input chain is in decreasing order.
+
+<br><br>
+
+The codes and a test program can be found in the files
+
+<code class = code>nchain.*</code>.
+
+
+
+<br><br><br>
+
+
+
+<dt> (b)
+
+<dd>
+
+The code is very similar to Program 2.7.  It is given below and
+
+in the file <code class=code>ochain.h</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::SelectionSort()
+
+{// Sort *this using the selection sort method.
+
+   if (!first) return *this;       // empty list
+
+
+
+   // define cursors
+
+   ChainNode&lt;T&gt; *AfterLast = 0,    // node after last one
+
+                *MaxNode,          // node with max element
+
+                *PreMax,           // node left of MaxNode
+
+                *current,          // curent node
+
+                *previous;         // node left of current
+
+
+
+   // selection sort
+
+   while (first-&gt;link != AfterLast) {
+
+      // more than one element remains
+
+      // do a selection pass
+
+      MaxNode = first;
+
+      PreMax = 0;
+
+      current = first-&gt;link;
+
+      previous = first;
+
+      while (current-&gt;link != AfterLast) {
+
+         // compare current and MaxNode
+
+         // update MaxNode if necessary
+
+         if (current-&gt;data &gt; MaxNode-&gt;data) {
+
+            // update PreMax and MaxNode
+
+            PreMax = previous;
+
+            MaxNode = current;
+
+            }
+
+         // move cursors forward one node
+
+         previous = current;
+
+         current = current-&gt;link;
+
+         }
+
+      if (current-&gt;data &gt; MaxNode-&gt;data)
+
+         // no node is to be moved
+
+         // set for next pass
+
+         AfterLast = current;
+
+      else {
+
+         // must bring MaxNode to right of current
+
+         // first delete MaxNode from present location
+
+         if (PreMax)
+
+            // MaxNode is not the first node on the chain
+
+            PreMax-&gt;link = MaxNode-&gt;link;
+
+         else
+
+            // MaxNode is the first node
+
+            first = MaxNode-&gt;link;
+
+         // now insert MaxNode after current
+
+         MaxNode-&gt;link = current-&gt;link;
+
+         current-&gt;link = MaxNode;
+
+         // set for next pass
+
+         AfterLast = MaxNode;
+
+         }
+
+      }
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+<DL compact>
+
+<DT>
+
+<DD>
+
+Each selection pass takes
+
+Theta(<em class=var>i</em>) time, where <em class=var>i</em> is
+
+the number of nodes on the
+
+portion of the chain from <code class=code>first</code>
+
+to <code class=code>AfterLast</code>.
+
+For an <em class=var>n</em>
+
+node input chain, the time needed is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+This is the asymptotic complexity for all data including
+
+initially sorted lists.
+
+There is some variability in the actual run time because the number
+
+of times <code class=code>MaxNode</code> and
+
+<code class=code>PreMax</code> are updated
+
+in each selection pass varies from
+
+0 to
+
+Theta(<em class=var>n</em>).
+
+Additional variance comes from the fact that a node may or may not
+
+be deleted from the chain and reinserted at the end of each selection pass.
+
+<br>
+
+<br>
+
+Although the code takes
+
+Theta(<em class=var>n<sup>2</sup></em>) time on all data, the actual run time is
+
+maximum when
+
+<code class=code>MaxNode</code> and
+
+<code class=code>PreMax</code> are updated
+
+following each comparison and
+
+when a node is deleted and reinserted at the end of each pass.
+
+This happens when the input chain is in decreasing order.
+
+<br><br>
+
+The codes and a test program can be found in the files
+
+<code class = code>ochain.*</code>.
+
+
+
+<br><br><br>
+
+<dt> (c)
+
+<dd>
+
+The code to compute the ranks is
+
+very similar to Program 2.5.  The actual
+
+rearrangement is done by assigning the elements to bins
+
+according to their rank and then collecting the elements
+
+from the bins in rank order. The code is given below and
+
+in the file <code class=code>pchain.h</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+Chain&lt;T&gt;&amp; Chain&lt;T&gt;::RankSort()
+
+{// Sort *this using the rank sort method.
+
+
+
+   if (!first) return *this;  // empty chain
+
+
+
+   int n = Length();
+
+
+
+   // r[i] will be rank of element i+1
+
+   int *r = new int[n];
+
+   for (int i = 0; i &lt; n; i++)
+
+      r[i] = 0;  // initialize
+
+
+
+   // compute ranks
+
+   // compare all pairs of elements
+
+   ChainNode&lt;T&gt; *c = first;
+
+   for (int i = 0; i &lt; n; i++) {
+
+      // c-&gt;data is element i+1
+
+      ChainNode&lt;T&gt; *d = first;
+
+      for (int j = 0; j &lt; i; j++) {
+
+         // d-&gt;data is element j+1
+
+         if (d-&gt;data &lt;= c-&gt;data) r[i]++;
+
+         else r[j]++;
+
+         d = d-&gt;link;
+
+         }
+
+      c = c-&gt;link;
+
+      }
+
+
+
+   // distribute to bins by rank
+
+   ChainNode&lt;T&gt; **bin = new ChainNode&lt;T&gt; * [n];
+
+   c = first;
+
+   for (int i = 0; i &lt; n; i++) {
+
+      bin[r[i]] = c;
+
+      c = c-&gt;link;
+
+      }
+
+
+
+   // collect from bins
+
+   first = bin[0];
+
+   ChainNode&lt;T&gt; *last = first;  // last node on chain
+
+   for (int i = 1; i &lt; n; i++)
+
+      last = last-&gt;link = bin[i];
+
+   last-&gt;link = 0;
+
+   
+
+   delete [] r;
+
+   delete [] bin;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+<DL compact>
+
+<DT>
+
+<DD>
+
+For an <em class=var>n</em>
+
+node input chain, the time taken to rank the elements is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+The ensuing assignment and collection from bins takes
+
+Theta(<em class=var>n</em>) time.
+
+Therefore, if an exception is not thrown, the complexity is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+This is the asymptotic complexity for all data including
+
+initially sorted lists.
+
+<br>
+
+The codes and a test program can be found in the files
+
+<code class = code>pchain.*</code>.
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

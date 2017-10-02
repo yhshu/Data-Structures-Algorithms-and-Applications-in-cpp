@@ -1,0 +1,172 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 37<BR>
+
+<BR>
+
+</H1>
+
+It is convenient to define a new class
+
+<code class=var>TreeBooster</code> that derives from
+
+<code class=var>BinaryTree<Booster></code>.  Our codes for the
+
+new class require that <code class=var>root</code> be
+
+a protected member of
+
+<code class=var>BinaryTree<Booster></code> rather than a
+
+private member.  With this assumption, we get access to
+
+the data member
+
+<code class=var>root</code>.
+
+<br><br>
+
+We shall write a public function
+
+<code class=var>PlaceBoosters</code> which invokes a recursive private
+
+function with the same name.  This private function has a single
+
+parameter, the root of the subtree where boosters are to be placed.
+
+The private function is called initially with the root of the overall
+
+binary tree.
+
+<br><br>
+
+The recursive private function places boosters as needed
+
+and also returns the
+
+max of the delays from the parent (in the original distribution tree)
+
+of the subtree root to the nearest
+
+booster or leaf in each subtree (of the parent in the
+
+original distribution tree), including itself,
+
+that is a right sibling of this subtree
+
+root.
+
+<br><br>
+
+The code is given below and in the files
+
+<code class=var>tbooster.*</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+class TreeBooster : public BinaryTree&lt;Booster&gt; {
+
+   public:
+
+      void PlaceBoosters(int tol)
+
+           {tolerance = tol;
+
+            PlaceBoosters(root);}
+
+   private:
+
+      int PlaceBoosters(BinaryTreeNode&lt;Booster&gt; *);
+
+      int tolerance;
+
+};
+
+
+
+
+
+int TreeBooster::PlaceBoosters
+
+                 (BinaryTreeNode&lt;Booster&gt; *t)
+
+{// Place boosters in the subtree with root t.
+
+ // Return max of delays from parent of t to nearest
+
+ // booster or leaf in each right sibling
+
+ // subtree of parent in
+
+ // original distribution tree.
+
+   if (!t) return 0;  // t is empty, parent is
+
+                      // a leaf
+
+   t-&gt;data.D = PlaceBoosters(t-&gt;LeftChild);
+
+   // compute max delay from parent of t
+
+   // to nearest booster or leaf in each
+
+   // subtree of t in original distribution tree
+
+   int del = t-&gt;data.D + t-&gt;data.d;
+
+
+
+   // see if we need a booster at t
+
+   if (del &gt; tolerance) {
+
+      t-&gt;data.boost = true;
+
+      del = t-&gt;data.d;}
+
+
+
+   // compute max delay for remaining
+
+   // children of parent of t in original
+
+   // distribution tree; the max of this value
+
+   // and del is the delay value for parent of t
+
+   return max(del, PlaceBoosters(t-&gt;RightChild));
+
+   
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

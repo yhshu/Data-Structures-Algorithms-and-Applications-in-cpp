@@ -1,0 +1,62 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 33<BR>
+
+<BR>
+
+</H1>
+
+
+
+From the solution for Exercise 31 we know that it is possible to
+
+delete from a nonleaf node so that the worst-case number of disk
+
+acceses is the same as when
+
+deleting from a leaf node.  So, assume we are deleting from a leaf node.
+
+The worst-case access analysis is:
+
+<br><br>
+
+<em class=var>h</em> reads to find the leaf to delete from
+
+<br>
+
++ <em class=var>2(h - 1)</em> reads of nearest siblings
+
+<br>
+
++ <em class=var>h - 2</em> writes at levels 3 through <em class=var>h</em>
+
+<br>
+
++ 3
+
+<br><br>
+
+The total is <em class=var>4h - 1</em>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

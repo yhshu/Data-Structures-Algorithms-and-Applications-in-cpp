@@ -1,0 +1,246 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 17<BR>
+
+<BR>
+
+</H1>
+
+
+
+An <code class=code>IncreaseKey</code> can be done by increasing the key of the root element
+
+and then performing a root to leaf scan of the min heap (as in a delete
+
+min) sliding elements up if they are smaller than the increased key.
+
+The derived class has all the public member
+
+functions of <code class=code>MinHeap</code>
+
+in addition to the function <code class=code>IncreaseKey</code>. 
+
+Since <code class=code>IncreaseKey</code>
+
+needs to know the data type of the key, it is defined as a template class
+
+with two class variables <code class=code>E</code>
+
+and <code class=code>K</code>.
+
+Combining these ideas results in the
+
+code given below
+
+and in the file
+
+<code class=var>eminheap.h</code>.
+
+<br><br>
+
+Since the code for
+
+<code class=code>IncreaseKey</code> requires access to the data members of
+
+<code class=code>Mineap</code>, these data members must be declared
+
+as <code class=code>protected</code> members.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class ExtendedMinHeap : public MinHeap&lt;E&gt;
+
+{
+
+   public:
+
+      ExtendedMinHeap(int ExtendedMinHeapSize = 10)
+
+          : MinHeap&lt;E&gt; (ExtendedMinHeapSize) {}
+
+      void IncreaseMinKey(K&amp; x, E&amp; e);
+
+};
+
+
+
+template&lt;class E, class K&gt;
+
+void ExtendedMinHeap&lt;E,K&gt;::IncreaseMinKey(K&amp; x, E&amp; e)
+
+{// Increase the key of the min element by x.
+
+ // Put original min element in e.
+
+   // make sure there is a min element
+
+   if (CurrentSize == 0)
+
+      throw OutOfBounds();
+
+
+
+   // save min element in e and y
+
+   E y = e = heap[1];
+
+
+
+   y += x; // increase key of min element
+
+
+
+   // put updated min element back into the heap
+
+   int i = 1,
+
+       ci = 2; // ci is child of i
+
+   while (ci &lt;= CurrentSize) {// find place to put y
+
+      if (ci &lt; CurrentSize &amp;&amp; heap[ci] &gt; heap[ci+1]) ci++;
+
+      // now ci points to smaller child of i
+
+
+
+      // can we put y in heap[i]?
+
+      if (y &lt;= heap[ci]) break;  // yes
+
+
+
+      // no
+
+      heap[i] = heap[ci]; // move child up
+
+ 
+
+      // move i and ci one level down
+
+      i = ci;
+
+      ci *= 2;
+
+      }
+
+
+
+   heap[i] = y;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+With the availability of the
+
+<code class=code>IncreaseKey</code>
+
+function, the code for
+
+<code class=code>LPT</code> is simplified.
+
+The new code is given below and in the file
+
+<code class=code>alpt.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void LPT(T a[], int n, int m)
+
+{// Construct an m machine LPT schedule.
+
+   if (n &lt;= m) {
+
+      cout &lt;&lt; "Schedule one job per machine." &lt;&lt; endl;
+
+      return;}
+
+
+
+   HeapSort(a,n); // in ascending order
+
+   // initialize m machines and the min heap
+
+   ExtendedMinHeap&lt;MachineNode, int&gt; H(m);
+
+   MachineNode x;
+
+   for (int i = 1; i &lt;= m; i++) {
+
+       x.avail = 0;
+
+       x.ID = i;
+
+       H.Insert(x);
+
+       }
+
+
+
+   // construct schedule
+
+   for (int i = n; i &gt;= 1; i--) {
+
+      H.IncreaseMinKey(a[i].time, x);
+
+      cout &lt;&lt; "Schedule job " &lt;&lt; a[i].ID 
+
+           &lt;&lt; " on machine " &lt;&lt; x.ID &lt;&lt; " from "
+
+           &lt;&lt; x.avail &lt;&lt; " to "
+
+           &lt;&lt; (x.avail + a[i].time) &lt;&lt; endl;
+
+      x.avail += a[i].time;  // new avail time
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

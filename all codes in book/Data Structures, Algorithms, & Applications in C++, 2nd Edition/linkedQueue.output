@@ -1,0 +1,17 @@
+Queue back is 1
+Queue back is 2
+Queue back is 3
+Queue back is 4
+Queue should be 1234, front to back
+The queue is not empty
+The queue size is 4
+Queue front is 1
+Popped front element
+Queue front is 2
+Popped front element
+Queue front is 3
+Popped front element
+Queue front is 4
+Popped front element
+Last pop failed 
+Invalid operation on empty queue

@@ -1,0 +1,14 @@
+Enter number of objects and knapsack capacity
+Enter profit and weight of object 1
+Enter profit and weight of object 2
+Enter profit and weight of object 3
+Enter profit and weight of object 4
+Enter profit and weight of object 5
+Optimal value is 15
+Rest of table is
+0  0  3  3  6  6  9  9  9  10  11  
+0  0  0  0  6  6  6  6  6  10  11  
+0  0  0  0  6  6  6  6  6  10  10  
+0  0  0  0  6  6  6  6  6  6  6  
+
+1  1  0  0  1  

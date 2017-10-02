@@ -1,0 +1,10 @@
+Enter image size
+Enter the pixel array in row-major order
+The labeled image is
+0  0  2  0  0  0  0  
+0  0  2  2  0  0  0  
+0  0  0  0  3  0  0  
+0  0  0  3  3  0  0  
+4  0  0  0  3  0  0  
+4  4  4  0  0  0  0  
+4  4  4  0  0  0  0  

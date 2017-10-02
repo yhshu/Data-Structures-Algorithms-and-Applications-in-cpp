@@ -1,0 +1,338 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 51<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can use the same code as used in Exercises 33, 40,
+
+and 46 to split a list using other representations.
+
+First, we must extend the class <code class=code>DoubleCircular</code>
+
+developed in Exercise 47
+
+by adding the members
+
+<code class=code>Append</code>
+
+and
+
+<code class=code>Erase</code>, and create
+
+an iterator class for doubly-linked circular lists
+
+analogous to the
+
+iterator class for chains.
+
+The codes for the member functions and for the iterator
+
+class are
+
+given below and in the files
+
+<code class=code>dblcirc2.*</code> and
+
+<code class=code>dbliter.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+DoubleCircular&lt;T&gt;&amp; DoubleCircular&lt;T&gt;::Append(const T&amp; x)
+
+{// Insert x at the end of the list.
+
+ // Pass NoMem exception if inadequate space.
+
+
+
+   // get a new node and set its fields
+
+   // and set pointer coming from left
+
+   DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   if (last) {// list not empty
+
+              y-&gt;right = last-&gt;right;
+
+              y-&gt;right-&gt;left = y;
+
+              last-&gt;right = y;
+
+              y-&gt;left = last;
+
+              }
+
+   else {// list is empty
+
+         y-&gt;right = y;
+
+         y-&gt;left = y;
+
+         }
+
+
+
+   // y is new last node
+
+   last = y;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void DoubleCircular&lt;T&gt;::Erase()
+
+{// Delete all nodes.
+
+   if (!last) return;         // list is empty
+
+
+
+   // delete all nodes
+
+   DoubleNode&lt;T&gt; *current = last-&gt;right,
+
+                               // current node
+
+                 *next;        // next node
+
+   while (current != last) {
+
+      next = current-&gt;right;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   delete last;
+
+   last = 0;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class DoubleCircularIterator {
+
+   public:
+
+      T* Initialize(const DoubleCircular&lt;T&gt;&amp; c)
+
+            {location = c.last;
+
+             last = c.last;
+
+             if (!location) return 0;
+
+             location = last-&gt;right;
+
+             return &amp;location-&gt;data;
+
+             }
+
+      T* Next()
+
+             {if (location == last)
+
+                 // no more elements
+
+                 return 0;
+
+             location = location-&gt;right;
+
+             return &amp;location-&gt;data;
+
+             }
+
+   private:
+
+      DoubleNode&lt;T&gt; *location,  // current element
+
+                    *last;      // last element in list
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<dl compact>
+
+<dt> 
+
+<dd>
+
+<br><br>
+
+
+
+
+
+The code to split a doubly-linked circular list is given below and in the file
+
+<code class=code>dblcirc5.cpp</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+void Split(DoubleCircular&lt;T&gt;&amp; A, DoubleCircular&lt;T&gt;&amp; B,
+
+           DoubleCircular&lt;T&gt;&amp; C)
+
+{// Split A into two circular lists B and C.
+
+ // When done, A is unchanged.
+
+   // first free all nodes in B and C
+
+   B.Erase();
+
+   C.Erase();
+
+
+
+   // assign elements alternately to B and C
+
+   DoubleCircularIterator&lt;T&gt; a;  // iterator for A
+
+   T *e = a.Initialize(A);
+
+   while (e) {
+
+      // first give B an element
+
+      B.Append(*e);
+
+      e = a.Next();
+
+      if (!e) break;
+
+      // now give C an element
+
+      C.Append(*e);
+
+      e = a.Next();
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The time needed to erase the lists <code class=code>B</code>
+
+and <code class=code>C</code> is linear in their length.
+
+The <code class=code>while</code> loop iterates
+
+at most
+
+<em class=var>(length of C)/2</em> times.  This loop
+
+may terminate earlier because it is possible for
+
+<code class=code>Append</code> to fail for lack
+
+of memory.  So, the
+
+complexity is O(<em class=var>sum of initial lengths of the three chains</em>).
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>dblcirc5.cpp</code>.
+
+The output is in the file
+
+<code class=code>dblcirc5.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

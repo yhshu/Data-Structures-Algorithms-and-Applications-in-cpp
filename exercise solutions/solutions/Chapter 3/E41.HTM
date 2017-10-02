@@ -1,0 +1,216 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 41<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+For this exercise,
+
+we interpret a circular list
+
+as having no first or last element.
+
+Each list element has an element befoe it and an element after it.
+
+The variable <code class=var>last</code> may therefore point to
+
+any one of the elements in the list.  Only the clockwise/counter-clockwise
+
+ordering of the elements is important.
+
+<br><br>
+
+For convenience, we embed the deletion code into the cicrcular
+
+list class.  We also add the member function
+
+<code class=code>MoveForward</code> which allows us to move
+
+a locator variable <code class=code>location</code> to
+
+an arbitrary position in the list. (Actually,
+
+<code class=code>MoveForward</code> moves
+
+<code class=code>location</code> clockwise a specified number
+
+of elements from its current position.)  The element currently
+
+being pointed to by
+
+<code class=code>location</code> can
+
+be deleted by invoking the function
+
+<code class=code>Delete(T& x)</code>.
+
+<br><br>
+
+The relevant codes are given below and in the files
+
+<code class=code>gcircle.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+Circular&lt;T&gt;&amp; Circular&lt;T&gt;::Delete(T&amp; x)
+
+{// Set x to the element that location
+
+ // points to and delete that element.
+
+ // Throw OutOfBounds exception if location is 0.
+
+   if (!location)
+
+      throw OutOfBounds(); // no element to delete
+
+   
+
+   x = location-&gt;data;
+
+   // p will eventually point to node that
+
+   // is to be deleted
+
+   ChainNode&lt;T&gt; *p;
+
+   if (last-&gt;link == last) {
+
+      // remaining list is empty
+
+      p = last;
+
+      last = 0;
+
+      }
+
+   else {// nonempty list is left
+
+      p = location-&gt;link;
+
+      // copy fields from p
+
+      location-&gt;data = p-&gt;data;
+
+      location-&gt;link = p-&gt;link;
+
+      if (p == last) last = location;
+
+      }
+
+
+
+   location = 0;
+
+   delete p;
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void Circular&lt;T&gt;::MoveForward(int k)
+
+{// Move location forward by k elements.
+
+ // Throw BadInput exception if there aren't
+
+ // k elements to the right of the current location.
+
+   if (!location &amp;&amp; k &gt; 0 &amp;&amp; last) {
+
+      //  move forward by at least one from
+
+      // left of nonempty list
+
+      location = last-&gt;link;
+
+      k--;
+
+      }
+
+   for (int i = 1; i &lt;= k; i++) {
+
+      // move forward by one node
+
+      if (location == last) // at last node
+
+         throw BadInput();
+
+      location = location-&gt;link;
+
+      }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The complexity of
+
+<code class=code>Delete</code> is Theta(1).
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>gcircle.cpp</code>.
+
+The output is in the file
+
+<code class=code>gcircle.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

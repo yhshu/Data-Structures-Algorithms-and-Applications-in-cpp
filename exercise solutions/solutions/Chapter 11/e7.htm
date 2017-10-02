@@ -1,0 +1,682 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+
+
+It is actually easier to derive from the class
+
+<code class=code>IndexedBSTree</code> developed in
+
+Exercise 5.  However, since the exercise asks us to
+
+derive from
+
+<code class=code>DBSTree</code> we shall do this.
+
+Much of the discussion that follows is similar to that
+
+given in the solution to Exercise 5.
+
+<br><br>
+
+First we must decide how we are going to incorporate
+
+the field <code class=code>LeftSize</code>.
+
+We can either require the user to include this
+
+field as one of the fields of the data type
+
+<code class=code>T</code>, or we can define
+
+a new type <code class=code>Element</code>
+
+with a <code class=code>LeftSize</code> field and a
+
+field <code class=code>data</code> of type <code class=code>T</code>.
+
+In our implementation of <code class=code>DIndexedBSTree</code>
+
+we have gone the first route.
+
+<br><br>
+
+The class <code class=code>DIndexedBSTree</code> is derived
+
+from <code class=code>DBSTree</code>.
+
+The public members <code class=code>Search</code> and
+
+<code class=code>Ascend</code> as well as the constructor and
+
+destructor are
+
+simply inherited from the base class.
+
+The code to do an indexed search, insert, delete, and
+
+indexed delete are new.
+
+The class definition is given below and in the file
+
+<code class=code>lbst.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class DIndexedBSTree : public DBSTree&lt;E, K&gt; {
+
+   public:
+
+      bool IndexedSearch(int k, E&amp; e);
+
+      DIndexedBSTree&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+      DIndexedBSTree&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e);
+
+      DIndexedBSTree&lt;E,K&gt;&amp; IndexedDelete(int k, E&amp; e);
+
+   private:
+
+      void Reset(int r, const K&amp; k);
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for indexed search is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool DIndexedBSTree&lt;E,K&gt;::IndexedSearch(int k, E&amp; e)
+
+{// Put the k'th element in e.
+
+ // Return false iff there is no k'th element
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (p)
+
+      if (k &lt; p-&gt;data.LeftSize) p = p-&gt;LeftChild;
+
+      else if (k &gt; p-&gt;data.LeftSize) {
+
+   	      k -= p-&gt;data.LeftSize;
+
+              p = p-&gt;RightChild;}
+
+           else {e = p-&gt;data;
+
+                return true;}
+
+   return false;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+To incorporate the two phase insert algorithm of Exercise 5,
+
+we must store the random decisions made when equal keys are
+
+encountered so that we can later
+
+retrace the path to update <code class=var>LeftSize</code> values.
+
+Rather than do this, we adopt the strategy suggested
+
+in Exercise 5 to penalize unsuccessful inserts rather
+
+than successful ones.  When this startegy is used, we need
+
+to retrace the path only if the insert fails.  With duplicate
+
+entries permitted, an insert fails only when we run out
+
+of memory.  Most likely, when a program runs out of memory,
+
+the program will abort and there is no point in resetting
+
+the <code class=code>LeftSize</code> values.
+
+<br><br>
+
+The code to insert is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+DIndexedBSTree&lt;E,K&gt;&amp; DIndexedBSTree&lt;E,K&gt;::
+
+                     Insert(const E&amp; e)
+
+{// Insert e even if it is a duplicate.
+
+   BinaryTreeNode&lt;E&gt; *pp = 0;  // pp is parent of p
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   K k = e; // extract key from e
+
+   // search for k
+
+   while (p) {
+
+      pp = p;
+
+      if (k &lt; p-&gt;data) {
+
+         // insert will be in left subtree of p
+
+         p-&gt;data.LeftSize++;
+
+         p = p-&gt;LeftChild;}
+
+      else if (e &gt; p-&gt;data) p = p-&gt;RightChild;
+
+           else // make a random decision
+
+                if (rand() % 2) {
+
+                   p-&gt;data.LeftSize++;
+
+                   p = p-&gt;LeftChild;}
+
+                else p = p-&gt;RightChild;
+
+      }
+
+
+
+   // get a node for e
+
+   p = new BinaryTreeNode&lt;E&gt; (e);
+
+   // cannot reset LeftSize fields because it is
+
+   // hard to find proper nodes when e equals
+
+   // some existing elements
+
+  
+
+   // attach node p to pp
+
+   p-&gt;data.LeftSize = 1;
+
+   if (root) // tree not empty
+
+      if (e &lt; pp-&gt;data)
+
+         pp-&gt;LeftChild = p;
+
+      else if (e &gt; pp-&gt;data)
+
+              pp-&gt;RightChild = p;
+
+           else // equal keys, pp has at most one child
+
+                // figure out where p belongs
+
+                if (pp-&gt;data.LeftSize == 2 &amp;&amp; !pp-&gt;LeftChild)
+
+                   pp-&gt;LeftChild = p;
+
+                else pp-&gt;RightChild = p;
+
+   else // insertion into empty tree
+
+        root = p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+To delete an element with a given key, we search for
+
+a matching element decreasing
+
+<code class=code>LeftSize</code> fields by one each time
+
+we move into a left subtree.
+
+If a matching element is not found,
+
+a second pass is made and <code class=code>LeftSize</code> values
+
+reset.
+
+<br><br>
+
+The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+DIndexedBSTree&lt;E,K&gt;&amp; DIndexedBSTree&lt;E,K&gt;::
+
+                     Delete(const K&amp; k, E&amp; e)
+
+{// Delete element that matches k.
+
+ // Put deleted element in e.
+
+ // Throw BadInput exception if no matching element.
+
+   // Find element to delete
+
+   BinaryTreeNode&lt;E&gt; *pp = 0;  // parent of p
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (p &amp;&amp; p-&gt;data != k) {
+
+      pp = p;
+
+      if (k &lt; p-&gt;data) {
+
+         p-&gt;data.LeftSize--;
+
+         p = p-&gt;LeftChild;}
+
+      else p = p-&gt;RightChild;
+
+      }
+
+   if (!p) {Reset(1, k);
+
+            throw BadInput();} // not found
+
+
+
+   e = p-&gt;data;  // save matching element
+
+
+
+   // proceed to delete from tree
+
+   if (p-&gt;LeftChild &amp;&amp; p-&gt;RightChild) {
+
+      // p has two children
+
+      // find largest element in left subtree of p
+
+      // first move into left subtree, then make as
+
+      // many right child moves as possible
+
+      int ls = p-&gt;data.LeftSize - 1; // save value
+
+      BinaryTreeNode&lt;E&gt; *ps = p,  // parent of s
+
+                        *s = p-&gt;LeftChild;
+
+      while (s-&gt;RightChild) {
+
+         ps = s;
+
+         s = s-&gt;RightChild;
+
+         }
+
+
+
+      // move largest element to p
+
+      p-&gt;data = s-&gt;data;
+
+      p-&gt;data.LeftSize = ls;
+
+      // set pp and p so that p is node to delete
+
+      pp = ps;
+
+      p = s;
+
+      }
+
+
+
+   // now p has at most one child
+
+   // save pointer to single subtree of p in s
+
+   BinaryTreeNode&lt;E&gt; *s;
+
+   if (p-&gt;LeftChild) s = p-&gt;LeftChild;
+
+   else s = p-&gt;RightChild;
+
+
+
+   // attach s to pp unless p is root
+
+   if (p == root) root = s;
+
+   else if (p == pp-&gt;LeftChild)
+
+           pp-&gt;LeftChild = s;
+
+        else pp-&gt;RightChild = s;
+
+
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for the function to reset <code class=code>LeftSize</code>
+
+is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void DIndexedBSTree&lt;E,K&gt;::
+
+       Reset(int r, const K&amp; k)
+
+{// Add r to LeftSize on path to k.
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (p)
+
+      if (k &lt; p-&gt;data) {
+
+         p-&gt;data.LeftSize += r;
+
+         p = p-&gt;LeftChild;}
+
+      else if (k &gt; p-&gt;data) p = p-&gt;RightChild;
+
+           else return;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+An indexed delete may be done in a similar way.  The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+DIndexedBSTree&lt;E,K&gt;&amp; DIndexedBSTree&lt;E,K&gt;::
+
+                     IndexedDelete(int k, E&amp; e)
+
+{// Delete the k'th element.  Put deleted element in e.
+
+ // Throw BadInput exception if no k'th element.
+
+   // find element to delete
+
+   BinaryTreeNode&lt;E&gt; *pp = 0;  // parent of p
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (p &amp;&amp; p-&gt;data.LeftSize != k) {
+
+      pp = p;
+
+      if (k &lt; p-&gt;data.LeftSize) {
+
+         p-&gt;data.LeftSize--;
+
+         p = p-&gt;LeftChild;}
+
+      else {k -= p-&gt;data.LeftSize;
+
+            p = p-&gt;RightChild;}
+
+      }
+
+   if (!p) {// no element to delete, reset LeftSize
+
+            p = root;
+
+            while (p)
+
+               if (k &lt; p-&gt;data.LeftSize) {
+
+                  p-&gt;data.LeftSize--;
+
+                  p = p-&gt;LeftChild;}
+
+               else {k -= p-&gt;data.LeftSize;
+
+                     p = p-&gt;RightChild;}
+
+
+
+             throw BadInput();
+
+             }
+
+
+
+   e = p-&gt;data;  // save matching element
+
+
+
+   // proceed to delete from tree
+
+   if (p-&gt;LeftChild &amp;&amp; p-&gt;RightChild) {
+
+      // p has two children
+
+      // find largest element in left subtree of p
+
+      // first move into left subtree, then make as
+
+      // many right child moves as possible
+
+      int ls = p-&gt;data.LeftSize - 1; // save value
+
+      BinaryTreeNode&lt;E&gt; *ps = p,  // parent of s
+
+                        *s = p-&gt;LeftChild;
+
+      while (s-&gt;RightChild) {
+
+         ps = s;
+
+         s = s-&gt;RightChild;
+
+         }
+
+
+
+      // move largest element to p
+
+      p-&gt;data = s-&gt;data;
+
+      p-&gt;data.LeftSize = ls;
+
+      // set pp and p so that p is node to delete
+
+      pp = ps;
+
+      p = s;
+
+      }
+
+
+
+   // now p has at most one child
+
+   // save pointer to single subtree of p in s
+
+   BinaryTreeNode&lt;E&gt; *s;
+
+   if (p-&gt;LeftChild) s = p-&gt;LeftChild;
+
+   else s = p-&gt;RightChild;
+
+
+
+   // attach s to pp unless p is root
+
+   if (p == root) root = s;
+
+   else if (p == pp-&gt;LeftChild)
+
+           pp-&gt;LeftChild = s;
+
+        else pp-&gt;RightChild = s;
+
+
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+<br><br>
+
+
+
+The constructor has complexity Theta(1).  The destructor and <code class=code>Ascend</code>
+
+have complexity Theta(<em class=var>n</em>).
+
+The search, insert, and delete functions
+
+have complexity O(<em class=var>h</em>), where <em class=var>h</em>
+
+is the height of the search tree.  The relevant files are
+
+<code class=code>lbst.*</code>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

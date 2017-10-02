@@ -1,0 +1,21 @@
+enter number of edges of 5 vertex digraph
+enter edge 1
+enter edge 2
+enter edge 3
+enter edge 4
+enter edge 5
+enter edge 6
+enter edge 7
+The network's adjacency matrix is
+0 1 1 0 1 
+0 0 0 1 1 
+0 0 0 1 0 
+0 0 0 0 1 
+0 0 0 0 0 
+Return status = 1
+The topological order is
+1
+3
+2
+4
+5

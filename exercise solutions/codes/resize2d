@@ -1,0 +1,31 @@
+
+
+#include <iostream.h>
+#include "resize2d.h"
+
+void main()
+{
+   int **x;
+   ChangeSize2D(x, 0, 0, 0, 3, 3);
+   for (int i = 0; i < 3; i++)
+      for (int j = 0; j < 3; j++)
+         x[i][j] = 4*i + j;
+
+   // increase array size to 8
+   ChangeSize2D(x, 3, 3, 3, 4, 4);
+
+   for (i = 0; i < 3; i++)
+      for (int j = 3; j < 4; j++)
+          x[i][j] = 4*i + j;
+
+   for (i = 3; i < 4; i++)
+      for (int j = 0; j < 4; j++)
+          x[i][j] = 4*i + j;
+
+   // output
+   for (i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++)
+      cout << x[i][j] << " ";
+      cout << endl;
+      }
+}

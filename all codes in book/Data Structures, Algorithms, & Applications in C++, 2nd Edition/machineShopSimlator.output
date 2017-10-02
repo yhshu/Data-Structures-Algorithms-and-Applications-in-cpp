@@ -1,0 +1,30 @@
+Enter number of machines and jobs
+Enter change-over times for machines
+Enter number of tasks for job 1
+Enter the tasks (machine, time) in process order
+Enter number of tasks for job 2
+Enter the tasks (machine, time) in process order
+Enter number of tasks for job 3
+Enter the tasks (machine, time) in process order
+Enter number of tasks for job 4
+Enter the tasks (machine, time) in process order
+Enter number of tasks for job 5
+Enter the tasks (machine, time) in process order
+Enter number of tasks for job 6
+Enter the tasks (machine, time) in process order
+Job 5 has completed at 11 Total wait was 9
+Job 1 has completed at 11 Total wait was 2
+Job 4 has completed at 13 Total wait was 6
+Job 2 has completed at 17 Total wait was 11
+Job 3 has completed at 26 Total wait was 14
+Job 6 has completed at 32 Total wait was 21
+Finish time = 32
+Machine 1 completed 7 tasks
+The total wait time was 52
+
+Machine 2 completed 6 tasks
+The total wait time was 8
+
+Machine 3 completed 4 tasks
+The total wait time was 3
+

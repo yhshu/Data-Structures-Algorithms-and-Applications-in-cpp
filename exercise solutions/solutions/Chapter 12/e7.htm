@@ -1,0 +1,122 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+This can be proved by construction.  For
+
+any <em class=var>n</em>,
+
+<em class=var>n</em> &gt;= 2, consider the digraph
+
+<em class=var>G<sub>n</sub></em> =
+
+({1, 2, ..., <em class=var>n</em>}, {(1, 2), (2, 3), (3, 4), ...,
+
+(<em class=var>n-1</em>,
+
+<em class=var>n</em>),
+
+(<em class=var>n</em>, 1)}).
+
+<em class=var>G<sub>n</sub></em>
+
+is simply an <em class=var>n</em> vertex directed cycle.
+
+<em class=var>G<sub>n</sub></em>
+
+is readily seen to be strongly connected.  Also, |<em class=var>E</em>| =
+
+<em class=var>n</em>.
+
+<dt>(b)
+
+<dd>
+
+Let <em class=var>G</em> =
+
+(<em class=var>V,E</em>) be any
+
+<em class=var>n</em> vertex strongly connected
+
+digraph.  Since <em class=var>G</em> contains a directed path
+
+from <em class=var>i</em>
+
+to <em class=var>j</em>
+
+and from <em class=var>j</em>
+
+to <em class=var>i</em> for every pair of
+
+vertices <em class=var>i</em>
+
+and <em class=var>j</em>,
+
+<em class=var>d<sub>i</sub><sup>in</sup></em> &gt;= 1 and
+
+<em class=var>d<sub>i</sub><sup>out</sup></em> &gt;= 1, 1 &lt;=
+
+<em class=var>i</em>
+
+&lt;= <em class=var>n</em>.  Hence, the sum of the in-degrees and out-degrees of all
+
+vertices is
+
+&gt;= <em class=var>2n</em>.  If
+
+|<em class=var>E</em>| =
+
+<em class=var>e</em>,
+
+then the sum of the in-degrees and out-degrees is
+
+<em class=var>2e</em> (Property 2).  So,
+
+<em class=var>2e</em> &gt;=
+
+<em class=var>2n</em> or
+
+<em class=var>e</em> &gt;=
+
+<em class=var>n</em>.
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,12 @@
+enter number of edges of 7 vertex graph
+enter edge 1
+enter edge 2
+enter edge 3
+enter edge 4
+enter edge 5
+enter edge 6
+enter edge 7
+enter edge 8
+Cost = 31
+Optimal tour is
+1 4 2 6 5 3 7 

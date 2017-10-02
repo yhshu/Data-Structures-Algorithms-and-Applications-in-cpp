@@ -1,0 +1,52 @@
+Enter number of rows
+Enter lower diagonal
+Enter main diagonal
+Enter upper diagonal
+X is 
+Lower diagonal is
+1  2  3  
+Main diagonal is
+4  5  6  7  
+Upper diagonal is
+8  9  10  
+
+Y is 
+Lower diagonal is
+1  2  3  
+Main diagonal is
+4  5  6  7  
+Upper diagonal is
+8  9  10  
+
+X incremented by 2 is 
+Lower diagonal is
+3  4  5  
+Main diagonal is
+6  7  8  9  
+Upper diagonal is
+10  11  12  
+
+Y + X is 
+Lower diagonal is
+4  6  8  
+Main diagonal is
+10  12  14  16  
+Upper diagonal is
+18  20  22  
+
+-(Y + X) is 
+Lower diagonal is
+-4  -6  -8  
+Main diagonal is
+-10  -12  -14  -16  
+Upper diagonal is
+-18  -20  -22  
+
+X transpose is 
+Lower diagonal is
+10  11  12  
+Main diagonal is
+6  7  8  9  
+Upper diagonal is
+3  4  5  
+

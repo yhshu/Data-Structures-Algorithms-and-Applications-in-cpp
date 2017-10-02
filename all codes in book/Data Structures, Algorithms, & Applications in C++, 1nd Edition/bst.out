@@ -1,0 +1,17 @@
+Elements in ascending order are
+1 a  4 c  6 b  8 d  
+Delete of 4 succeeds 
+4 c
+Elements in ascending order are
+1 a  6 b  8 d  
+Delete of 8 succeeds 
+8 d
+Elements in ascending order are
+1 a  6 b  
+Delete of 6 succeeds 
+6 b
+Elements in ascending order are
+1 a  
+Delete of 6 fails 
+Elements in ascending order are
+1 a  

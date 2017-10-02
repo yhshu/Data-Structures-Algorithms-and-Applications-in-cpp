@@ -1,0 +1,85 @@
+An RR rotation has been done
+Elements in ascending order are
+21 26 30 
+Elements in postorder order are
+21 30 26 
+An LL rotation has been done
+Elements in ascending order are
+4 9 21 26 30 
+Elements in postorder order are
+4 21 9 30 26 
+An LR rotation has been done
+Elements in ascending order are
+4 9 14 21 26 30 
+Elements in postorder order are
+4 14 9 30 26 21 
+An RL rotation has been done
+Elements in ascending order are
+4 9 14 21 26 28 30 
+Elements in postorder order are
+4 14 9 26 30 28 21 
+An RL rotation has been done
+Elements in ascending order are
+4 9 14 15 18 21 26 28 30 
+Elements in postorder order are
+4 14 18 15 9 26 30 28 21 
+An RL rotation has been done
+Elements in ascending order are
+4 9 10 14 15 18 21 26 28 30 
+Elements in postorder order are
+4 10 9 18 15 14 26 30 28 21 
+An LL rotation has been done
+Elements in ascending order are
+2 4 9 10 14 15 18 21 26 28 30 
+Elements in postorder order are
+2 4 10 9 18 15 26 30 28 21 14 
+An LR rotation has been done
+Elements in ascending order are
+2 3 4 9 10 14 15 18 21 26 28 30 
+Elements in postorder order are
+2 4 3 10 9 18 15 26 30 28 21 14 
+An LR rotation has been done
+Elements in ascending order are
+2 3 4 7 9 10 14 15 18 21 26 28 30 
+Elements in postorder order are
+2 3 7 10 9 4 18 15 26 30 28 21 14 
+An L0/RR rotation has been done
+Elements in ascending order are
+4 7 9 10 14 15 18 21 26 28 30 
+Elements in postorder order are
+7 4 10 9 18 15 26 30 28 21 14 
+An R-1/LR rotation has been done
+Elements in ascending order are
+4 7 9 14 15 18 21 26 28 30 
+Elements in postorder order are
+4 9 7 18 15 26 30 28 21 14 
+An L-1/RR rotation has been done
+Elements in ascending order are
+7 14 15 21 26 28 30 
+Elements in postorder order are
+7 15 14 26 30 28 21 
+An L1/RL rotation has been done
+Elements in ascending order are
+21 26 28 
+Elements in postorder order are
+21 28 26 
+An R0/LL rotation has been done
+Elements in ascending order are
+5 10 21 26 
+Elements in postorder order are
+5 21 26 10 
+An R1/LL rotation has been done
+Elements in ascending order are
+3 5 10 
+Elements in postorder order are
+3 10 5 
+Two L-1/RR rotations have been done
+Elements in ascending order are
+1 5 7 10 20 30 40 41 45 46 47 50 52 55 60 65 68 70 72 
+Elements in postorder order are
+1 7 5 20 30 10 41 46 47 45 40 52 55 68 65 72 70 60 50 
+An L1/RL followed by two L-1/RR rotations have been done
+Elements in ascending order are
+40 41 45 46 47 50 52 55 56 58 60 65 68 70 71 72 74 75 
+Elements in postorder order are
+41 40 46 47 45 52 56 58 55 50 68 65 71 75 74 72 70 60 

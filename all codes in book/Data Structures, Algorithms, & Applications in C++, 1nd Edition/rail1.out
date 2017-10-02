@@ -1,0 +1,17 @@
+Input permutation is 0369247185
+Move car 3 from input to holding track 1
+Move car 6 from input to holding track 2
+Move car 9 from input to holding track 3
+Move car 2 from input to holding track 1
+Move car 4 from input to holding track 2
+Move car 7 from input to holding track 3
+Move car 1 from input to output
+Move car 2 from holding track 1 to output
+Move car 3 from holding track 1 to output
+Move car 4 from holding track 2 to output
+Move car 8 from input to holding track 1
+Move car 5 from input to output
+Move car 6 from holding track 2 to output
+Move car 7 from holding track 3 to output
+Move car 8 from holding track 1 to output
+Move car 9 from holding track 3 to output

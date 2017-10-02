@@ -1,0 +1,87 @@
+Enter number of edges in graph
+Enter weighted edge 1
+Enter weighted edge 2
+Enter weighted edge 3
+Enter weighted edge 4
+Enter weighted edge 5
+Enter weighted edge 6
+Graph 0 is
+Number of Vertices = 7
+Number of Edges = 6
+0  0  1  1  0  0  0  
+0  0  0  0  1  0  0  
+1  0  0  0  0  0  0  
+1  0  0  0  0  0  0  
+0  1  0  0  0  1  1  
+0  0  0  0  1  0  1  
+0  0  0  0  1  1  0  
+
+
+Graph 1 is
+Number of Vertices = 7
+Number of Edges = 6
+0  0  1  1  0  0  0  
+0  0  0  0  1  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  0  0  0  
+0  0  0  0  0  1  0  
+0  0  0  0  0  0  0  
+0  0  0  0  1  1  0  
+
+
+Number of components = 2
+The component labels are 1  2  1  1  2  2  2  
+graph::labelComponents() not defined for directed graphs
+Number of components = 2
+The component labels are 1  2  1  1  2  2  2  
+graph::labelComponents() not defined for directed graphs
+Number of components = 2
+The component labels are 1  2  1  1  2  2  2  
+graph::labelComponents() not defined for directed graphs
+Number of components = 2
+The component labels are 1  2  1  1  2  2  2  
+graph::labelComponents() not defined for directed graphs
+Enter number of edges in graph
+Enter weighted edge 1
+Enter weighted edge 2
+Enter weighted edge 3
+Enter weighted edge 4
+Enter weighted edge 5
+Enter weighted edge 6
+Enter weighted edge 7
+Graph 0 is
+Number of Vertices = 7
+Number of Edges = 9
+0  1  1  1  0  0  0  
+1  0  0  0  1  1  0  
+1  0  0  0  0  0  0  
+1  0  0  0  1  0  0  
+0  1  0  1  0  1  1  
+0  1  0  0  1  0  1  
+0  0  0  0  1  1  0  
+
+
+Graph 1 is
+Number of Vertices = 7
+Number of Edges = 9
+0  1  1  1  0  0  0  
+0  0  0  0  1  1  0  
+0  0  0  0  0  0  0  
+0  0  0  0  1  0  0  
+0  0  0  0  0  1  0  
+0  0  0  0  0  0  0  
+0  0  0  0  1  1  0  
+
+
+Number of components = 1
+The component labels are 1  1  1  1  1  1  1  
+graph::labelComponents() not defined for directed graphs
+Number of components = 1
+The component labels are 1  1  1  1  1  1  1  
+graph::labelComponents() not defined for directed graphs
+Number of components = 1
+The component labels are 1  1  1  1  1  1  1  
+graph::labelComponents() not defined for directed graphs
+Number of components = 1
+The component labels are 1  1  1  1  1  1  1  
+graph::labelComponents() not defined for directed graphs

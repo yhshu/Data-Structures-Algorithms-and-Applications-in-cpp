@@ -1,0 +1,98 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 41<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+The height increases only when two trees of the same height
+
+are combined.  We can prove that the number of elements
+
+in a tree of height <em class=var>h</em> is at least
+
+<em class=var>2<sup>h-1</sup></em>.  We shall do this by
+
+induction on <em class=var>h</em>.
+
+<br><br>
+
+For the induction base use <em class=var>h = 1</em>.
+
+A tree of height 1 has exactly 1 &gt;= <em class=var>2<sup>h-1</sup></em>
+
+element/node.
+
+<br><br>
+
+For the induction hypothesis assume that trees of height
+
+<em class=var>h</em> for
+
+<em class=var>h &lt; m</em>, where
+
+<em class=var>m</em> is an arbitrary integer &gt;= 1, have at least
+
+<em class=var>2<sup>h-1</sup></em> elements.
+
+<br><br>
+
+In the induction step we must show that all trees of height
+
+<em class=var>m + 1</em> created using the height rule
+
+have at least
+
+<em class=var>2<sup>m</sup></em> elements.
+
+Consider a height <em class=var>m + 1</em> tree created
+
+using the height rule.  Consider the union operation that first caused this
+
+tree to have this height.  During this union operation
+
+two trees of height <em class=var>m</em> were combined.  From the
+
+induction hypothesis it follows that each of these trees
+
+had at least
+
+<em class=var>2<sup>m - 1</sup></em> elements at this time.
+
+Therefore, the resulting tree has at least
+
+<em class=var>2<sup>m</sup></em> elements.  Since future operations
+
+do not reduce the number of elements in a tree, the height
+
+<em class=var>m + 1</em> tree has at least
+
+<em class=var>2<sup>m</sup></em> elements now.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

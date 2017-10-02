@@ -1,0 +1,82 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 1, Exercise 9<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The maximum currency amount that can be represented is
+
+<em class=var>$x.99</em> and the minimum is <em class=var>-$x.99</em>, where <em class=var>x</em> is <em class=var>2<sup>32</sup>-1</em>.
+
+However, if we plan to do any arithmetic on the currency amounts,
+
+then the limits are changed because our codes combine the
+
+dollar and cents amounts into a single
+
+<code class=code>long</code> by multiplying the dollar
+
+amount by 100 and then adding in the number of cents.
+
+When arithmetic is to be performed, the absolute value of
+
+the currency amount <em class=var>$x.yy</em> should be such that <em class=var>100x + y <= 2<sup>32</sup>-1</em>.
+
+
+
+<dt> (b)
+
+<dd>
+
+When the data type of <code class=code>dollars</code> is
+
+changed to <code class=code>int</code>, the maximum currency
+
+amount that can be represented is $32,768.99 and the minimum amount is
+
+-$32,768.99 (note that one of the 16 bits is reserved for a sign
+
+even though we never store a negative number).
+
+
+
+<dt> (c)
+
+<dd>
+
+See answer to (a).
+
+</dl>
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

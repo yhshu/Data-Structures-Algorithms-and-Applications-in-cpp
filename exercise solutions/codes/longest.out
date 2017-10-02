@@ -1,0 +1,92 @@
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter value to use for no edge
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+The input digraph is
+0 3 0 4 0 0 0 0 0 
+0 0 0 0 1 0 0 0 0 
+0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 1 0 0 0 
+0 0 0 0 0 3 0 0 0 
+0 0 0 0 0 0 2 6 0 
+0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 7 
+0 0 0 0 0 0 0 0 0 
+The length of the longest path is 20
+The L values are 20 17 0 14 16 13 0 7 0 
+The kay values are 2 5 0 6 6 8 0 9 0 
+The longest path is 1 2 5 6 8 9 
+
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter value to use for no edge
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+Enter edge 11
+Enter edge 12
+Enter edge 13
+Enter edge 14
+The input digraph is
+0 0 0 2 1 0 9 0 0 
+0 0 3 8 0 0 0 0 4 
+0 0 0 0 0 0 0 5 0 
+0 0 0 0 9 0 2 0 0 
+0 0 0 0 0 7 4 3 8 
+0 0 0 0 0 0 9 0 0 
+0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 
+The length of the longest path is 33
+The L values are 27 33 5 25 16 9 0 0 0 
+The kay values are 4 4 8 5 6 7 0 0 0 
+The longest path is 2 4 5 6 7 
+
+Enter the number of vertices in the digraph
+Enter the number of edges in the digraph
+Enter value to use for no edge
+Enter edge 1
+Enter edge 2
+Enter edge 3
+Enter edge 4
+Enter edge 5
+Enter edge 6
+Enter edge 7
+Enter edge 8
+Enter edge 9
+Enter edge 10
+Enter edge 11
+The input digraph is
+0 0 0 2 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 18 11 0 0 
+0 0 0 0 0 0 0 0 0 0 9 0 0 0 
+0 0 0 0 12 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 10 0 0 0 0 0 0 0 
+0 0 0 0 0 0 14 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 12 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 10 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 2 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 10 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+The length of the longest path is 30
+The L values are 24 30 21 22 10 14 0 22 10 0 12 10 0 0 
+The kay values are 4 11 11 5 7 7 0 9 14 0 12 13 0 0 
+The longest path is 2 11 12 13 
+

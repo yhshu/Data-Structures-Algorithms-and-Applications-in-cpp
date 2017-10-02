@@ -1,0 +1,15 @@
+Edges = 0
+The graph is
+0 0 1 1 
+1 0 0 1 
+0 0 0 0 
+0 1 0 0 
+The graph after deleting <1,3> is
+0 0 0 1 
+1 0 0 1 
+0 0 0 0 
+0 1 0 0 
+Exist(3,1) = 0
+InDegree(3) = 0
+OutDegree(1) = 1
+Edges = 4

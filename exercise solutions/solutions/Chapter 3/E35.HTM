@@ -1,0 +1,402 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 35<BR>
+
+<BR>
+
+</H1>
+
+<P ALIGN=LEFT>
+
+The code is given below and in the files <code class=var>circular.*</code>.
+
+Rather than keep a pointer to the first element of the ordered list,
+
+we keep a pointer to the last.  Because of this, the asymptotic
+
+complexity of each function is the same as for the corresponding
+
+function of the class <code class=var>Chain</code>.
+
+</P>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class Circular {
+
+   public:
+
+      Circular() {last = 0;}
+
+      ~Circular();
+
+      bool IsEmpty() const {return last == 0;}
+
+      int Length() const; 
+
+      bool Find(int k, T&amp; x) const; 
+
+      int Search(const T&amp; x) const; 
+
+      Circular&lt;T&gt;&amp; Delete(int k, T&amp; x); 
+
+      Circular&lt;T&gt;&amp; Insert(int k, const T&amp; x);
+
+      void Output(ostream&amp; out) const;
+
+   private:
+
+      ChainNode&lt;T&gt; *last;  // pointer to last node
+
+};
+
+
+
+template&lt;class T&gt;
+
+Circular&lt;T&gt;::~Circular()
+
+{// Circular destructor. Delete all nodes.
+
+   if (!last) return;         // list is empty
+
+
+
+   // delete all nodes
+
+   ChainNode&lt;T&gt; *current = last-&gt;link,
+
+                              // current node
+
+                *next;        // next node
+
+   while (current != last) {
+
+      next = current-&gt;link;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   delete last;
+
+}
+
+
+
+template&lt;class T&gt;
+
+int Circular&lt;T&gt;::Length() const
+
+{// Return the number of elements in the list.
+
+   if (!last) return 0;  // list is empty
+
+
+
+   // count nodes
+
+   ChainNode&lt;T&gt; *current = last-&gt;link;
+
+   int len = 0;
+
+   while (current != last) {
+
+     len++;
+
+     current = current-&gt;link;
+
+     }
+
+   len++;  // for last node
+
+   return len;
+
+}
+
+
+
+template&lt;class T&gt;
+
+bool Circular&lt;T&gt;::Find(int k, T&amp; x) const
+
+{// Set x to the k'th element in the list.
+
+ // Return false if no k'th; return true otherwise.
+
+   if (k &lt; 1 || !last) return false;
+
+
+
+   ChainNode&lt;T&gt; *current = last-&gt;link;
+
+   int index = 1;  // index of current
+
+   while (index &lt; k &amp;&amp; current != last) {
+
+      // move to next node
+
+      current = current-&gt;link;
+
+      index++;
+
+      }
+
+   if (index == k) {x = current-&gt;data;
+
+                    return true;}
+
+   return false; // no k'th element
+
+}
+
+
+
+template&lt;class T&gt;
+
+int Circular&lt;T&gt;::Search(const T&amp; x) const
+
+{// Locate x.  Return position of x if found.
+
+ // Return 0 if x not in the chain.
+
+   if (!last) return 0;  // list is empty
+
+
+
+   // examine nodes
+
+   ChainNode&lt;T&gt; *current = last-&gt;link;
+
+   int index = 1;  // index of current
+
+   while (current-&gt;data != x &amp;&amp; current != last) {
+
+      // move to next node
+
+      current = current-&gt;link;
+
+      index++;
+
+      }
+
+   if (current-&gt;data == x) return index;
+
+   return 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Circular&lt;T&gt;&amp; Circular&lt;T&gt;::Delete(int k, T&amp; x)
+
+{// Set x to the k'th element and delete it.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+   if (k &lt; 1 || !last)
+
+      throw OutOfBounds(); // no k'th
+
+   
+
+   // p will eventually point to k'th node
+
+   // and q to k-1'st node
+
+   ChainNode&lt;T&gt; *p = last-&gt;link,
+
+                *q = last;
+
+
+
+   // move p to k'th &amp; remove from list
+
+   if (k == 1) {// p already at k'th
+
+      if (p != last) // nonempty list remains
+
+         last-&gt;link = p-&gt;link;} // remove
+
+   else { // move q to k-1'st
+
+      q = p;
+
+      for (int index = 1; index &lt; k - 1
+
+                &amp;&amp; q != last; index++)
+
+         q = q-&gt;link;
+
+      if (q == last)
+
+         throw OutOfBounds(); // no k'th
+
+      p = q-&gt;link; // k'th
+
+      q-&gt;link = p-&gt;link;} // remove
+
+
+
+   // save k'th element and free node p
+
+   x = p-&gt;data;
+
+   if (p == last)  // check if new list is empty
+
+      if (k == 1)  // new list is empty
+
+         last = 0;
+
+      else // not empty
+
+         last = q;
+
+   delete p;
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Circular&lt;T&gt;&amp; Circular&lt;T&gt;::Insert(int k, const T&amp; x)
+
+{// Insert x after the k'th element.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+ // Pass NoMem exception if inadequate space.
+
+   if (k &lt; 0) throw OutOfBounds();
+
+
+
+   // p will eventually point to k'th node
+
+   ChainNode&lt;T&gt; *p = last;
+
+   if (k) {// advance p to k'th node
+
+      if (!last) throw OutOfBounds();  // empty list
+
+      p = p-&gt;link;
+
+      int index = 1;
+
+      for (; index &lt; k &amp;&amp; p != last;
+
+             index++)  // move p to k'th
+
+         p = p-&gt;link;
+
+      if (index != k) throw OutOfBounds();} // no k'th
+
+
+
+   // insert
+
+   ChainNode&lt;T&gt; *y = new ChainNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   if (k) {// insert after p
+
+           y-&gt;link = p-&gt;link;
+
+           p-&gt;link = y;
+
+           if (p == last) last = y;}
+
+   else // insert as first element
+
+        if (last) {y-&gt;link = last-&gt;link;
+
+                   last-&gt;link = y;}
+
+        else {last = y;
+
+              y-&gt;link = y;}
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void Circular&lt;T&gt;::Output(ostream&amp; out) const
+
+{// Insert the chain elements into the stream out.
+
+   if (!last) return;
+
+   ChainNode&lt;T&gt; *current;
+
+   for (current = last-&gt;link; current != last;
+
+                         current = current-&gt;link)
+
+      out &lt;&lt; current-&gt;data &lt;&lt; "  ";
+
+  // output last node
+
+  out &lt;&lt; current-&gt;data &lt;&lt; "  ";
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, const Circular&lt;T&gt;&amp; x)
+
+   {x.Output(out); return out;}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

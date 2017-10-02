@@ -1,0 +1,86 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+The code is very similar to the case when the binary tree is represented
+
+using pointers.  The code is given below and in the file
+
+<code class=var>btraver.cpp</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void LevelOrder(T a[], int last)
+
+{// Level-order traversal of a binary tree.
+
+   LinkedQueue&lt;int&gt; Q;
+
+   if (!last) return; // empty tree
+
+   int i = 1; // start at root
+
+   while (true) {
+
+      Visit(a, i);  
+
+
+
+      // put children on queue
+
+      if (2*i &lt;= last &amp;&amp; a[2*i])
+
+         Q.Add(2*i);       // add left child to queue
+
+      if (2*i+1 &lt;= last &amp;&amp; a[2*i+1])
+
+         Q.Add(2*i+1);  // add right child to queue
+
+
+
+      // get next node to visit
+
+      try {Q.Delete(i);}
+
+      catch (OutOfBounds) {return;}
+
+      }
+
+ }
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

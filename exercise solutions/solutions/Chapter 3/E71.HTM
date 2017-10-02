@@ -1,0 +1,250 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 71<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The implementation varies depending on the relative cost
+
+of moving elements and changing pointers.  We shall make the
+
+assumption that the elements are long, and therefore it is undesirable
+
+to copy elements from one node into another.  Our sort code will
+
+change node pointers rather than move elements
+
+so as to obtain a sorted chain.  Since the time needed to change
+
+node pointers is
+
+independent of the size of an element, the run time of our
+
+sort code is also independent of element size.
+
+<br><br>
+
+The code is very similar to Program 2.7.
+
+It may be modified to obtain an early-terminating version.
+
+The code is given below and in the files
+
+<code class=code>schain4.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+SimChain&lt;T&gt;&amp; SimChain&lt;T&gt;::SelectionSort()
+
+{// Sort *this using the selection sort method.
+
+   if (first == -1) return *this;       // empty list
+
+
+
+   // define cursors
+
+   int AfterLast = -1,    // node after last one
+
+       MaxNode,           // node with max element
+
+       PreMax,            // node left of MaxNode
+
+       current,           // curent node
+
+       previous;          // node left of current
+
+
+
+   // selection sort
+
+   while (S.node[first].link != AfterLast) {
+
+      // more than one element remains
+
+      // do a selection pass
+
+      MaxNode = first;
+
+      PreMax = -1;
+
+      current = S.node[first].link;
+
+      previous = first;
+
+      while (S.node[current].link != AfterLast) {
+
+         // compare current and MaxNode
+
+         // update MaxNode if necessary
+
+         if (S.node[current].data &gt; S.node[MaxNode].data) {
+
+            // update PreMax and MaxNode
+
+            PreMax = previous;
+
+            MaxNode = current;
+
+            }
+
+         // move cursors forward one node
+
+         previous = current;
+
+         current = S.node[current].link;
+
+         }
+
+      if (S.node[current].data &gt; S.node[MaxNode].data)
+
+         // no node is to be moved
+
+         // set for next pass
+
+         AfterLast = current;
+
+      else {
+
+         // must bring MaxNode to right of current
+
+         // first delete MaxNode from present location
+
+         if (PreMax != -1)
+
+            // MaxNode is not the first node on the chain
+
+            S.node[PreMax].link = S.node[MaxNode].link;
+
+         else
+
+            // MaxNode is the first node
+
+            first = S.node[MaxNode].link;
+
+         // now insert MaxNode after current
+
+         S.node[MaxNode].link = S.node[current].link;
+
+         S.node[current].link = MaxNode;
+
+         // set for next pass
+
+         AfterLast = MaxNode;
+
+         }
+
+      }
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<DL compact>
+
+<DT> (b)
+
+<DD>
+
+Each selection pass takes
+
+Theta(<em class=var>i</em>) time, where <em class=var>i</em> is
+
+the number of nodes on the
+
+portion of the chain from <code class=code>first</code>
+
+to <code class=code>AfterLast</code>.
+
+For an <em class=var>n</em>
+
+node input chain, the time needed is
+
+Theta(<em class=var>n<sup>2</sup></em>).
+
+This is the asymptotic complexity for all data including
+
+initially sorted lists.
+
+There is some variability in the actual run time because the number
+
+of times <code class=code>MaxNode</code> and
+
+<code class=code>PreMax</code> are updated
+
+in each selection pass varies from
+
+0 to
+
+Theta(<em class=var>n</em>).
+
+Additional variance comes from the fact that a node may or may not
+
+be deleted from the chain and reinserted at the end of each selection pass.
+
+<br>
+
+<br>
+
+Although the code takes
+
+Theta(<em class=var>n<sup>2</sup></em>) time on all data, the actual run time is
+
+maximum when
+
+<code class=code>MaxNode</code> and
+
+<code class=code>PreMax</code> are updated
+
+following each comparison and
+
+when a node is deleted and reinserted at the end of each pass.
+
+This happens when the input chain is in decreasing order.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

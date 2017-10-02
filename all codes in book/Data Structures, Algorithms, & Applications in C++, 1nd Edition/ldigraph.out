@@ -1,0 +1,16 @@
+Edges = 0
+The graph is
+Vertex 1 = 4  3  
+Vertex 2 = 1  4  
+Vertex 3 = 
+Vertex 4 = 2  
+The graph after deleting <2,4> is
+Vertex 1 = 4  3  
+Vertex 2 = 1  
+Vertex 3 = 
+Vertex 4 = 2  
+Deletion of <3,4> failed
+Exist(3,1) = 0
+InDegree(3) = 1
+OutDegree(1) = 2
+Edges = 4

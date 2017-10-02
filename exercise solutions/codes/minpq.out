@@ -1,0 +1,8 @@
+Elements in linear list order 10  20  5  
+Insert of 15  succeeded
+An insert has failed
+Elements in linear list order 10  20  5  15  
+The min element is 5
+Deleted min element 5
+Deleted min element 10
+Elements in linear list order 20  15  

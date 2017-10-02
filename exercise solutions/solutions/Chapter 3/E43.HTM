@@ -1,0 +1,156 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 43<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+A circular list may be reversed by reversing the direction of the
+
+pointers in each node.  For this, we use three pointers to
+
+march through the circular list from
+
+left to right.  <code class=code>current</code> points to the node whose
+
+pointer (link) we are about to reverse;
+
+<code class=code>prev</code> points to the
+
+node on its left;
+
+and <code class=code>next</code> points to the node at the right of
+
+<code class=code>current</code>.
+
+The link
+
+in <code class=code>current</code> is changed
+
+from <code class=code>next</code> to
+
+<code class=code>prev</code>.  Then
+
+<code class=code>prev</code>,
+
+<code class=code>current</code>,
+
+and <code class=code>next</code> are advanced one node to the right.
+
+The code for the member function to reverse a circular list is
+
+given below and in the file
+
+<code class=code>icircle.h</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+HCircular&lt;T&gt;&amp; HCircular&lt;T&gt;::Reverse()
+
+{// In-pace reversal of the circular list.
+
+   ChainNode&lt;T&gt; *prev = head,  // previous node
+
+                *current = head-&gt;link,
+
+                               // current node
+
+                *next;         // next node      
+
+   while (current != head) {
+
+      // change pointer direction
+
+      next = current-&gt;link;
+
+      current-&gt;link = prev;
+
+
+
+      // move to next node
+
+      prev = current;
+
+      current = next;
+
+      }
+
+
+
+   // reverse pointer in head node
+
+   head-&gt;link = prev;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The complexity is linear in the length of the circular list.
+
+<dt> (c)
+
+<dd>
+
+A sample code to test this function is given in the file
+
+<code class=code>icircle.cpp</code> and the output is given in the file
+
+<code class=code>icircle.out</code>.
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

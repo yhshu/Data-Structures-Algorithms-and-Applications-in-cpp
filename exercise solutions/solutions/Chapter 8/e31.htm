@@ -1,0 +1,124 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 31<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Add the line<br>
+
+
+
+<code class=var>Compare(T)</code>: Compare with the binary tree
+
+<code class=var>T</code>;
+
+     return <code class=var>false</code> if different,
+
+     return <code class=var>true</code> if identical.
+
+<br><br>
+
+at the end of the <code class=var>operations</code> section of ADT 8.1.
+
+<br><br>
+
+<dt> (b)
+
+
+
+<dd>
+
+We define a public <code class=var>Compare</code>
+
+function as below:
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+bool Compare(const BinaryTree&lt;T&gt;&amp; t)
+
+     {return Compare(root, t.root);}
+
+<hr class=coderule>
+
+</pre>
+
+and a private <code class=var>Compare</code>
+
+function as below:
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class type&gt;
+
+bool BinaryTree&lt;type&gt;::Compare(BinaryTreeNode&lt;T&gt; *t,
+
+                               BinaryTreeNode&lt;T&gt; *u)
+
+{// Use a preorder traversal to compare the
+
+ // two binary (sub)trees t and u.
+
+ // Return true iff t and u are identical.
+
+   if (!t &amp;&amp; !u) return true;  // both empty
+
+   if (!t || !u) return false; // only one is empty
+
+   // neither is empty
+
+   if (t-&gt;data != u-&gt;data) return false; // different data
+
+   return  Compare(t-&gt;LeftChild, u-&gt;LeftChild)
+
+        &amp;&amp; Compare(t-&gt;RightChild, u-&gt;RightChild);
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+The codes appear in the files
+
+<code class=var>abinary.*</code>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

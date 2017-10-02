@@ -1,0 +1,6 @@
+Number of nodes = 4
+height = 3
+Preorder sequence is 4 3 1 2 
+Inorder sequence is 1 3 2 4 
+Postorder sequence is 1 2 3 4 
+Level order sequence is 4 3 1 2 

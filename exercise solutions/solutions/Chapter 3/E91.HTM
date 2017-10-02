@@ -1,0 +1,962 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 91<BR>
+
+<BR>
+
+</H1>
+
+To avoid spending excessive time copying polynomials returned by the
+
+overloaded operators, we use the default copy constructor which
+
+copies only the data members, which are an integer denoting the
+
+polynomial degree and a pointer to the coefficient space.
+
+For this to work as we would like, the destructor is defined as
+
+a null method.  Consequently, circilar lists are not destroyed
+
+when polynomials go out of scope.  We provide a member
+
+function <code class=code>Erase</code> that can be used to
+
+explicitly free the nodes on a circular list just before a polynomial
+
+goes out of scope.
+
+<br><br>
+
+The code is given below and in the file
+
+<code class=code>poly2.h</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+// node class
+
+template&lt;class T&gt;
+
+class PolyNode {
+
+   friend CPolynomial&lt;T&gt;;
+
+   private:
+
+      T coeff;             // coefficient
+
+      int exp;            // exponent
+
+      PolyNode&lt;T&gt; *link;  // pointer to next node
+
+};
+
+
+
+// polynomial class
+
+template&lt;class T&gt;
+
+class CPolynomial {
+
+   public:
+
+      CPolynomial();
+
+      ~CPolynomial() {};
+
+      void Erase();
+
+      int Degree()
+
+         {if (head-&gt;link == head)
+
+             // zero polynomial
+
+             return 0;
+
+          // nonzero polynomial
+
+          return head-&gt;link-&gt;exp;
+
+          }
+
+      CPolynomial&lt;T&gt;&amp; operator=(const CPolynomial&lt;T&gt;&amp; m);
+
+      CPolynomial&lt;T&gt; operator+(const CPolynomial&lt;T&gt;&amp; m) const;
+
+      CPolynomial&lt;T&gt; operator-(const CPolynomial&lt;T&gt;&amp; m) const;
+
+      CPolynomial&lt;T&gt; operator*(const CPolynomial&lt;T&gt;&amp; m) const;
+
+      CPolynomial&lt;T&gt; operator/(const CPolynomial&lt;T&gt;&amp; m) const;
+
+      T operator()(const T&amp; x) const;
+
+      void Input(istream&amp; in);
+
+      void Output(ostream&amp; out) const;
+
+   private:
+
+      void Append(T c, int e, PolyNode&lt;T&gt; * &amp;last) const;
+
+      PolyNode&lt;T&gt; *head;  // pointer to head node
+
+};
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt;::CPolynomial()
+
+{// Create the zero polynomial.
+
+   head = new PolyNode&lt;T&gt;;
+
+   head-&gt;exp = -1;
+
+   head-&gt;link = head;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void CPolynomial&lt;T&gt;::Erase()
+
+{// Free all nodes including the head node.
+
+   PolyNode&lt;T&gt; *current = head-&gt;link;
+
+   while (current != head) {
+
+      // free current
+
+      PolyNode&lt;T&gt; *next = current-&gt;link;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   // free the head node
+
+   delete head;
+
+   head = 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void CPolynomial&lt;T&gt;::Append(T c, int e, PolyNode&lt;T&gt; * &amp;last) const
+
+{// Add a new term with coefficient c and exponent
+
+ // e to the right of last; update last to
+
+ // point to the new node added.
+
+   last-&gt;link = new PolyNode&lt;T&gt;;
+
+   last = last-&gt;link;
+
+   last-&gt;coeff = c;
+
+   last-&gt;exp = e;
+
+}
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt;&amp; CPolynomial&lt;T&gt;::operator=(const CPolynomial&lt;T&gt;&amp; p)
+
+{// Assignment. (*this) = p.
+
+   if (this != &amp;p) {// not a self assignment, i.e. not p = p
+
+                    Erase();  // free present space
+
+                    head = new PolyNode&lt;T&gt;;
+
+                    head-&gt;exp = -1;
+
+                    PolyNode&lt;T&gt; *last = head;
+
+                        // last node in *this
+
+                    PolyNode&lt;T&gt; *current = p.head-&gt;link;
+
+                    // copy nodes of p
+
+                    while (current != p.head) {
+
+                       Append(current-&gt;coeff, current-&gt;exp, last);
+
+                       current = current-&gt;link;
+
+                       }
+
+
+
+                    // link last to head
+
+                    last-&gt;link = head;
+
+                    }
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+T CPolynomial&lt;T&gt;::operator()(const T&amp; x) const
+
+{// Return polynomial value at x.
+
+   if (head-&gt;link == head)
+
+      // zero polynomial
+
+      return 0;
+
+
+
+   if (!x) {// x is zero
+
+            // find coefficient of x^0
+
+            PolyNode&lt;T&gt; *current = head-&gt;link;
+
+            while(current-&gt;link != head)
+
+               current = current-&gt;link;
+
+            if (current-&gt;exp)
+
+               // no term with exponent 0
+
+               return 0;
+
+    
+
+            // current points to node for x^0
+
+            return current-&gt;coeff;
+
+            }
+
+
+
+   // compute highest power of x that is needed
+
+   T PowerOfX = 1;
+
+
+
+   for (int i = 1; i &lt;= head-&gt;link-&gt;exp; i++)
+
+      PowerOfX *= x;
+
+
+
+   int CurrentPower = head-&gt;link-&gt;exp;
+
+       // PowerOfX = x^CurrentPower
+
+
+
+   // evlauate first term of polynomial
+
+   PolyNode&lt;T&gt; *current = head-&gt;link;
+
+   T value = current-&gt;coeff * PowerOfX;
+
+
+
+   // add in remaining terms
+
+   current = current-&gt;link;
+
+   while (current != head) {
+
+      // compute PowerOfX for this term
+
+      for (int i = CurrentPower; i &gt; current-&gt;exp; i--)
+
+         PowerOfX /= x;
+
+      CurrentPower = current-&gt;exp;
+
+
+
+      // add in the term
+
+      value += current-&gt;coeff * PowerOfX;
+
+
+
+      // move to next term
+
+      current = current-&gt;link;
+
+      }
+
+
+
+   return value;
+
+}
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt; CPolynomial&lt;T&gt;::
+
+          operator+(const CPolynomial&lt;T&gt;&amp; p) const
+
+{// Return w = (*this) + p.
+
+   // define result polynomial w
+
+   CPolynomial&lt;T&gt; w;
+
+   // define cursors for w, p, and *this
+
+   PolyNode&lt;T&gt; *lastw = w.head,     // last node of w
+
+               *cp = p.head-&gt;link,  // p cursor
+
+               *ct = head-&gt;link;    // cursor for *this
+
+
+
+   // compute result
+
+   while (true)
+
+      if (ct-&gt;exp &gt; cp-&gt;exp) {
+
+         // higher exponent in *this
+
+         // append ct term to w
+
+         Append(ct-&gt;coeff, ct-&gt;exp, lastw);
+
+         ct = ct-&gt;link;
+
+         }
+
+      else if (ct-&gt;exp &lt; cp-&gt;exp) {
+
+              // higher exponent in p
+
+              // append cp term to w
+
+              Append(cp-&gt;coeff, cp-&gt;exp, lastw);
+
+              cp = cp-&gt;link;
+
+              }
+
+           else {
+
+              // equal exponents, see if we are finished
+
+              if (ct-&gt;exp == -1) {
+
+                 // returned to head nodes
+
+                 lastw-&gt;link = w.head;
+
+                 return w;
+
+                 }
+
+
+
+              // not finished, add coeffecients
+
+              // and append if sum is nonzero
+
+              T sum = ct-&gt;coeff + cp-&gt;coeff;
+
+              if (sum) Append(sum, ct-&gt;exp, lastw);
+
+              ct = ct-&gt;link;
+
+              cp = cp-&gt;link;
+
+              }
+
+}
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt; CPolynomial&lt;T&gt;::
+
+          operator-(const CPolynomial&lt;T&gt;&amp; p) const
+
+{// Return w = (*this) - p.
+
+   // define result polynomial w
+
+   CPolynomial&lt;T&gt; w;
+
+   // define cursors for w, p, and *this
+
+   PolyNode&lt;T&gt; *lastw = w.head,     // last node of w
+
+               *cp = p.head-&gt;link,  // p cursor
+
+               *ct = head-&gt;link;    // cursor for *this
+
+
+
+   // compute result
+
+   while (true)
+
+      if (ct-&gt;exp &gt; cp-&gt;exp) {
+
+         // higher exponent in *this
+
+         // append ct term to w
+
+         Append(ct-&gt;coeff, ct-&gt;exp, lastw);
+
+         ct = ct-&gt;link;
+
+         }
+
+      else if (ct-&gt;exp &lt; cp-&gt;exp) {
+
+              // higher exponent in p
+
+              // append cp term to w
+
+              Append(-cp-&gt;coeff, cp-&gt;exp, lastw);
+
+              cp = cp-&gt;link;
+
+              }
+
+           else {
+
+              // equal exponents, see if we are finished
+
+              if (ct-&gt;exp == -1) {
+
+                 // returned to head nodes
+
+                 lastw-&gt;link = w.head;
+
+                 return w;
+
+                 }
+
+
+
+              // not finished, subtract coeffecients
+
+              // and append if difference is nonzero
+
+              T diff = ct-&gt;coeff - cp-&gt;coeff;
+
+              if (diff) Append(diff, ct-&gt;exp, lastw);
+
+              ct = ct-&gt;link;
+
+              cp = cp-&gt;link;
+
+              }
+
+}
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt; CPolynomial&lt;T&gt;::
+
+          operator*(const CPolynomial&lt;T&gt;&amp; p) const
+
+{// CPolynomial multiply.  Return w = (*this) * p.
+
+
+
+   CPolynomial&lt;T&gt; w;  // result polynomial
+
+
+
+   // define cursors for w, p, and *this
+
+   PolyNode&lt;T&gt; *cw,                 // cursor for w
+
+               *cp = p.head-&gt;link,  // p cursor
+
+               *ct;                 // cursor for *this
+
+   
+
+   // multiply the two polynomials
+
+   while (cp != p.head) {
+
+      // multiply *this and cp-&gt;coeff and
+
+      // add to w
+
+      cw = w.head;
+
+      ct = head-&gt;link;
+
+      while (ct != head) {
+
+         int e = ct-&gt;exp + cp-&gt;exp;  // exponent of new term
+
+         T c = ct-&gt;coeff * cp-&gt;coeff;
+
+
+
+         // find place to append new term
+
+         while (e &lt; cw-&gt;link-&gt;exp)
+
+            cw = cw-&gt;link;
+
+
+
+         if (e == cw-&gt;link-&gt;exp) {
+
+            // add terms
+
+            cw-&gt;link-&gt;coeff += c;
+
+            if (cw-&gt;link-&gt;coeff) cw = cw-&gt;link;
+
+            else {
+
+               // coefficient is zero, remove the node
+
+               PolyNode&lt;T&gt; *t = cw-&gt;link;
+
+               cw-&gt;link = t-&gt;link;
+
+               delete t;
+
+               }
+
+            }   
+
+          else {// new exponent, insert right of cw
+
+                PolyNode&lt;T&gt; *t = cw-&gt;link;
+
+                Append(c, e, cw);
+
+                cw-&gt;link = t;
+
+                cw = t;
+
+                }
+
+
+
+          ct = ct-&gt;link;
+
+          }
+
+      cp = cp-&gt;link;
+
+      }
+
+
+
+   return w;
+
+}
+
+
+
+template&lt;class T&gt;
+
+CPolynomial&lt;T&gt; CPolynomial&lt;T&gt;::
+
+          operator/(const CPolynomial&lt;T&gt;&amp; p) const
+
+{// CPolynomial division.  Return w = (*this) / p.
+
+ // Remainder is discarded.
+
+
+
+   if (p.head-&gt;link == p.head)
+
+      // division by zero
+
+      throw BadInput();
+
+
+
+   CPolynomial&lt;T&gt; w,  // result polynomial
+
+                  r;  // current remainder
+
+   r = *this;
+
+
+
+   // define pointers to first terms in p and r
+
+   // and to last one in w
+
+   PolyNode&lt;T&gt; *fp = p.head-&gt;link,  // first in p
+
+               *fr = r.head-&gt;link,  // first in r
+
+               *lastw = w.head;     // last in w
+
+   
+
+   // divide the two polynomials
+
+   while (fp-&gt;exp &lt;= fr-&gt;exp) {
+
+      // possible new term in answer
+
+      // compute coefficient of new term
+
+      T c = fr-&gt;coeff / fp-&gt;coeff;
+
+      if (!c) // coefficient is zero, no more terms
+
+         break;
+
+
+
+      // compute exponent of new term
+
+      int e = fr-&gt;exp - fp-&gt;exp;
+
+
+
+      // append new term to w
+
+      Append(c, e, lastw);
+
+
+
+      // check if additional terms possible
+
+      if (c * fp-&gt;coeff != fr-&gt;coeff)
+
+         // no more terms
+
+         break;
+
+      
+
+      // update remainder r by subtracting
+
+      // p * c * x^e from r
+
+      PolyNode&lt;T&gt; *cr = r.head-&gt;link;
+
+
+
+      // term cr is eliminated
+
+      r.head-&gt;link = cr-&gt;link;
+
+      delete cr;
+
+      cr = r.head;
+
+      
+
+      PolyNode&lt;T&gt; *cp = fp-&gt;link;
+
+      while (cp != p.head) {
+
+         // multiply term of p with c * x^e
+
+         T NewCoeff = c * cp-&gt;coeff;
+
+         int NewExp = e + cp-&gt;exp;
+
+         
+
+         // find place for this term in r
+
+         while (NewExp &lt; cr-&gt;link-&gt;exp)
+
+            cr = cr-&gt;link;  // new term goes right of cr
+
+
+
+         // see if r has a term with the same exponent
+
+         if (NewExp == cr-&gt;link-&gt;exp) {
+
+            // subtract terms
+
+            cr-&gt;link-&gt;coeff -= NewCoeff;
+
+            if (cr-&gt;link-&gt;coeff) cr = cr-&gt;link;
+
+            else {
+
+               // coefficient is zero, remove the node
+
+               PolyNode&lt;T&gt; *t = cr-&gt;link;
+
+               cr-&gt;link = t-&gt;link;
+
+               delete t;
+
+               }
+
+            }   
+
+         else {// new exponent, insert right of cr
+
+               PolyNode&lt;T&gt; *t = cr-&gt;link;
+
+               Append(-NewCoeff, NewExp, cr);
+
+               cr-&gt;link = t;
+
+               cr = t;
+
+               }
+
+
+
+         cp = cp-&gt;link;
+
+         }
+
+
+
+      fr = r.head-&gt;link;  // fr has changed
+
+      }
+
+
+
+   // close the list w
+
+   lastw-&gt;link = w.head;
+
+
+
+   return w;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void CPolynomial&lt;T&gt;::Input(istream&amp; in)
+
+{// Input the polynomial.
+
+   // free current space
+
+   Erase();
+
+ 
+
+   // set up the head node
+
+   head = new PolyNode&lt;T&gt;;
+
+   head-&gt;exp = -1;
+
+   PolyNode&lt;T&gt;* last = head;  // last node in *this
+
+
+
+   // input number of terms
+
+   cout &lt;&lt; "Enter the number of nonzero terms" &lt;&lt; endl;
+
+   int terms;
+
+   in &gt;&gt; terms;
+
+   if (terms &lt; 0) throw BadInput();
+
+   if (terms) {// at least one nonzero term
+
+      // input the nonzero terms in
+
+      // decreasing order of exponents
+
+      cout &lt;&lt; "Enter the nonzero terms "
+
+           &lt;&lt; "in decreasing order of exponents."
+
+           &lt;&lt; endl
+
+           &lt;&lt; "Give input as a sequence e_1, c_1, e_2, c_2, ..."
+
+           &lt;&lt; endl;
+
+
+
+      // get first term
+
+      int exponent, LastExp;
+
+      T coefficient;
+
+      in &gt;&gt; exponent &gt;&gt; coefficient;
+
+      // exponent must be &gt;= 0 and coefficient must be nonzero
+
+      if (exponent &lt; 0 || !coefficient)
+
+         throw BadInput();
+
+      Append(coefficient, exponent, last);
+
+      LastExp = exponent;
+
+      
+
+      // get remaining terms
+
+      for (int i = 2; i &lt;= terms; i++) {
+
+         // get next term
+
+         in &gt;&gt; exponent &gt;&gt; coefficient;
+
+         if (exponent &gt;= LastExp || !coefficient)
+
+            throw BadInput();
+
+         Append(coefficient, exponent, last);
+
+         LastExp = exponent;
+
+         }
+
+      }
+
+   
+
+      // complete circular linkage
+
+      last-&gt;link = head;
+
+   
+
+   return;
+
+}
+
+
+
+// overload &gt;&gt;
+
+template&lt;class T&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, CPolynomial&lt;T&gt;&amp; x)
+
+   {x.Input(in); return in;}
+
+
+
+
+
+template&lt;class T&gt;
+
+void CPolynomial&lt;T&gt;::Output(ostream&amp; out) const
+
+{// Output the polynomial.
+
+
+
+   // put the exponents and coefficients into the stream out
+
+   PolyNode&lt;T&gt; *current = head-&gt;link;
+
+   while (current != head) {
+
+      // output a term
+
+      out &lt;&lt; current-&gt;exp &lt;&lt; " " &lt;&lt; current-&gt;coeff &lt;&lt; " ";
+
+      current = current-&gt;link;
+
+      }
+
+   out &lt;&lt; endl;
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, const CPolynomial&lt;T&gt;&amp; x)
+
+   {x.Output(out); return out;}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+The test program, input, and output are given in the files
+
+<code class=code>poly2.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

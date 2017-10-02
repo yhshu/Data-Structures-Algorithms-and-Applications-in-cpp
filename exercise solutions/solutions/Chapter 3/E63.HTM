@@ -1,0 +1,172 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 63<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The code is given below and in the files
+
+<code class=code>indlist1.*</code>.
+
+The code is very similar to that of Program 2.30.  As a
+
+result, its complexity is also the same.  The same proof as used
+
+for the complexity of Program 2.30 may be used here.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+int IndirectList&lt;T&gt;::BinarySearch(const T&amp; x) const
+
+{// Locate x.  Return position of x if found.
+
+ // Return 0 if x not in the chain.
+
+ // List must be in nondecreasing order.
+
+   int left = 0;
+
+   int right = length - 1;
+
+   while (left &lt;= right) {
+
+      int middle = (left + right)/2;
+
+      if (x == *table[middle]) return middle + 1;
+
+      if (x &gt; *table[middle]) left = middle + 1;
+
+      else right = middle - 1;
+
+      }
+
+   return 0; // x not found
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+<br><br>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The test code and output are in the files
+
+<code class=code>indlist1.*</code>.
+
+
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+The binary search method cannot be used to search a sorted chain
+
+efficiently because it takes linear time to access the middle
+
+element of a chain.  We can, however, reduce the expected time
+
+to search a sorted chain by a constant factor from the expected
+
+time taken by the chain search code of Program 3.12.
+
+To get this improvement, we observe that the search can terminate as soon
+
+as we reach an element that is equal to or larger than the search
+
+element.
+
+The code is given below and in the files
+
+<code class=code>qchain.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+int Chain&lt;T&gt;::SortedSearch(const T&amp; x) const
+
+{// Locate x.  Return position of x if found.
+
+ // Return 0 if x not in the chain.
+
+ // Chain must be in nondecreasing order.
+
+   ChainNode&lt;T&gt; *current = first;
+
+   int index = 1;  // index of current
+
+   while (current &amp;&amp; current-&gt;data &lt; x) {
+
+      current = current-&gt;link;
+
+      index++;
+
+      }
+
+   // verify match
+
+   if (current &amp;&amp; current-&gt;data == x) return index;
+
+   return 0;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

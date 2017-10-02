@@ -1,0 +1,148 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 9<BR>
+
+<BR>
+
+</H1>
+
+
+
+
+
+The new code for <code class=var>DeleteMax</code> is given below.
+
+It is expected to run faster than the old code when
+
+the cost of comparing two elements of type <code class=var>T</code>
+
+is high.
+
+The relevant files are
+
+<code class=var>naxheap4.*</code>.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+MaxHeap&lt;T&gt;&amp; MaxHeap&lt;T&gt;::DeleteMax(T&amp; x)
+
+{// Set x to max element and delete
+
+ // max element from heap.
+
+   // check if heap is empty
+
+   if (CurrentSize == 0)
+
+      throw OutOfBounds(); // empty
+
+
+
+   x = heap[1]; // max element
+
+
+
+   // restucture heap
+
+   T y = heap[CurrentSize--]; // last element
+
+
+
+   // first propagate vacancy to a leaf
+
+   int i = 1,  // current node of heap
+
+       ci = 2; // child of i
+
+   while (ci &lt;= CurrentSize) {
+
+      // heap[ci] should be larger child of i
+
+      if (ci &lt; CurrentSize &amp;&amp;
+
+          heap[ci] &lt; heap[ci+1]) ci++;
+
+
+
+      // move larger child to heap[i]
+
+      heap[i] = heap[ci]; // move child up
+
+      i = ci;             // move down a level
+
+      ci *= 2;
+
+      }
+
+
+
+   i = ci/2;
+
+   // vacancy at heap[i], start from here
+
+   // and insert y
+
+   while (i != 1 &amp;&amp; y &gt; heap[i/2]) {
+
+      // cannot put y in heap[i]
+
+      heap[i] = heap[i/2]; // move element down
+
+      i /= 2;              // move to parent
+
+      }
+
+
+
+   heap[i] = y;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

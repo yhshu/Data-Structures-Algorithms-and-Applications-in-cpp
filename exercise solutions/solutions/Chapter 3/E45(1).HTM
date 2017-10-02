@@ -1,0 +1,380 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 45<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can use the same code as used in Exercise 31 to merge two chains and again
+
+in Exercise 39 to merge two circular lists that do not have a head node.
+
+First, we must extend the class <code class=code>HCircular</code>
+
+developed in Exercise 36
+
+by adding the members
+
+<code class=code>Append</code>
+
+and
+
+<code class=code>Erase</code>, and create
+
+an iterator class for circular lists with head nodes analogous to the
+
+iterator class for chains.
+
+To obtain a constant time implementation of the
+
+<code class=code>Append</code> operation, we add
+
+the data member <code class=code>last</code> which
+
+points to the last node in the list; this is the node that points
+
+to the head node.
+
+The codes for the member functions and for the iterator
+
+class are
+
+given below and in the files
+
+<code class=code>jcircle.*</code> and
+
+<code class=code>hciter.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void HCircular&lt;T&gt;::Erase()
+
+{// Delete all nodes other than the head.
+
+
+
+   // delete all nodes
+
+   ChainNode&lt;T&gt; *current = head-&gt;link,
+
+                              // current node
+
+                *next;        // next node
+
+   while (current != head) {
+
+      next = current-&gt;link;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   head-&gt;link = head;
+
+   last = head;
+
+}
+
+
+
+template&lt;class T&gt;
+
+HCircular&lt;T&gt;&amp; HCircular&lt;T&gt;::Append(const T&amp; x)
+
+{// Insert x at the end of the list.
+
+ // Pass NoMem exception if inadequate space.
+
+
+
+   // get a new node and set its fields
+
+   // and set pointer coming from left
+
+   ChainNode&lt;T&gt; *y = new ChainNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   y-&gt;link = head;
+
+   last-&gt;link = y;
+
+
+
+   // y is new last node
+
+   last = y;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class HCircularIterator {
+
+   public:
+
+      T* Initialize(const HCircular&lt;T&gt;&amp; c)
+
+            {location = c.head-&gt;link;
+
+             head = c.head;
+
+             if (location == head) return 0;
+
+             else return &amp;location-&gt;data;
+
+             }
+
+      T* Next()
+
+             {if (location-&gt;link == head)
+
+                 // no more elements
+
+                 return 0;
+
+             location = location-&gt;link;
+
+             return &amp;location-&gt;data;
+
+             }
+
+   private:
+
+      ChainNode&lt;T&gt; *location,  // current element
+
+                   *head;      // head node
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<dl compact>
+
+<dt> 
+
+<dd>
+
+
+
+The sorted merge function uses circular list iterators to move through the
+
+input lists <code class=code>A</code> and
+
+<code class=code>B</code>.  At any time in the first <code class=code>while</code> loop below,
+
+we are positioned at the first unused element
+
+in each of the lists <code class=code>A</code> and
+
+<code class=code>B</code>.  The smaller of these is appended
+
+to the output list.  If the appended
+
+element came from <code class=code>A</code>, we move to the next
+
+element of <code class=code>A</code>.  Otherwise,
+
+we move to the next element of <code class=code>B</code>.
+
+<br><br>
+
+The code for the merge
+
+operation
+
+is given below and in the files
+
+<code class=code>lcircle.*</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void Merge(const HCircular&lt;T&gt;&amp; A,
+
+          const HCircular&lt;T&gt;&amp; B, HCircular&lt;T&gt;&amp; C)
+
+{// Merge from A and B to get C.
+
+   HCircularIterator&lt;T&gt; a,  // iterator for A
+
+                        b;  // iterator for B
+
+   T *DataA = a.Initialize(A);
+
+                    // pointer to an element of A
+
+   T *DataB = b.Initialize(B);
+
+                    // pointer to an element of B
+
+   C.Erase(); // empty out C
+
+
+
+   // merge until one of A and B is empty
+
+   while (DataA &amp;&amp; DataB) {
+
+      if (*DataA &lt;= *DataB) {// A goes next
+
+         C.Append(*DataA);
+
+         DataA = a.Next();}
+
+      else {// B is smaller
+
+         C.Append(*DataB);
+
+         DataB = b.Next();}
+
+      }
+
+
+
+   // append the rest
+
+   // at most one of A and B is nonempty now
+
+   if (DataA) while(DataA) {// A is not empty
+
+                 C.Append(*DataA);
+
+                 DataA = a.Next();
+
+                 }
+
+   else while(DataB) {// B is not empty
+
+           C.Append(*DataB);
+
+           DataB = b.Next();
+
+           }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+We shall do the analysis under the assumption that the merge
+
+is successful (i.e., no exception is thrown).
+
+In each iteration of the first <code class=code>while</code> loop, we move one node right
+
+either in <code class=code>A</code> or
+
+<code class=code>B</code>.  So, the complexity of this loop is O(length of
+
+<code class=code>A</code> +
+
+length of <code class=code>B</code>).  The complexity of the second <code class=code>while</code> loop
+
+is O(length of <code class=code>B</code>) and that of the third
+
+loop is O(length of <code class=code>A</code>).
+
+The call to <code class=code>Erase</code> takes
+
+Theta(length of initial <code class=code>C</code>) time.  Also,
+
+Omega(length of <code class=code>A</code> +
+
+length of <code class=code>B</code>) time is spent constructing the
+
+final <code class=code>C</code>.  So, the overall complexity is Theta(sum of initial lengths of the
+
+three lists <code class=code>A</code>,
+
+<code class=code>B</code>,
+
+and <code class=code>C</code>).
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+The codes and output are in the files <code class=code>lcircle.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

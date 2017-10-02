@@ -1,0 +1,160 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+<DL Compact>
+
+<DT> (a)
+
+<DD>
+
+The member function is given below and in the file
+
+<code class=code>llist3.h</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+LinearList&lt;T&gt;&amp; LinearList&lt;T&gt;::Alternate(
+
+    const LinearList&lt;T&gt;&amp; A, const LinearList&lt;T&gt;&amp; B)
+
+{// Meld the two lists A and B taking elements
+
+ // alternately from each.
+
+
+
+   length = A.length + B.length;  // length of result
+
+   if (length &gt; MaxSize) throw NoMem();
+
+                 // inadequate space for result
+
+   int cab = 1;  // cursor for A and B
+
+   int ct = 1;   // cursor for *this
+
+   int s;        // smaller of A and B
+
+   if (A.length &gt; B.length) s = B.length;
+
+   else s = A.length;
+
+   
+
+   // copy from A and B to *this
+
+   while (cab &lt;= s) {
+
+      element[ct++] = A.element[cab];
+
+      element[ct++] = B.element[cab++];
+
+      }
+
+   
+
+   // take care of left overs
+
+   if (cab &gt; A.length)
+
+      for (int q = cab; q &lt;= B.length; q++)
+
+         element[ct++] = B.element[q];
+
+   else for (int q = cab; q &lt;= A.length; q++)
+
+           element[ct++] = A.element[q];
+
+   return *this;
+
+}
+
+</pre>
+
+<HR class=coderule><BR>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+Let <em class=var>al</em> and
+
+<em class=var>bl</em>, respectively, be the lengths of <code class=code>A</code>
+
+and <code class=code>B</code>.
+
+Assume that <em class=var>al</em> &lt;=
+
+<em class=var>bl</em>. 
+
+The <code class=code>while</code> loop is iterated <em class=var>al</em> times,
+
+the first <code class=code>for</code> loop
+
+is iterated <em class=var>bl-al</em> times, and the second
+
+<code class=code>for</code> loop
+
+is iterated zero times.  So, the total
+
+time is Theta(<em class=var>al</em>).
+
+Similarly, when <em class=var>bl</em> &gt;
+
+<em class=var>al</em>, the total time is
+
+Theta(<em class=var>bl</em>).
+
+So, the overall complexity is
+
+Theta(<em class=var>al+bl</em>) when the operation is successful.
+
+When the operation fails, an exception is thrown and the
+
+complexity is Theta(1).
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>llist3.cpp</code>.
+
+The output is in the file
+
+<code class=code>llist3.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

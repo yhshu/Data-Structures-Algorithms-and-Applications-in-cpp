@@ -1,0 +1,14 @@
+Edges = 0
+The graph is
+0 1 1 1 
+1 0 1 1 
+1 1 0 0 
+1 1 0 0 
+The graph after deleting (3,1) is
+0 1 0 1 
+1 0 1 1 
+0 1 0 0 
+1 1 0 0 
+Exist(3,1) = 0
+G.Degree(2) = 3
+G.Edges() = 4

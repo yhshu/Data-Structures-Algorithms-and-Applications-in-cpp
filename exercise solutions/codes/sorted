@@ -1,0 +1,34 @@
+
+// check if an array is sorted
+
+#include <iostream.h>
+
+template <class T>
+bool IsSorted(T a[], int n)
+{// Return true if the elements a[0:n-1] are
+ // in sorted order.  Return false otherwise.
+ 
+   // see if any element is out of order
+   for (int i = 0; i < n - 1; i++)
+      if (a[i] > a[i+1]) return false;
+
+   // array is sorted
+   return true;
+}
+
+void main(void)
+{
+   int a[5] = {1, 2, 3, 4, 5};
+   int n = 5;
+
+   // try a sorted array
+   if (IsSorted(a,n))
+      cout << "The array is sorted" << endl;
+   else cout << "The array is not sorted" << endl;
+
+   // try one that is not sorted
+   a[3] = 1;
+   if (IsSorted(a,n))
+      cout << "The array is sorted" << endl;
+   else cout << "The array is not sorted" << endl;
+}

@@ -1,0 +1,25 @@
+enter number of edges of 7 vertex graph
+enter edge 1
+enter edge 2
+enter edge 3
+enter edge 4
+enter edge 5
+enter edge 6
+enter edge 7
+enter edge 8
+enter edge 9
+The input graph is
+Vertex 1 = 6 10   2 28   
+Vertex 2 = 3 16   7 14   1 28   
+Vertex 3 = 4 12   2 16   
+Vertex 4 = 5 22   3 12   7 18   
+Vertex 5 = 4 22   7 24   6 25   
+Vertex 6 = 5 25   1 10   
+Vertex 7 = 4 18   5 24   2 14   
+The min spanning tree edges are
+1 6 10
+3 4 12
+2 7 14
+2 3 16
+4 5 22
+5 6 25

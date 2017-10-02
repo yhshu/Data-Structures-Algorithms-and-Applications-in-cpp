@@ -1,0 +1,238 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 65<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+The codes for all three sort methods are very similar to
+
+their counterparts that use a formula-based representation
+
+(Programs 2.13, 2.12, and 2.11).  The complexity analysis
+
+is the same as for the counterparts.  The complexity of the new
+
+codes is, however, independent of the size of an element as no elements
+
+are moved; rather, table entries are moved.
+
+<dt> (a)
+
+<dd>
+
+The code for bubbl sort is given below and in the files
+
+<code class=code>indlist3.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+bool IndirectList&lt;T&gt;::Bubble(int n)
+
+{// Bubble reference to largest element in
+
+ // *table[0:n-1] to right.
+
+   bool swapped = false; // no swaps so far
+
+   for (int i = 0; i &lt; n - 1; i++)
+
+      if (*table[i] &gt; *table[i+1]) {
+
+         Swap(table[i], table[i + 1]);
+
+         swapped = true; // swap was done
+
+         }
+
+   return swapped;
+
+}
+
+
+
+template&lt;class T&gt;
+
+IndirectList&lt;T&gt;&amp; IndirectList&lt;T&gt;::BubbleSort()
+
+{// Early-terminating version of bubble sort.
+
+   for (int i = length; i &gt; 1 &amp;&amp; Bubble(i); i--);
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The code for selection sort is given below and
+
+in the files <code class=code>indlist4.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+IndirectList&lt;T&gt;&amp; IndirectList&lt;T&gt;::SelectionSort()
+
+{// Sort using the selection-sort method.
+
+ // Early-terminating version.
+
+   bool sorted = false;
+
+   for (int size = length; !sorted &amp;&amp; (size &gt; 1); size--) {
+
+      int pos = 0;
+
+      sorted = true;
+
+      // find largest
+
+      for (int i = 1; i &lt; size; i++)
+
+         if (*table[pos] &lt;= *table[i]) pos = i;
+
+         else sorted = false; // out of order
+
+      Swap(table[pos], table[size - 1]);
+
+      }
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+<dl compact>
+
+<dt> (c)
+
+<dd>
+
+The code for rank sort is given below and
+
+in the files <code class=code>indlist5.*</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+IndirectList&lt;T&gt;&amp; IndirectList&lt;T&gt;::RankSort()
+
+{// Sort using the rank-sort method.
+
+   // rank the elements *table[0:length-1].
+
+   // r[i] will be rank of element i+1
+
+   int *r = new int [length];
+
+   for (int i = 0; i &lt; length; i++)
+
+      r[i] = 0;  // initialize
+
+
+
+   // compare all element pairs
+
+   for (int i = 1; i &lt; length; i++)
+
+      for (int j = 0; j &lt; i; j++)
+
+         if (*table[j] &lt;= *table[i]) r[i]++;
+
+         else r[j]++;
+
+
+
+   // Do an in-place rearrangement into sorted order.
+
+   for (int i = 0; i &lt; length; i++)
+
+      // get proper reference to table[i]
+
+      while (r[i] != i) {
+
+         int t = r[i];
+
+         Swap(table[i], table[t]);
+
+         Swap(r[i], r[t]);
+
+         }
+
+
+
+   delete [] r;
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

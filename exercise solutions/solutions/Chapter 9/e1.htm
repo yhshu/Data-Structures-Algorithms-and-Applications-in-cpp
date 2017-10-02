@@ -1,0 +1,160 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+The code for the derived class is given below and in the file
+
+<code class=var>pqlist.h</code>.
+
+The complexity of
+
+<code class=var>Insert</code> is Theta(1),
+
+and the complexity of <code class=var>DeleteMax</code>
+
+and
+
+<code class=var>Max</code>
+
+is Theta(<em class=var>n</em>).
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+class MaxPQ : private LinearList&lt;T&gt; {
+
+   public:
+
+      MaxPQ(int MaxPQSize = 10) :
+
+         LinearList&lt;T&gt; (MaxPQSize) {}
+
+      int Size() {return Length();}
+
+      T Max();
+
+      MaxPQ&lt;T&gt;&amp; Insert(const T&amp; x)
+
+         {LinearList&lt;T&gt;::Insert(Length(), x);
+
+          return *this;}
+
+      MaxPQ&lt;T&gt;&amp; DeleteMax(T&amp; x);
+
+};
+
+
+
+template&lt;class T&gt;
+
+T MaxPQ&lt;T&gt;::Max()
+
+{// Return max element.
+
+   int len = Length();             // size of queue
+
+   if (!len) throw OutOfBounds();  // queue is empty
+
+
+
+   // find max element by examining all
+
+   // elements in queue
+
+   T CurrentMax, x;
+
+   Find(1, CurrentMax);
+
+   for (int i = 2; i &lt;= len; i++) {
+
+      Find(i, x);
+
+      if (x &gt; CurrentMax) CurrentMax = x;
+
+      }
+
+
+
+   return CurrentMax;
+
+}
+
+      
+
+template&lt;class T&gt;
+
+MaxPQ&lt;T&gt;&amp; MaxPQ&lt;T&gt;::DeleteMax(T&amp; x)
+
+{// Set x to max element and delete
+
+ // max element from priority queue.
+
+   // check if queue is empty
+
+   int len = Length();
+
+   if (len == 0)
+
+      throw OutOfBounds(); // empty
+
+
+
+   // find max element and its index
+
+   // we could replace next two lines by code
+
+   // to find IndexOfMax by making a single
+
+   // pass over the queue elements
+
+   x = Max();
+
+   int IndexOfMax = Search(x);
+
+
+
+   // delete max element
+
+   Delete(IndexOfMax, x);
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

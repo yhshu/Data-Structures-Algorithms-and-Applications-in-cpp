@@ -1,0 +1,25 @@
+Enter 25 edges of a 17 vertex graph
+The graph is
+Vertex 1 = 13  8  9  7  6  4  
+Vertex 2 = 5  6  8  4  
+Vertex 3 = 12  8  14  15  10  
+Vertex 4 = 17  2  1  
+Vertex 5 = 16  2  
+Vertex 6 = 16  2  1  
+Vertex 7 = 1  
+Vertex 8 = 16  3  2  1  
+Vertex 9 = 17  1  
+Vertex 10 = 17  3  
+Vertex 11 = 17  
+Vertex 12 = 16  3  
+Vertex 13 = 1  
+Vertex 14 = 16  3  
+Vertex 15 = 16  3  
+Vertex 16 = 6  15  14  8  12  5  
+Vertex 17 = 9  11  10  4  
+Enter vertex labels
+The vertex labels are
+1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 
+Cover Status = 1
+The cover is
+16 1 17 

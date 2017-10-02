@@ -1,0 +1,70 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 23<BR>
+
+<BR>
+
+</H1>
+
+Suppose we have four runs to merge.  Let the lengths of these four runs be
+
+10, 2, 5, and 2.  One way to merge these four runs into a single run
+
+is to first merge runs 1 and 2 at a cost of 10 + 2 = 12;
+
+then merge runs 3 and 4 at a cost of 5 + 2 = 7; and finally
+
+merge the result of the last two merges at a cost of 12 + 7 = 19.
+
+This merge pattern can be depicted as an extended binary tree in which two
+
+runs are merged at each node; the external nodes represent
+
+the initial runs; and the weights of the external nodes are the
+
+lengths of the runs to be merged.
+
+The weighted external path length of this binary tree
+
+is the total cost of merging the runs using the merge pattern
+
+defined by the binary tree.
+
+A minimum-cost merge pattern can be found by determining
+
+a binary tree whose external weights are the run lengths and whose
+
+weighted external path length is minimum.  A Huffman tree with
+
+wieghts equal to the initial run lengths has minimum external
+
+path length.  Therefore the Huffman tree defines the minimum-cost
+
+merge pattern.
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

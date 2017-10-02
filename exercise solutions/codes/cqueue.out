@@ -1,0 +1,35 @@
+Enter size of queue
+Enter the elements from front to rear
+The queue has 5 element(s)
+The element(s) from front to rear are
+1 2 3 4 5 
+
+The split queues are 
+The queue has 3 element(s)
+The element(s) from front to rear are
+1 3 5 
+
+The queue has 2 element(s)
+The element(s) from front to rear are
+2 4 
+
+After combining, we get 
+The queue has 5 element(s)
+The element(s) from front to rear are
+1 2 3 4 5 
+
+Enter size of queue
+Enter the elements from front to rear
+Two queues and their combination are
+The queue has 5 element(s)
+The element(s) from front to rear are
+1 2 3 4 5 
+
+The queue has 2 element(s)
+The element(s) from front to rear are
+6 7 
+
+The queue has 7 element(s)
+The element(s) from front to rear are
+1 6 2 7 3 4 5 
+

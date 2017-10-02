@@ -1,0 +1,30 @@
+One tree in postorder is
+9  11  7  8  1  
+Other tree in postorder is
+6  9  4  2  
+After melding, the tree in postorder is
+9  11  7  9  8  4  6  2  1  
+After deleting four elements, the tree is
+9  11  8  9  7  
+The deleted elements, in order, are
+1  2  4  6
+Leftist tree in postorder
+9  11  8  10  20  9  7  5  
+Leftist tree in postorder
+9  11  8  10  20  9  7  30  15  5  2  
+The min element is 2
+Deleted min element 2
+Leftist tree in postorder
+9  11  8  10  20  9  7  30  15  5  
+Deleted min element 5
+Leftist tree in postorder
+9  11  8  30  20  15  10  9  7  
+Deleted 7
+Deleted 8
+Deleted 9
+Deleted 9
+Deleted 10
+Deleted 11
+Deleted 15
+Deleted 20
+Deleted 30

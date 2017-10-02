@@ -1,0 +1,21 @@
+Elements in ascending order are
+2 f 1  3 g 1  4 c 3  5 a 4  6 b 1  7 e 1  8 d 2  
+element 1 is 2 f
+element 2 is 3 g
+element 3 is 4 c
+element 4 is 5 a
+element 5 is 6 b
+element 6 is 7 e
+element 7 is 8 d
+Deleted  4 c
+Elements in ascending order are
+2 f 1  3 g 1  5 a 3  6 b 1  7 e 1  8 d 2  
+Delete of fourth element suceeds  6 b
+Elements in ascending order are
+2 f 1  3 g 1  5 a 3  7 e 1  8 d 2  
+Delete of fourth element succeeds  7 e
+Elements in ascending order are
+2 f 1  3 g 1  5 a 3  8 d 1  
+Delete of third element succeeds  5 a
+Elements in ascending order are
+2 f 1  3 g 2  8 d 1  

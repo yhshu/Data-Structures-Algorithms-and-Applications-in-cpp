@@ -1,0 +1,8 @@
+Elements in linear list order 5  10  20  
+Insert of 15  succeeded
+An insert has failed
+Elements in linear list order 5  10  15  20  
+The max element is 20
+Deleted max element 20
+Deleted max element 15
+Elements in linear list order 5  10  

@@ -1,0 +1,15 @@
+#include <iostream.h>
+
+template<class T>
+bool Exists(T a[], const T& x, int n)
+{// Return true iff x is one of a[0:n-1].
+   if (n < 1) return false;
+   if (a[n-1] == x) return true;
+   return Exists(a, x, n-1);
+}
+
+void main(void)
+{
+   int a[7] = {0, 5, 3, 4, 7, 2, 6};
+   cout << Exists(a, 4, 7) << endl;
+}

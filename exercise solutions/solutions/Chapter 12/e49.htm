@@ -1,0 +1,174 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 49<BR>
+
+<BR>
+
+</H1>
+
+
+
+We may perform a breadth-first or depth-first search in each component
+
+of the graph.  In each component, the first vertex that is visited
+
+may be assigned to either set.  The assignment of the remaining
+
+vertices in the component is forced by the bipartite labeling requirement
+
+that the end points of an edge have different labels.  The code
+
+below assigns the first vertex in each component the label 1.
+
+It is a modified version of the code for breadth first search.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+bool Undirected::Bipartite(int L[])
+
+{// Label the vertices such that every edge connects
+
+ // a vertex with L[] = 1 to one with L[] = 2.
+
+ // Return false if not bipartite and true if bipartite
+
+   int n = Vertices();
+
+   // set all labels to 0
+
+   for (int v = 1; v &lt;= n; v++)
+
+      L[v] = 0;
+
+
+
+   // do a breadth first search in each component
+
+   LinkedQueue&lt;int&gt; Q;
+
+   InitializePos();
+
+   for (int v = 1; v &lt;= n; v++)
+
+      if (!L[v]) {// new component
+
+         L[v] = 1;
+
+         Q.Add(v);
+
+         while (!Q.IsEmpty()) {
+
+            int w;
+
+            Q.Delete(w);
+
+            int u = Begin(w);
+
+            while (u) {  // vertices adjacent to w
+
+               if (L[u]) // old vertex
+
+   	          {if (L[u] == L[w]) return false;} // same set
+
+               else {// new vertex
+
+                     Q.Add(u);
+
+                     L[u] = 3 - L[w];} // assign u to other set
+
+               u = NextVertex(w);
+
+               }
+
+            }
+
+        }  
+
+
+
+   DeactivatePos();
+
+
+
+   return true;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+When the graph is bipartite,
+
+each vertex of the graph is added to the queue exactly once.
+
+Each vertex is also deleted from the queue exactly once.  When a vertex
+
+is deleted from the queue, all vertices adjacent to it are examined.
+
+It takes Theta(<code class=code>n</code>) time to find and examine the vertices
+
+adjacent to vertex <code class=code>w</code> when an adjacency matrix is used and
+
+Theta(<code class=code>d<sub>w</sub></code>) when adjacency lists are used.
+
+If the algorithm does not terminate early because of an exception
+
+or because the graph is not bipartite, all vertices in the graph
+
+get examined.
+
+The total examination time is Theta(<code class=code>n<sup>2</sup>)</code> when adjacency
+
+matrices are used and Theta(<code class=code>e</code>) when adjacency lists are used.  The remainder
+
+of the algorithm
+
+takes O(<code class=code>n</code>) time.  Allowing for exceptions and
+
+the fact that the algorithm may terminate early because
+
+the graph is not bipartite, we see that the overall complexity
+
+is O(<code class=code>n<sup>2</sup></code>) when adjacency matrices
+
+are used and O(<code class=code>n+e</code>)
+
+when adjacency lists are used.
+
+The relevant files are <code class=code>und4.h</code> and
+
+<code class=code>bipart.*</code>.
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

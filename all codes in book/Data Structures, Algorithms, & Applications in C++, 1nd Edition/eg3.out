@@ -1,0 +1,9 @@
+Job 2 has completed at time 7 Total wait was 0
+Job 1 has completed at time 10 Total wait was 3
+Finish time = 10
+Machine 1 completed 3 tasks
+The total wait time was 0
+
+Machine 2 completed 2 tasks
+The total wait time was 3
+

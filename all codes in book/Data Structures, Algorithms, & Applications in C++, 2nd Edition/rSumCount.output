@@ -1,0 +1,4 @@
+a[0:5] = 1 2 3 4 5 6 
+For rSum(a,0) the step count is 2
+For rSum(a,1) the step count is 4
+For rSum(a,6) the step count is 14

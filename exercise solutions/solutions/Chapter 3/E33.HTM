@@ -1,0 +1,128 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 33<BR>
+
+<BR>
+
+</H1>
+
+<DL Compact>
+
+<DT> (a)
+
+<DD>
+
+The code to split a chain is given below and in the file
+
+<code class=code>lchain.cpp</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+void Split(Chain&lt;T&gt;&amp; A, Chain&lt;T&gt;&amp; B, Chain&lt;T&gt;&amp; C)
+
+{// Split A into two chains B and C.
+
+ // When done, A is unchanged.
+
+   // first free all nodes in B and C
+
+   B.Erase();
+
+   C.Erase();
+
+
+
+   // assign elements alternately to B and C
+
+   ChainIterator&lt;T&gt; a;  // iterator for A
+
+   T *e = a.Initialize(A);
+
+   while (e) {
+
+      // first give B an element
+
+      B.Append(*e);
+
+      e = a.Next();
+
+      if (!e) break;
+
+      // now give C an element
+
+      C.Append(*e);
+
+      e = a.Next();
+
+      }
+
+}
+
+</pre>
+
+<HR class=coderule><BR>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The time needed to erase the lists <code class=code>B</code>
+
+and <code class=code>C</code> is linear in their length.
+
+The <code class=code>while</code> loop iterates
+
+at most
+
+<em class=var>(length of C)/2</em> times.  This loop
+
+may terminate earlier because it is possible for
+
+<code class=code>Append</code> to fail for lack
+
+of memory.  So, the
+
+complexity is O(<em class=var>sum of initial lengths of the three chains</em>).
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>lchain.cpp</code>.
+
+The output is in the file
+
+<code class=code>lchain.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

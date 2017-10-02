@@ -1,0 +1,9 @@
+The list is
+14  13  12  11  10  9  8  7  6  5  4  3  2  1  0  
+At front, should return true 1
+First element is 14
+Second element is 13
+Fourth element is 11
+Third element is 12
+Not at end, should return false 0
+Not at front, should return false 0

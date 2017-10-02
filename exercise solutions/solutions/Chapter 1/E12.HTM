@@ -1,0 +1,278 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 1, Exercise 12<BR>
+
+<BR>
+
+</H1>
+
+
+
+The code is
+
+given below and in the files <code class=code>curr3.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+enum sign {plus, minus};
+
+
+
+class Currency {
+
+   friend istream&amp; operator&gt;&gt;(istream&amp; in, Currency&amp; x);
+
+   public:
+
+      // constructor
+
+      Currency(sign s = plus, unsigned long d = 0,
+
+                              unsigned int c = 0);
+
+      // destructor
+
+      ~Currency() {}
+
+      Currency operator=(int x)
+
+         {amount = x;
+
+          return *this;}
+
+      Currency operator=(float x)
+
+         {amount = (x + 0.001) * 100;
+
+          return *this;}
+
+      sign Sign() const
+
+        {if (amount &lt; 0) return minus;
+
+         else return plus;}
+
+      unsigned long Dollars() const
+
+        {if (amount &lt; 0) return (-amount) / 100;
+
+         else return amount / 100;}
+
+      unsigned int Cents() const
+
+        {if (amount &lt; 0)
+
+            return -amount - Dollars() * 100;
+
+         else return amount - Dollars() * 100;}
+
+      Currency operator+(const Currency&amp; x) const;
+
+      Currency operator-(const Currency&amp; x) const;
+
+      Currency operator%(float x) const;
+
+      Currency operator*(float x) const;
+
+      Currency operator/(float x) const;
+
+      Currency&amp; operator+=(const Currency&amp; x)
+
+        {amount += x.amount; return *this;}
+
+      void Output(ostream&amp; out) const;
+
+   private:
+
+      long amount;
+
+};
+
+
+
+Currency::Currency(sign s, unsigned long d,
+
+                           unsigned int c)
+
+{// Create a Currency object.
+
+   if (c &gt; 99)
+
+      {// too many cents
+
+       cerr &lt;&lt; "Cents should be &lt; 100" &lt;&lt; endl;
+
+       exit(1);}
+
+   
+
+   amount = d * 100 + c;
+
+   if (s == minus) amount = -amount;
+
+}
+
+
+
+   
+
+Currency Currency::operator+(const Currency&amp; x) const
+
+{// Add x and *this.
+
+   Currency y;
+
+   y.amount = amount + x.amount;
+
+   return y;
+
+}
+
+
+
+Currency Currency::operator-(const Currency&amp; x) const
+
+{// Subtract x from *this.
+
+   Currency y;
+
+   y.amount = amount - x.amount;
+
+   return y;
+
+}
+
+
+
+Currency Currency::operator%(float x) const
+
+{// Return x% of *this.
+
+   Currency y;
+
+   y.amount = (amount * x) / 100;
+
+   return y;
+
+}
+
+
+
+Currency Currency::operator*(float x) const
+
+{// Return x * (*this).
+
+   Currency y;
+
+   y.amount = amount * x;
+
+   return y;
+
+}
+
+
+
+Currency Currency::operator/(float x) const
+
+{// Return (*this) / x.
+
+   Currency y;
+
+   y.amount = amount / x;
+
+   return y;
+
+}
+
+
+
+void Currency::Output(ostream&amp; out) const
+
+{// Insert currency value into stream out.
+
+   long a = amount;
+
+   if (a &lt; 0) {out &lt;&lt; '-';
+
+               a = -a;}
+
+   long d = a / 100; // dollars
+
+   out &lt;&lt; '$' &lt;&lt; d &lt;&lt; '.';
+
+   int c = a - d * 100; // cents
+
+   if (c &lt; 10) out &lt;&lt; "0";
+
+   out &lt;&lt; c;
+
+}
+
+
+
+// overload &lt;&lt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, const Currency&amp; x)
+
+   {x.Output(out); return out;}
+
+
+
+// overload &gt;&gt;
+
+istream&amp; operator&gt;&gt;(istream&amp; in, Currency&amp; x)
+
+{// Input a currency amount.
+
+
+
+   float y;
+
+   cout &lt;&lt; "Enter the currency amount as "
+
+        &lt;&lt; "a floating point number as in dd.cc or -dd.cc"
+
+        &lt;&lt; endl;
+
+
+
+   in &gt;&gt; y;
+
+   x.amount = (y + 0.001) * 100;
+
+   return in;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

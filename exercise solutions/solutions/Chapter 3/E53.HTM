@@ -1,0 +1,128 @@
+
+
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 53<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+A doubly-linked circular list with a head node
+
+may be reversed by swapping the left
+
+and right pointers in each node.
+
+The code for the member function to reverse a doubly-linked
+
+circular list with a head node is
+
+given below and in the file
+
+<code class=code>dblcirc7.h</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+HDoubleCircular&lt;T&gt;&amp; HDoubleCircular&lt;T&gt;::Reverse()
+
+{// In-pace reversal of the doubly linked circular list.
+
+   // reverse the list by swapping left and right
+
+   // pointers in all nodes
+
+   DoubleNode&lt;T&gt; *current = head-&gt;right;
+
+                            // current node
+
+   while (current != head) {
+
+      // swap pointers
+
+      Swap(current-&gt;left, current-&gt;right);
+
+
+
+      // move to next node
+
+      current = current-&gt;left;
+
+      }
+
+   // swap head node pointers
+
+   Swap(head-&gt;left, head-&gt;right);
+
+
+
+   return *this;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The complexity is linear in the length of the doubly-linked circular list.
+
+<dt> (c)
+
+<dd>
+
+A sample code to test this function is given in the file
+
+<code class=code>dblcirc7.cpp</code> and the output is given in the file
+
+<code class=code>dblcirc7.out</code>.
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

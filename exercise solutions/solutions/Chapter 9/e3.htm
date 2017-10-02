@@ -1,0 +1,344 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 9, Exercise 3<BR>
+
+<BR>
+
+</H1>
+
+
+
+First we define a class <code class=var>SortedList</code>
+
+which maintains a linear list in ascending order of key.
+
+The code for this class is given below and in the file
+
+<code class=var>solist2.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class SortedList {
+
+   public:
+
+      SortedList(int MaxListSize = 10); // constructor
+
+      ~SortedList() {delete [] element;} // destructor
+
+      bool IsEmpty() const {return length == 0;}
+
+      int Length() const {return length;}
+
+      bool Find(int k, E&amp; e) const;
+
+      bool Search(const K&amp; k, E&amp; e) const;
+
+      SortedList&lt;E,K&gt;&amp; Delete(int k, E&amp; e);
+
+      SortedList&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+   private:
+
+      int length;
+
+      int MaxSize;
+
+      E *element; // dynamic 1D array
+
+};
+
+
+
+template&lt;class E, class K&gt;
+
+SortedList&lt;E,K&gt;::SortedList(int MaxListSize)
+
+{// Constructor for formula-based sorted list.
+
+   MaxSize = MaxListSize;
+
+   element = new E [MaxSize];
+
+   length = 0;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool SortedList&lt;E,K&gt;::Find(int k, E&amp; e) const
+
+{// Return k'th element in e.
+
+   if (k &lt; 0 || k &gt; length)
+
+      return false;
+
+   e = element[k-1];
+
+   return true;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool SortedList&lt;E,K&gt;::Search(const K&amp; k, E&amp; e) const
+
+{// Put element that matches k in e.
+
+ // Return false if no match.
+
+   // examine elements from left to right
+
+   int i = 0;
+
+   while (i &lt; length &amp;&amp; k &gt; element[i])
+
+      i++;
+
+
+
+   // verify match
+
+   if (i &gt;= length || k != element[i]) return false;
+
+
+
+   // there is a match
+
+   e = element[i];
+
+   return true;
+
+ }
+
+
+
+template&lt;class E, class K&gt;
+
+SortedList&lt;E,K&gt;&amp; SortedList&lt;E,K&gt;::Delete(int k, E&amp; x)
+
+{// Set x to the k'th element and delete it.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+   if (Find(k, x)) {// move elements k+1, ..., down
+
+      for (int i = k; i &lt; length; i++)
+
+         element[i-1] = element[i];
+
+      length--;
+
+      return *this;
+
+      }
+
+   else throw OutOfBounds();
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+SortedList&lt;E,K&gt;&amp; SortedList&lt;E,K&gt;::
+
+                 Insert(const E&amp; e)
+
+{// Insert e.  Throw NoMem exception if no space.
+
+   if (length == MaxSize) throw NoMem();
+
+
+
+   // find proper place to insert
+
+   // when done, insert to left of element[i]
+
+   int i = 0;
+
+   while (i &lt; length &amp;&amp; e &gt; element[i])
+
+      i++;
+
+
+
+   // move element[i:length - 1] one spot right
+
+   for (int j = length-1; j &gt;= i; j--)
+
+      element[j+1] = element[j];
+
+
+
+   // insert e
+
+   element[i] = e;
+
+   length++;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+Now we can derive the class <code class=var>MaxPQ</code> from
+
+<code class=var>SortedList</code> as below.  The relevant files
+
+are <code class=var>sopqlist.*</code>.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class MaxPQ : private SortedList&lt;E,K&gt; {
+
+   public:
+
+      MaxPQ(int MaxPQSize = 10) :
+
+         SortedList&lt;E,K&gt; (MaxPQSize) {}
+
+      int Size() {return Length();}
+
+      E Max();
+
+      MaxPQ&lt;E,K&gt;&amp; Insert(const E&amp; x)
+
+         {SortedList&lt;E,K&gt;::Insert(x);
+
+          return *this;}
+
+      MaxPQ&lt;E,K&gt;&amp; DeleteMax(E&amp; x);
+
+};
+
+
+
+template&lt;class E, class K&gt;
+
+E MaxPQ&lt;E,K&gt;::Max()
+
+{// Return max element.
+
+   int len = Length();             // size of queue
+
+   if (!len) throw OutOfBounds();  // queue is empty
+
+
+
+   // max element is last one
+
+   E x;
+
+   Find(len,x);
+
+   return x;
+
+}
+
+      
+
+template&lt;class E, class K&gt;
+
+MaxPQ&lt;E,K&gt;&amp; MaxPQ&lt;E,K&gt;::DeleteMax(E&amp; x)
+
+{// Set x to max element and delete
+
+ // max element from priority queue.
+
+   // check if queue is empty
+
+   int len = Length();
+
+   if (len == 0)
+
+      throw OutOfBounds(); // empty
+
+
+
+   // max element is last one
+
+   Delete(len, x);
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+The complexity of
+
+<code class=var>Insert</code> is O(<em class=var>n</em>),
+
+and the complexity of <code class=var>DeleteMax</code>
+
+and
+
+<code class=var>Max</code>
+
+is Theta(1).
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

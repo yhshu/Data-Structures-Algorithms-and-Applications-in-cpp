@@ -1,0 +1,76 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 15<BR>
+
+<BR>
+
+</H1>
+
+All nodes of a binary tree can be deleted by doing a postorder
+
+traversal.  In the visit step, delete the node being visited.
+
+The code is given below and in the file <code class=var>berase.cpp</code>.
+
+The step <code class=var>t = 0</code> may be omitted.
+
+Having it there ensures that no attempt is later made to
+
+access the deleted tree.
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void Erase(BinaryTreeNode&lt;T&gt; * &amp;t)
+
+{// Delete all nodes of *t.
+
+ // Use a postorder traversal.
+
+   if (t) {
+
+      Erase(t-&gt;LeftChild);   // delete left subtree
+
+      Erase(t-&gt;RightChild);  // delete right subtree
+
+      delete t;              // delete tree root
+
+      t = 0;
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

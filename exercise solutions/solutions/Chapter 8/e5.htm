@@ -1,0 +1,128 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+Property 4 can be proved by induction on <em class=var>i</em>.
+
+For the induction base, use <em class=var>i</em> = 1.
+
+<em class=var>i</em> = 1 is the root; it has no left child
+
+if <em class=var>2i</em> &gt; <em class=var>n</em>,
+
+otherwise its left child is
+
+at <em class=var>2i</em> = 2; it has no right child
+
+if <em class=var>2i</em> <code>+1</code> &gt; <em class=var>n</em>,
+
+otherwise its right child is
+
+at <em class=var>2i</em><code>+1</code> = 3.
+
+<br><br>
+
+For the induction hypothesis assume Property 4 is true for
+
+<em class=var>i</em> &lt; <em class=var>m</em> where
+
+<em class=var>m</em> is an arbitrary integer &gt; 1.
+
+<br><br>
+
+In the induction hypothesis we must show that Property 4 is true for
+
+the next value of <em class=var>i</em>, that is
+
+<em class=var>i</em> = <em class=var>m</em> &lt;= <em class=var>n</em>.
+
+If
+
+<em class=var>m</em> is even, then from the induction base
+
+and Property 4.2, it follows that the left child of node
+
+<em class=var>m/2</em> is at
+
+<em class=var>m</em>.  So the parent of
+
+<em class=var>m</em> is at
+
+<em class=var>m/2</em>.  A similar argument applies when
+
+<em class=var>m</em> is odd.  So Property 4.1 is true when
+
+<em class=var>i</em> =
+
+<em class=var>m</em>.
+
+<br><br>
+
+From Property 4.2 and the induction hypothesis it follows that the
+
+left child of node
+
+<em class=var>m-1</em> is at
+
+<em class=var>2(m-1)</em> unless
+
+<em class=var>2(m-1)</em> &gt; <em class=var>n</em>.
+
+If <em class=var>m-1</em> has no right child, then node
+
+<em class=var>m</em> has no left child, and since
+
+<em class=var>2(m-1)+1</em> &gt; <em class=var>n</em>,
+
+<em class=var>2m</em> &gt; <em class=var>n</em>.  If
+
+<em class=var>m-1</em> has a right child, it is at
+
+<em class=var>2(m-1)+1</em> =
+
+<em class=var>2m-1</em>.  After the right child of
+
+<em class=var>m-1</em> is numbered, the left child of
+
+<em class=var>m</em>, if it exists, gets numbered.  So its
+
+number is
+
+<em class=var>2m</em>.
+
+So Property 4.2 is true when
+
+<em class=var>i</em> =
+
+<em class=var>m</em>.
+
+<br><br>
+
+The proof for Property 4.3 is similar.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

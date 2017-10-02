@@ -1,0 +1,148 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 14, Exercise 25<BR>
+
+<BR>
+
+</H1>
+
+
+
+The modified selection code is given below and in the files
+
+<code class=code>select2.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+T Select(T a[], int n, int k)
+
+{// Return k'th smallest element in a[0:n-1].
+
+ // Assume a[n] is a dummy largest element.
+
+   if (k &lt; 1 || k &gt; n) throw OutOfBounds();
+
+
+
+   // define left and right ends of segment to be searched
+
+   int l = 0;
+
+   int r = n - 1;
+
+
+
+   while (l &lt; r) {
+
+      // segment has &gt; 1 element
+
+      // partition the segment
+
+      int i = l,      // left to right cursor
+
+          j = r + 1;  // right to left cursor
+
+      T pivot = a[l];
+
+   
+
+      // swap elements &gt;= pivot on left side
+
+      // with elements &lt;= pivot on right side
+
+      while (true) {
+
+         do {// find &gt;= element on left side
+
+            i = i + 1;
+
+            } while (a[i] &lt; pivot);
+
+         do {// find &lt;= element on right side
+
+            j = j - 1;
+
+            } while (a[j] &gt; pivot);
+
+         if (i &gt;= j) break;  // swap pair not found
+
+         Swap(a[i], a[j]);
+
+         }
+
+   
+
+      if (j - l + 1 == k) return pivot;
+
+   
+
+      // place pivot
+
+      a[l] = a[j];
+
+      a[j] = pivot;
+
+   
+
+      // only one segment is to be serached further
+
+      if (j - l + 1 &lt; k) {// look in right segment
+
+         k -= j - l + 1;  // subtract size of left segment
+
+                          // and pivot
+
+         l = j + 1;
+
+         }
+
+      else // look in left segment
+
+         r = j - 1;
+
+      }
+
+
+
+   return a[l];
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+The modified code is expected to run slightly faster than Program 14.7
+
+because the overhead of a <code class=code>while</code>
+
+is less than that of a function call for most compilers.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

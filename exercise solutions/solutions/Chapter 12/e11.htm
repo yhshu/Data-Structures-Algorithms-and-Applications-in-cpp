@@ -1,0 +1,142 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 12, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+Diagonal elements of <em class=var>A</em> are not stored in
+
+<code class=code>a</code>.  However,all diagonal elements
+
+of an adjacency matrix are required to be zero.
+
+Elements <em class=var>A(i,j)</em> with <em class=var>i &lt; j</em>
+
+are in the upper triangle of <em class=var>A</em> and are stored
+
+in <code class=code>a[i-1][j-1]</code>.
+
+Elements <em class=var>A(i,j)</em> with <em class=var>i &gt; j</em>
+
+are in the lower triangle of <em class=var>A</em> and are stored
+
+in <code class=code>a[i-2][j-1]</code>.
+
+With these observations, the code for <code class=code>Store</code>
+
+and <code class=code>Retrieve</code> takes the form given below.
+
+The code together with test data and output
+
+also appears
+
+in the files <code class=code>agraph.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Store(int **a, int n, int i, int j, int v)
+
+{// Set A(i,j) equal to v.  v must be 0 or 1.
+
+ // Diagonal of A is not stored in a.  A is
+
+ // n x n and a is [0:n-2,0:n-1].
+
+ // Throw OutOfBounds exception if i or j invalid.
+
+ // Throw BadInput exception if is not 0 or 1.
+
+ // Throw MustBeZero if v not zero but should be.
+
+   if (i &lt; 1 || i &gt; n || j &lt; 1 || j &gt; n)
+
+      throw OutOfBounds();
+
+   if (v &lt; 0 || v &gt; 1)
+
+      throw BadInput();
+
+
+
+   if (i &lt; j) // upper triangle
+
+      a[i-1][j-1] = v;
+
+   else if (i &gt; j) // lower triangle
+
+           a[i-2][j-1] = v;
+
+        else // diagonal entry
+
+           if (v) throw MustBeZero();
+
+}
+
+
+
+int Retrieve(int ** a, int n, int i, int j)
+
+{// Return value of A(i,j).
+
+ // Throw OutOfBounds exception if i or j invalid.
+
+   if (i &lt; 1 || i &gt; n || j &lt; 1 || j &gt; n)
+
+      throw OutOfBounds();
+
+
+
+   // diagonal entry is always zero
+
+   if (i == j) return 0;
+
+
+
+   // not a diagonal entry
+
+   if (i &lt; j) // upper triangle
+
+      return a[i-1][j-1];
+
+   // lower triangle
+
+   return a[i-2][j-1];
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

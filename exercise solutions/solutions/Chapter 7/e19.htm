@@ -1,0 +1,112 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 7, Exercise 19<BR>
+
+<BR>
+
+</H1>
+
+The code is very similar to that for <code class=var>ChainHashTable</code>.
+
+Simply replace all references to <code class=var>SortedChain</code> with
+
+refernces to <code class=var>SortedChainWithTail</code>.  The new code is
+
+given belw and in the files
+
+<code class=var>cchash.*</code>.
+
+<br><br>
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class ChainHashTable {
+
+   public:
+
+      ChainHashTable(int divisor = 11)
+
+         {D = divisor;
+
+          ht = new SortedChainWithTail&lt;E,K&gt; [D];}
+
+      ~ChainHashTable() {delete [] ht;}
+
+      bool Search(const K&amp; k, E&amp; e) const
+
+           {return ht[k % D].Search(k, e);}
+
+      ChainHashTable&lt;E,K&gt;&amp; Insert(const E&amp; e)
+
+           {ht[e % D].DistinctInsert(e);
+
+            return *this;}
+
+      ChainHashTable&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e)
+
+           {ht[k % D].Delete(k, e);
+
+            return *this;}
+
+      void Output() const;   // output the table
+
+   private:
+
+      int D;                         // divisor
+
+      SortedChainWithTail&lt;E,K&gt; *ht;  // array of chains
+
+};
+
+
+
+template&lt;class E, class K&gt;
+
+void ChainHashTable&lt;E,K&gt;::Output() const
+
+{
+
+   SortedChainWithTail&lt;E,K&gt; c;
+
+   for (int i = 0; i &lt; D; i++) {
+
+     cout &lt;&lt; "Chain " &lt;&lt; i &lt;&lt; ' ';
+
+     ht[i].Output(cout);
+
+     cout &lt;&lt; endl;}
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,10 @@
+Schedule job 10 on machine 1 from 0 to 200
+Schedule job 9 on machine 2 from 0 to 162
+Schedule job 8 on machine 3 from 0 to 128
+Schedule job 7 on machine 3 from 128 to 226
+Schedule job 6 on machine 2 from 162 to 234
+Schedule job 5 on machine 1 from 200 to 250
+Schedule job 4 on machine 3 from 226 to 258
+Schedule job 3 on machine 2 from 234 to 252
+Schedule job 2 on machine 1 from 250 to 258
+Schedule job 1 on machine 2 from 252 to 254

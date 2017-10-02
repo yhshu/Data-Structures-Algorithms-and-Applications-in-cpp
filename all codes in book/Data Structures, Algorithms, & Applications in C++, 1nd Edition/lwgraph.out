@@ -1,0 +1,14 @@
+Edges = 0
+Vertex 1 = 4 4   2 4   3 2   
+Vertex 2 = 3 5   1 4   4 1   
+Vertex 3 = 2 5   1 2   
+Vertex 4 = 1 4   2 1   
+Edge (1,2) deleted
+Vertex 1 = 4 4   3 2   
+Vertex 2 = 3 5   4 1   
+Vertex 3 = 2 5   1 2   
+Vertex 4 = 1 4   2 1   
+Exist(3,1) = 1
+Degree(3) = 2
+Degree(1) = 2
+Edges = 4

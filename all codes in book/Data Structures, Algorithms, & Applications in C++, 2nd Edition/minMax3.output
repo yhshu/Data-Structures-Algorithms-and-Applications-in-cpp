@@ -1,0 +1,5 @@
+a[0:9] = 3 2 4 1 6 9 8 7 5 0 
+The min element is at 9
+Its value is 0
+The max element is at 5
+Its value is 9

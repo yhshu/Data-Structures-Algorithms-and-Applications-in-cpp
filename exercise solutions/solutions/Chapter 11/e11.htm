@@ -1,0 +1,126 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+The max element is found by starting at the root
+
+and making as many right child moves as possible.
+
+The node at which this sequence of moves terminates
+
+has an empty right subtree and so can be deleted by
+
+changing the right child pointer of the parent node to
+
+point to the left child of the node being deleted.
+
+The code is given below and in the file
+
+<code class=code>bst3.h</code>.
+
+The complexity is O(<em class=var>h</em>)
+
+because we spend O(1) time at each level of the tree.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+BSTree&lt;E,K&gt;&amp; BSTree&lt;E,K&gt;::DeleteMax(E&amp; e)
+
+{// Delete element with max key and put it in e.
+
+ // Throw OutOfBounds exception if tree is empty.
+
+
+
+   if (!root) throw OutOfBounds();  // empty tree
+
+
+
+   // set p to point to node with max key
+
+   BinaryTreeNode&lt;E&gt; *p = root, // search pointer
+
+                     *pp = 0;   // parent of p
+
+   // follow right child pointers to max element
+
+   while (p-&gt;RightChild) {// move to a child of p
+
+      pp = p;
+
+      p = p-&gt;RightChild;
+
+      }
+
+
+
+   e = p-&gt;data;  // save max element
+
+
+
+   // delete p from tree
+
+   // p has at most one child
+
+   if (p == root) root = p-&gt;LeftChild;
+
+   else pp-&gt;RightChild = p-&gt;LeftChild;
+
+
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

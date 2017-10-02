@@ -1,0 +1,64 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 9<BR>
+
+<BR>
+
+</H1>
+
+The code is very similar to the case when the binary tree is represented
+
+using pointers.  The code is given below and in the file
+
+<code class=var>btraver.cpp</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class T&gt;
+
+void InOrder(T a[], int last, int i)
+
+{// Inorder traversal of binary tree with root a[i].
+
+   if (i &lt;= last &amp;&amp; a[i]) {
+
+      InOrder(a, last, 2*i);    // do left subtree
+
+      Visit(a, i);              // visit tree root
+
+      InOrder(a, last, 2*i+1);  // do right subtree
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

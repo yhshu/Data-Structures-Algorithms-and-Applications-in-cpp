@@ -1,0 +1,154 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 81<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can prove this by induction on <em class=var>u</em>.
+
+In the induction base, we establish the result for <em class=var>u</em> = 0.
+
+When no unions have been performed, each class has exactly one element.
+
+Therefore, no class has more than <em class=var>u+1</em> = 1 element.
+
+<br><br>
+
+In the induction hypothesis, we assume that no class has more than
+
+<em class=var>u+1</em> elements when the number of unions is at most
+
+<em class=var>m</em>, where
+
+<em class=var>m</em> is an arbitrary natural number.
+
+<br><br>
+
+In the induction step, we must show that no class has more than
+
+<em class=var>m+2</em> elements when the number of
+
+unions is <em class=var>m+1</em>.
+
+Consider the class <em class=var>A</em> with the largest number of elements.
+
+This class has more than one element, and so it is the result
+
+of one or more unions starting from singleton classes.
+
+Suppose that the last union performed to create <em class=var>A</em>
+
+united classes <em class=var>B</em> and
+
+<em class=var>C</em>. 
+
+The maximum number of union operations used to create
+
+<em class=var>B</em> and
+
+<em class=var>C</em> is
+
+<em class=var>m</em> (note that one union is used to unite
+
+<em class=var>B</em> and
+
+<em class=var>C</em> to create
+
+<em class=var>A</em>, leaving
+
+<em class=var>m</em> unions for the creation of other classes).
+
+Let <em class=var>b</em> be the number of union operations performed
+
+to create <em class=var>B</em>.  The number used for
+
+<em class=var>C</em> is at most
+
+<em class=var>m-b</em>. From the induction hypothesis it follows that
+
+the number of elements in <em class=var>B</em> is at most
+
+<em class=var>b+1</em> and the number in
+
+<em class=var>C</em> is at most
+
+<em class=var>m-b+1</em>.  Therefore, the number of elements in
+
+<em class=var>A</em> is at most
+
+<em class=var>b+1+m-b+1 = m+2</em>.
+
+<br><br>
+
+<dt> (b)
+
+<dd>
+
+There are three cases for a union operation: it unites two
+
+singleton classes, it unites a singleton class and a nonsingleton
+
+class, and it combines two nonsingleton classes.
+
+The first case reduces the number of singleton classes by two,
+
+the second by one, and the third by zero.  Therefore, after
+
+<em class=var>u</em> union operations the number of singleton classes
+
+is at least
+
+<em class=var>n-2u</em>.
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+Each union reduces the number of classes by one.  Therefore,
+
+after <em class=var>n-1</em> unions, the number of classes is one and no further
+
+unions can be done.  So <em class=var>u &lt; n</em>.
+
+</dl>
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

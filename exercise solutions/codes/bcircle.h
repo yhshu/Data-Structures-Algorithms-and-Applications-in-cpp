@@ -1,0 +1,212 @@
+
+
+// circluar list class extended to include function Reverse
+
+#ifndef Circular_
+#define Circular_
+
+#include <iostream.h>
+#include "cnode.h"
+#include "xcept.h"
+
+template<class T>
+class Circular {
+   public:
+      Circular() {last = 0;}
+      ~Circular();
+      bool IsEmpty() const {return last == 0;}
+      int Length() const; 
+      bool Find(int k, T& x) const; 
+      int Search(const T& x) const; 
+      Circular<T>& Delete(int k, T& x); 
+      Circular<T>& Insert(int k, const T& x);
+      void Output(ostream& out) const;
+      Circular<T>& Reverse();
+   private:
+      ChainNode<T> *last;  // pointer to last node
+};
+
+template<class T>
+Circular<T>::~Circular()
+{// Circular destructor. Delete all nodes.
+   if (!last) return;         // list is empty
+
+   // delete all nodes
+   ChainNode<T> *current = last->link,
+                              // current node
+                *next;        // next node
+   while (current != last) {
+      next = current->link;
+      delete current;
+      current = next;
+      }
+   delete last;
+}
+
+template<class T>
+int Circular<T>::Length() const
+{// Return the number of elements in the list.
+   if (!last) return 0;  // list is empty
+
+   // count nodes
+   ChainNode<T> *current = last->link;
+   int len = 0;
+   while (current != last) {
+     len++;
+     current = current->link;
+     }
+   len++;  // for last node
+   return len;
+}
+
+template<class T>
+bool Circular<T>::Find(int k, T& x) const
+{// Set x to the k'th element in the list.
+ // Return false if no k'th; return true otherwise.
+   if (k < 1 || !last) return false;
+
+   ChainNode<T> *current = last->link;
+   int index = 1;  // index of current
+   while (index < k && current != last) {
+      // move to next node
+      current = current->link;
+      index++;
+      }
+   if (index == k) {x = current->data;
+                    return true;}
+   return false; // no k'th element
+}
+
+template<class T>
+int Circular<T>::Search(const T& x) const
+{// Locate x.  Return position of x if found.
+ // Return 0 if x not in the chain.
+   if (!last) return 0;  // list is empty
+
+   // examine nodes
+   ChainNode<T> *current = last->link;
+   int index = 1;  // index of current
+   while (current->data != x && current != last) {
+      // move to next node
+      current = current->link;
+      index++;
+      }
+   if (current->data == x) return index;
+   return 0;
+}
+
+template<class T>
+Circular<T>& Circular<T>::Delete(int k, T& x)
+{// Set x to the k'th element and delete it.
+ // Throw OutOfBounds exception if no k'th element.
+   if (k < 1 || !last)
+      throw OutOfBounds(); // no k'th
+   
+   // p will eventually point to k'th node
+   // and q to k-1'st node
+   ChainNode<T> *p = last->link,
+                *q = last;
+
+   // move p to k'th & remove from list
+   if (k == 1) {// p already at k'th
+      if (p != last) // nonempty list remains
+         last->link = p->link;} // remove
+   else { // move q to k-1'st
+      q = p;
+      for (int index = 1; index < k - 1
+                && q != last; index++)
+         q = q->link;
+      if (q == last)
+         throw OutOfBounds(); // no k'th
+      p = q->link; // k'th
+      q->link = p->link;} // remove
+
+   // save k'th element and free node p
+   x = p->data;
+   if (p == last)  // check if new list is empty
+      if (k == 1)  // new list is empty
+         last = 0;
+      else // not empty
+         last = q;
+   delete p;
+   return *this;
+}
+
+template<class T>
+Circular<T>& Circular<T>::Insert(int k, const T& x)
+{// Insert x after the k'th element.
+ // Throw OutOfBounds exception if no k'th element.
+ // Pass NoMem exception if inadequate space.
+   if (k < 0) throw OutOfBounds();
+
+   // p will eventually point to k'th node
+   ChainNode<T> *p = last;
+   if (k) {// advance p to k'th node
+      if (!last) throw OutOfBounds();  // empty list
+      p = p->link;
+      int index = 1;
+      for (; index < k && p != last;
+             index++)  // move p to k'th
+         p = p->link;
+      if (index != k) throw OutOfBounds();} // no k'th
+
+   // insert
+   ChainNode<T> *y = new ChainNode<T>;
+   y->data = x;
+   if (k) {// insert after p
+           y->link = p->link;
+           p->link = y;
+           if (p == last) last = y;}
+   else // insert as first element
+        if (last) {y->link = last->link;
+                   last->link = y;}
+        else {last = y;
+              y->link = y;}
+
+   return *this;
+}
+
+template<class T>
+void Circular<T>::Output(ostream& out) const
+{// Insert the chain elements into the stream out.
+   if (!last) return;
+   ChainNode<T> *current;
+   for (current = last->link; current != last;
+                         current = current->link)
+      out << current->data << "  ";
+  // output last node
+  out << current->data << "  ";
+}
+
+// overload <<
+template <class T>
+ostream& operator<<(ostream& out, const Circular<T>& x)
+   {x.Output(out); return out;}
+
+template<class T>
+Circular<T>& Circular<T>::Reverse()
+{// In-pace reversal of the circular list.
+   if (!last) return *this;    // empty list
+
+   ChainNode<T> *prev = last,  // previous node
+                *current = last->link,
+                               // current node
+                *newlast = current,
+                               // new last node
+                *next;         // next node      
+   while (current != last) {
+      // change pointer direction
+      next = current->link;
+      current->link = prev;
+
+      // move to next node
+      prev = current;
+      current = next;
+      }
+   current->link = prev;
+   last = newlast;
+
+   return *this;
+}
+
+#endif

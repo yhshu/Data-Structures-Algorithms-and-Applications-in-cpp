@@ -1,0 +1,94 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 8, Exercise 45<BR>
+
+<BR>
+
+</H1>
+
+The code for path splitting is given below and in the files
+
+<code class=var>ufsplit.*</code>.
+
+<HR class = coderule>
+
+<pre class = code>
+
+int Find(int e)
+
+{// Return root of tree containing e.
+
+ // Split path from e to root.
+
+   int current = e,  // current node
+
+       p,            // parent of current
+
+       gp;           // grandparent of p
+
+
+
+   // see if there are pointers to change
+
+   if (root[current]) return current;
+
+   p = parent[current];
+
+   if (root[p]) return p;
+
+   gp = parent[p];
+
+
+
+   // at least one pointer to change
+
+   while(true) {
+
+      parent[current] = gp;
+
+      if (root[gp]) return gp;
+
+      // move current, p, and gp one
+
+      // level up the tree
+
+      current = p;
+
+      p = gp;
+
+      gp = parent[p];
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

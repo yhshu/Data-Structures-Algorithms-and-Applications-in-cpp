@@ -1,0 +1,21 @@
+Enter the coefficients a, b, and c
+a should not be zero
+The coefficients of the quadratic are 1 -5 6
+There are two real roots 3 and 2
+
+Enter the coefficients a, b, and c
+a should not be zero
+The coefficients of the quadratic are 1 -8 16
+There is only one distinct root 4
+
+Enter the coefficients a, b, and c
+a should not be zero
+The coefficients of the quadratic are 1 2 5
+The roots are complex
+The real part is -1
+The imaginary part is 2
+
+Enter the coefficients a, b, and c
+a should not be zero
+Caught illegalInputData exception
+a should be non-zero

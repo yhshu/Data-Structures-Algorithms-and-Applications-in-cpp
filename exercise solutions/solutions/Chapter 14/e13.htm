@@ -1,0 +1,130 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 14, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+
+
+The modified quick sort code is given below and in the files
+
+<code class=code>qsort1.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class T&gt;
+
+void quickSort(T a[], int l, int r)
+
+{// Sort a[l:r], a[r+1] has large value.
+
+   while (l &lt; r) {
+
+      // at least two elements to sort
+
+      int i = l,      // left-to-right cursor
+
+          j = r + 1;  // right-to-left cursor
+
+      T pivot = a[l];
+
+   
+
+      // swap elements &gt;= pivot on left side
+
+      // with elements &lt;= pivot on right side
+
+      while (true) {
+
+         do {// find &gt;= element on left side
+
+            i = i + 1;
+
+            } while (a[i] &lt; pivot);
+
+         do {// find &lt;= element on right side
+
+            j = j - 1;
+
+            } while (a[j] &gt; pivot);
+
+         if (i &gt;= j) break;  // swap pair not found
+
+         Swap(a[i], a[j]);
+
+         }
+
+   
+
+      // place pivot
+
+      a[l] = a[j];
+
+      a[j] = pivot;
+
+   
+
+      quickSort(a, l, j-1); // sort left segment
+
+      l = j + 1;            // sort right segment
+
+      }
+
+}
+
+
+
+
+
+template&lt;class T&gt;
+
+void QuickSort(T a[], int n)
+
+{// Sort a[0:n-1] using quick sort.
+
+ // Requires a[n] must have largest key.
+
+   quickSort(a, 0, n-1);
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+The modified code is expected to run slightly faster than Program 14.6
+
+because the overhead of a <code class=code>while</code>
+
+is less than that of a function call for most compilers.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

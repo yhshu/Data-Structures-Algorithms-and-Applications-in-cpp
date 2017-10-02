@@ -1,0 +1,32 @@
+
+//average times using random permutation generator
+#include <iostream.h>
+#include <stdlib.h>
+#include<time.h>
+#include "insort.h"
+#include "rperm.h"
+
+void main(void)
+{
+   int a[1000], step = 10;
+   long counter;
+   float seconds;
+   clock_t start, finish;
+//   randomize(); //initialize random number generator
+   for (int i = 0; i < 1000; i++)
+      a[i] = i; // initialize
+   for (int n = 0; n <= 1000; n += step) {
+      // get time for size n
+      start = clock( ); counter = 0;
+      while ((counter < 20) || (clock( ) - start < 10)) {
+         counter++;
+         Permute(a,n);
+         InsertionSort(a,n);
+         }
+      finish = clock( );
+      seconds = (finish - start) / CLK_TCK;
+      cout << n << ' ' << counter << ' ' << seconds
+                << ' ' << seconds / counter << endl;
+      if (n == 100) step = 100;
+      }
+}

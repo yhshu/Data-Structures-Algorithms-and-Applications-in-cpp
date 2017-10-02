@@ -1,0 +1,16 @@
+Enter number of vertices in the graph
+Enter number of edges in the graph
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Enter end points of next edge
+Input failed
+The graph has 5 vertices and 7 edges
+There is an edge from vertex 1 to vertex (vertices) 3  4  2  
+There is an edge from vertex 2 to vertex (vertices) 5  3  5  1  
+There is an edge from vertex 3 to vertex (vertices) 1  2  
+There is an edge from vertex 4 to vertex (vertices) 1  5  
+There is an edge from vertex 5 to vertex (vertices) 2  4  2  

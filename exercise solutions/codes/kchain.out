@@ -1,0 +1,3 @@
+The chain 1  3  4  5   is bitonic
+The chain 1  3  4  5  4  2  1   is bitonic
+The chain 1  3  2  4  5  4  2  1   is not bitonic

@@ -1,0 +1,150 @@
+
+
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 11<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+To implement the greedy strategy, we first sort the tasks by
+
+task time using any
+
+<em class=var>n log n</em> sorting algorithm, and then assign the
+
+tasks to the <em class=var>m</em> persons in round-robin fashion.
+
+The task assignment takes linear time.
+
+So the overall complexity is
+
+O(<em class=var>n log n</em>).
+
+The code for the ACT function is given below and in the files
+
+<em class=var>act3.*</em>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+class Task {
+
+   friend void main(void);
+
+   friend void ACT(Task J[], int n, int m);
+
+   public:
+
+      operator int () const
+
+         {return time;}
+
+   private:
+
+     int ID,      // task ID
+
+         time,    // task time
+
+         person;  // person who is to do the task
+
+};
+
+
+
+template &lt;class T&gt;
+
+void ACT(T J[], int n, int m)
+
+{// Reorder the n tasks so that the average
+
+ // completion time is minimized.
+
+ // Tasks are assigned to m persons.
+
+   HeapSort(J,n);
+
+   // assign tasks to persons in round-robin fashion
+
+   for (int i = 1; i &lt;= n; i++)
+
+      J[i].person = (i-1) % m + 1;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+<dt>(b)
+
+<dd>
+
+The greedy startegy implemented in function <codeclass=code>ACT</code>
+
+always minimize the ACT.  To see this, let the task times, in nondecreasing
+
+order, be <em class=var>t<sub>1</sub></em>,
+
+<em class=var>t<sub>2</sub></em>, ...,
+
+<em class=var>t<sub>n</sub></em>.  The ACT of the task assignment
+
+constructed by the greedy algorithm is the sum of
+
+<em class=var>floor((n-i+1)/m)t<sub>i</sub></em> for <em class=var>i</em>
+
+equal to 1 to <em class=var>n</em> divided by <em class=var>n</em>.
+
+In the sum, we see that the <em class=var>m</em>
+
+largest times are multiplied by 1,
+
+the next <em class=var>m</em> by 2, the next <em class=var>m</em> by 3, etc.
+
+In every task assignment, the last task assigned to each person is multiplied
+
+by 1; the second last task by 2; etc.  Therefore, we cannot get a smaller
+
+sum than obtained by the greedy algorithm.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

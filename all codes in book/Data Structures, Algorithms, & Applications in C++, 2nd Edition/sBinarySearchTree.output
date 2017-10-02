@@ -1,0 +1,34 @@
+Tree size is 7
+Elements in ascending order are
+1 b 1 a 3 d 3 c 4 e 6 g 6 f 
+Search for 3 succeeds 
+3 c
+3 deleted 
+Tree size is 6
+Elements in ascending order are
+1 b 1 a 3 d 4 e 6 g 6 f 
+Search for 3 succeeds 
+3 d
+3 deleted 
+Tree size is 5
+Elements in ascending order are
+1 b 1 a 4 e 6 g 6 f 
+Search for 1 succeeds 
+1 a
+1 deleted 
+Tree size is 4
+Elements in ascending order are
+1 b 4 e 6 g 6 f 
+Search for 8 fails 
+Tree size is 4
+Elements in ascending order are
+1 b 4 e 6 g 6 f 
+Search for 6 succeeds 
+6 f
+6 deleted 
+Tree size is 3
+Elements in ascending order are
+1 b 4 e 6 g 
+Tree size is 10
+Elements in ascending order are
+1 b 1 a 1 b 3 d 3 c 4 e 4 e 6 g 6 f 6 g 

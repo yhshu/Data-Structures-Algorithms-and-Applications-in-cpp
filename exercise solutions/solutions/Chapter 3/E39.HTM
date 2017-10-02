@@ -1,0 +1,382 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 39<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+We can use the same code as used in Exercise 31 to merge two chains.
+
+First, we must extend the class <code class=code>Circular</code>
+
+by adding the members
+
+<code class=code>Append</code>
+
+and
+
+<code class=code>Erase</code>, and create
+
+an iterator class for circular lists analogous to the
+
+iterator class for chains.
+
+The codes for the member functions and for the iterator
+
+class are
+
+given below and in the files
+
+<code class=code>ccircle.*</code> and
+
+<code class=code>circiter.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+Circular&lt;T&gt;&amp; Circular&lt;T&gt;::Append(const T&amp; x)
+
+{// Insert x at the end of the list.
+
+ // Pass NoMem exception if inadequate space.
+
+
+
+   // get a new node and set its fields
+
+   // and set pointer coming from left
+
+   ChainNode&lt;T&gt; *y = new ChainNode&lt;T&gt;;
+
+   y-&gt;data = x;
+
+   if (last) {// list not empty
+
+              y-&gt;link = last-&gt;link;
+
+              last-&gt;link = y;
+
+              }
+
+   else // list is empty
+
+        y-&gt;link = y;
+
+
+
+   // y is new last node
+
+   last = y;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void Circular&lt;T&gt;::Erase()
+
+{// Delete all nodes.
+
+   if (!last) return;         // list is empty
+
+
+
+   // delete all nodes
+
+   ChainNode&lt;T&gt; *current = last-&gt;link,
+
+                              // current node
+
+                *next;        // next node
+
+   while (current != last) {
+
+      next = current-&gt;link;
+
+      delete current;
+
+      current = next;
+
+      }
+
+   delete last;
+
+   last = 0;
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class CircularIterator {
+
+   public:
+
+      T* Initialize(const Circular&lt;T&gt;&amp; c)
+
+            {location = c.last;
+
+             last = c.last;
+
+             if (!location) return 0;
+
+             location = last-&gt;link;
+
+             return &amp;location-&gt;data;
+
+             }
+
+      T* Next()
+
+             {if (location == last)
+
+                 // no more elements
+
+                 return 0;
+
+             location = location-&gt;link;
+
+             return &amp;location-&gt;data;
+
+             }
+
+   private:
+
+      ChainNode&lt;T&gt; *location,  // current element
+
+                   *last;      // last element in list
+
+};
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+<dl compact>
+
+<dt> 
+
+<dd>
+
+<br><br>
+
+
+
+The sorted merge function uses circular list iterators to move through the
+
+input lists <code class=code>A</code> and
+
+<code class=code>B</code>.  At any time in the first <code class=code>while</code> loop below,
+
+we are positioned at the first unused element
+
+in each of the lists <code class=code>A</code> and
+
+<code class=code>B</code>.  The smaller of these is appended
+
+to the output list.  If the appended
+
+element came from <code class=code>A</code>, we move to the next
+
+element of <code class=code>A</code>.  Otherwise,
+
+we move to the next element of <code class=code>B</code>.
+
+<br><br>
+
+The code for the merge
+
+operation
+
+is given below and in the files
+
+<code class=code>ecircle.*</code>.
+
+</dl>
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+void Merge(const Circular&lt;T&gt;&amp; A,
+
+          const Circular&lt;T&gt;&amp; B, Circular&lt;T&gt;&amp; C)
+
+{// Merge from A and B to get C.
+
+   CircularIterator&lt;T&gt; a,  // iterator for A
+
+                       b;  // iterator for B
+
+   T *DataA = a.Initialize(A);
+
+                    // pointer to an element of A
+
+   T *DataB = b.Initialize(B);
+
+                    // pointer to an element of B
+
+   C.Erase(); // empty out C
+
+
+
+   // merge until one of A and B is empty
+
+   while (DataA &amp;&amp; DataB) {
+
+      if (*DataA &lt;= *DataB) {// A goes next
+
+         C.Append(*DataA);
+
+         DataA = a.Next();}
+
+      else {// B is smaller
+
+         C.Append(*DataB);
+
+         DataB = b.Next();}
+
+      }
+
+
+
+   // append the rest
+
+   // at most one of A and B is nonempty now
+
+   if (DataA) while(DataA) {// A is not empty
+
+                 C.Append(*DataA);
+
+                 DataA = a.Next();
+
+                 }
+
+   else while(DataB) {// B is not empty
+
+           C.Append(*DataB);
+
+           DataB = b.Next();
+
+           }
+
+}
+
+<HR class = coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+We shall do the analysis under the assumption that the merge
+
+is successful (i.e., no exception is thrown).
+
+In each iteration of the first <code class=code>while</code> loop, we move one node right
+
+either in <code class=code>A</code> or
+
+<code class=code>B</code>.  So, the complexity of this loop is O(length of
+
+<code class=code>A</code> +
+
+length of <code class=code>B</code>).  The complexity of the second <code class=code>while</code> loop
+
+is O(length of <code class=code>B</code>) and that of the third
+
+loop is O(length of <code class=code>A</code>).
+
+The call to <code class=code>Erase</code> takes
+
+Theta(length of initial <code class=code>C</code>) time.  Also,
+
+Omega(length of <code class=code>A</code> +
+
+length of <code class=code>B</code>) time is spent constructing the
+
+final <code class=code>C</code>.  So, the overall complexity is Theta(sum of initial lengths of the
+
+three lists <code class=code>A</code>,
+
+<code class=code>B</code>,
+
+and <code class=code>C</code>).
+
+<br><br>
+
+<dt> (c)
+
+<dd>
+
+The codes and output are in the files <code class=code>ecircle.*</code>.
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

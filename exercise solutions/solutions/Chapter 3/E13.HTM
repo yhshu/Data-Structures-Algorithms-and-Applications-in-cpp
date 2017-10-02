@@ -1,0 +1,126 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+<DL Compact>
+
+<DT> (a)
+
+<DD>
+
+The code to split a list is given below and in the file
+
+<code class=code>llist5.h</code>.
+
+</dl>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template &lt;class T&gt;
+
+LinearList&lt;T&gt;&amp; LinearList&lt;T&gt;::Split(
+
+    LinearList&lt;T&gt;&amp; A, LinearList&lt;T&gt;&amp; B)
+
+{// Split *this into lists A and B
+
+   B.length = length / 2;
+
+   A.length = length - B.length;
+
+   if (A.length &gt; A.MaxSize || B.length &gt; B.MaxSize)
+
+       throw NoMem(); // inadequate space for result
+
+   
+
+   int ct = 1;  // cursor for *this
+
+   int cab = 1; // cursor for A and B
+
+   while (cab &lt;= B.length) {
+
+      A.element[cab] = element[ct++];
+
+      B.element[cab++] = element[ct++];
+
+      }
+
+   
+
+   // is an element left?
+
+   if (A.length &gt; B.length)
+
+      A.element[cab] = element[ct];
+
+   
+
+   return *this;
+
+}
+
+</pre>
+
+<HR class=coderule><BR>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+When there is inadequate space for the result, an exception is thrown
+
+and the complexity is Theta(1).  Assume we have enough space.
+
+The <code class=code>while</code> loop iterates
+
+<code class=code>length/2</code> times.  So, the
+
+complexity is Theta(<code class=code>length</code>)
+
+where <code class=code>length</code> is
+
+the length of the list being split.
+
+<dt> (c)
+
+<dd>
+
+The test program is <code class=code>llist5.cpp</code>.
+
+The output is in the file
+
+<code class=code>llist5.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

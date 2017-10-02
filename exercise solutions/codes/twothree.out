@@ -1,0 +1,89 @@
+Elements in ascending order are
+21 29 30 
+Elements in postorder order are
+21 30 29 
+Elements in ascending order are
+4 9 21 29 30 
+Elements in postorder order are
+4 21 9 30 29 
+Elements in ascending order are
+4 9 14 15 21 29 30 
+Elements in postorder order are
+4 14 9 21 30 29 15 
+Elements in ascending order are
+4 9 14 15 21 29 30 31 32 
+Elements in postorder order are
+4 14 9 21 30 29 32 31 15 
+Elements in ascending order are
+4 9 14 15 21 22 23 29 30 31 32 
+Elements in postorder order are
+4 14 9 21 23 22 15 30 32 31 29 
+1 was not found
+28 was not found
+40 was not found
+23 was found
+30 was found
+Elements in ascending order are
+4 9 14 15 21 22 23 24 25 27 28 29 30 31 32 
+Elements in postorder order are
+4 14 9 21 23 22 15 25 28 27 30 32 31 29 24 
+Elements in ascending order are
+9 14 15 21 22 23 24 25 27 28 29 30 31 32 
+Elements in postorder order are
+9 14 21 15 23 22 25 28 27 24 30 32 31 29 
+Elements in ascending order are
+9 15 21 22 23 24 25 27 28 29 30 31 32 
+Elements in postorder order are
+9 21 15 23 22 25 28 27 24 30 32 31 29 
+Elements in ascending order are
+9 15 22 23 24 25 27 28 29 30 31 32 
+Elements in postorder order are
+9 15 23 22 25 28 27 24 30 32 31 29 
+Elements in ascending order are
+9 15 22 23 24 25 27 28 29 31 32 
+Elements in postorder order are
+9 15 23 22 25 28 27 31 32 29 24 
+Elements in ascending order are
+9 15 22 23 24 25 27 28 29 31 
+Elements in postorder order are
+9 15 23 22 25 28 27 31 29 24 
+Elements in ascending order are
+9 15 22 23 24 25 27 29 31 
+Elements in postorder order are
+9 15 23 22 25 27 31 29 24 
+Elements in ascending order are
+9 15 18 22 23 24 25 26 27 29 31 32 34 36 40 
+Elements in postorder order are
+9 18 15 23 22 25 27 26 24 31 34 32 40 36 29 
+Elements in ascending order are
+9 15 18 22 23 24 25 26 27 31 32 34 36 40 
+Elements in postorder order are
+9 18 15 23 25 26 24 22 31 34 32 40 36 27 
+Elements in ascending order are
+9 15 18 23 24 25 26 27 31 32 34 36 40 
+Elements in postorder order are
+9 15 23 18 25 26 24 31 34 32 40 36 27 
+Elements in ascending order are
+9 15 18 23 24 25 26 31 32 34 36 40 
+Elements in postorder order are
+9 15 23 18 25 24 31 34 32 40 36 26 
+Elements in ascending order are
+9 15 18 23 24 26 31 32 34 36 40 
+Elements in postorder order are
+9 15 23 24 18 31 34 32 40 36 26 
+Elements in ascending order are
+9 15 18 23 24 26 31 32 34 40 
+Elements in postorder order are
+9 15 23 24 18 31 32 40 34 26 
+Elements in ascending order are
+9 18 24 31 34 40 
+Elements in postorder order are
+9 18 31 24 40 34 
+Elements in ascending order are
+9 31 40 
+Elements in postorder order are
+9 40 31 
+Elements in ascending order are
+
+Elements in postorder order are
+

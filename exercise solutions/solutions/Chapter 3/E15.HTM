@@ -1,0 +1,76 @@
+<HTML>
+<HEAD>
+<LINK rel="stylesheet" href="../exer.css">
+</HEAD>
+<BODY>
+<H1>
+Data Structures, Algorithms, & Applications in C++<BR>
+Chapter 3, Exercise 15<BR>
+<BR>
+</H1>
+<DL Compact>
+<DT> (a)
+<DD>
+The member function is given below and in the file
+<code class=code>llist7.h</code>.
+</dl>
+<HR class = coderule>
+<PRE class = code>
+template&lt;class type&gt;
+LinearList&lt;T&gt;&amp; LinearList&lt;type&gt;::Reverse()
+{// Reverse the list.
+   int len = Length();
+   for (int i = 1; i &lt;= len/2; i++)
+      Swap(element[(first + i - 1) % MaxSize],
+           element[(first + len - i) % MaxSize]);
+   return *this;
+}
+</pre>
+<HR class=coderule><BR>
+<dl compact>
+<dt> (b)
+<dd>
+The complexity is Theta(<code class=code>length</code>).
+<dt> (c)
+<dd>
+The test program is <code class=code>llist7.cpp</code>.
+It uses an even and an odd
+length list.  The output is in the file
+<code class=code>llist7.out</code>.
+For completeness, we could also test using an empty list and
+one of length one.
+<dt> (d)
+<dd>
+The code is given below and in the files
+<code class=code>llist8.*</code>.
+</DL>
+<HR class = coderule>
+<PRE class = code>
+template &lt;class T&gt;
+void Reverse(LinearList&lt;T&gt;&amp; L)
+{// In-place reversal of the list L.
+   int l = L.Length();
+   T x;
+   for (int i = 0; i &lt; l - 1; i++) {
+      L.Delete(l,x);  // delete last element
+      L.Insert(i,x);  // insert as i'th
+      }
+}
+</pre>
+<HR class=coderule><BR>
+<DL Compact>
+<DT> (e)
+<DD>
+Each <code class=code>Delete</code> takes Theta(1) time (as it is from the right end
+of the list).  The complexity of
+<code class=code>Insert(i,x)</code> is
+Theta(<code class=code>length - i</code>).
+So, the time needed to perform all the inserts
+is Theta(<code class=code>length<sup>2</sup></code>).
+This is also the overall complexity of function <code class=code>Reverse</code>.
+</dl>
+
+
+</FONT>
+</BODY>
+</HTML>

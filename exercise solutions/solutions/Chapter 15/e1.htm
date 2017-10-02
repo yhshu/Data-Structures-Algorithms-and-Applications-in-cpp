@@ -1,0 +1,140 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 15, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+
+
+To compute the <em class=var>x</em>s, we need to save
+
+the decisions made when an <em class=code>F</code> is computed.
+
+Then following the computation of <em class=code>F(1,c)</code>,
+
+we can perform a traceback similar to that done in Program 15.2.
+
+We save the decisions in a two-dimensional array
+
+<code class=code>D</code>.
+
+<br><br>
+
+The modified program together with the traceback function
+
+are given below and in the files <code class=code>rknap1.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+int F(int i, int y)
+
+{// Return f(i,y).
+
+   if (i == n)
+
+      // use Equation 15.1
+
+      if (y &lt; w[n]) {
+
+        // x[n] is 0
+
+        D[n][y] = 0;
+
+        return 0;
+
+        }
+
+      else {// x[n] is 1
+
+         D[n][y] = 1;
+
+         return p[n];
+
+         }
+
+
+
+   // use Equation 15.2
+
+   if (y &lt; w[i]) {// x[i] is 0
+
+      D[i][y] = 0;
+
+      return F(i+1,y); 
+
+      }
+
+   
+
+   int p1 = F(i+1,y);
+
+   int p2 = F(i+1,y-w[i]) + p[i];
+
+   if (p1 &lt; p2) {// x[i] is 1
+
+      D[i][y] = 1;
+
+      return p2;
+
+      }
+
+   // x[1] is 0
+
+   D[i][y] = 0;
+
+   return p1;
+
+}
+
+
+
+void Traceback(int **D, int w[], int c, int n, int x[])
+
+{// Compute x for optimal filling.
+
+   for (int i = 1; i &lt; n; i++)
+
+      if (D[i][c]) {
+
+         x[i] = 1;
+
+         c -= w[i];}
+
+      else x[i] = 0;
+
+   x[n] = D[n][c];
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,12 @@
+Enter number of matrices
+Enter number of rows in matrix 1
+Enter number of rows in matrix 2
+Enter number of rows in matrix 3
+Enter number of rows in matrix 4
+Enter number of rows in matrix 5
+Enter number of columns in matrix 5
+Minimum cost is 190
+Multiply M 1, 1 and M 2, 2
+Multiply M 3, 3 and M 4, 4
+Multiply M 3, 4 and M 5, 5
+Multiply M 1, 2 and M 3, 5

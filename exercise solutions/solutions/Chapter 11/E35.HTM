@@ -1,0 +1,1155 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 35<BR>
+
+<BR>
+
+</H1>
+
+
+
+First we must decide on a representation for the nodes of a
+
+2-3 tree.  Two of the obvious choices are (a) use a node
+
+with one data field and two pointer fields for a 2-node (i.e., a
+
+node that has two children) and use a node with two data fields
+
+and three pointer fields for a 3-node (i.e., a node
+
+that has three children), and (b) use the same node for both a 2-node
+
+and a 3-node; however, when representing a 2-node, set the second
+
+data field to <code class=code>Null</code>, where
+
+<code class=code>Null</code> denotes an invalid element.
+
+<br><br>
+
+Option (a) wastes no space but requires us to invoke
+
+<code class=code>new</code>
+
+and
+
+<code class=code>delete</code>
+
+each time we add or remove an element from a node.
+
+Option (b) wastes space because a 2-node takes as much space as
+
+does a 3-node.  However, option (b) is more effecient in time as
+
+we can switch from a 2-node to a 3-node or the reverse without invoking
+
+<code class=code>new</code>
+
+and
+
+<code class=code>delete</code>.
+
+We shall use option (b).
+
+<br><br>
+
+Even though we have settled on option (b), we must still
+
+decide whether to use arrays to represent the data and pointer
+
+fields in a node, or to name each field differently.  For high-order
+
+B-trees, it is impossible to name all the fields individually and we
+
+must use one array for the data fields and another for the pointer
+
+fields.  For low-order B-trees (orders 3 or 4) the individual name option
+
+is feasible.  We shall opt to name the two data fields and three
+
+pointer fields of a 3-node individually.
+
+<br><br>
+
+With these decisions made we can define the class
+
+<code class=code>Node23</code> which represents the nodes of a
+
+2-3 tree.  This class is given below and in the file
+
+<code class=code>node23.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class E, class K&gt;
+
+class Node23 {
+
+   friend TwoThree&lt;E, K&gt;;
+
+   private:
+
+      E LData,  // place for first element
+
+        RData;  // place for possible second element
+
+      Node23&lt;E,K&gt; *LChild,  // pointer to left child
+
+                  *MChild,  // pointer to middle child
+
+                  *RChild;  // pointer to possible right child
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The definition of the class
+
+<code class=code>TwoThree</code> is given below and in the file
+
+<code class=code>twothree.h</code>.  The constructor requires
+
+that the user provide us with a special element
+
+<code class=code>Null</code> which is an invalid element,
+
+that is it is an element that cannot be inserted into the 2-3 tree.
+
+This element is used to detect whether a node of the 2-3 tree
+
+contains one or two elements.
+
+The destructor invokes the recursive method
+
+<code class=code>Erase</code> which deletes all nodes by
+
+performing a postorder traversal of the 2-3 tree.
+
+We shall explain the remaining methods later.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class TwoThree {
+
+   public:
+
+      TwoThree(E NullElement)
+
+         {Null = NullElement;
+
+          root = 0;
+
+          }
+
+      ~TwoThree() {Erase(root);}
+
+      bool Search(const K&amp; k, E&amp; e) const;
+
+      TwoThree&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+      TwoThree&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e)
+
+         {if (Delete(k, e, root)) {
+
+             // root has become deficient
+
+             Node23&lt;E,K&gt; *t = root;
+
+             root = root-&gt;LChild;
+
+             delete t;
+
+             }
+
+          return *this;
+
+          }
+
+      void Ascend() {InOutput(root);
+
+                     cout &lt;&lt; endl;}
+
+      void PostOut() {PostOutput(root);
+
+                      cout &lt;&lt; endl;}
+
+   private:
+
+      Node23&lt;E,K&gt; *root;  // root node
+
+      E Null;             // denotes null element
+
+      void Erase(Node23&lt;E,K&gt; *t);
+
+      ReturnPair23&lt;E,K&gt; Insert(Node23&lt;E,K&gt; *p, const E&amp; e);
+
+      bool FixLeftChild(Node23&lt;E,K&gt; *p);
+
+      bool FixMiddleChild(Node23&lt;E,K&gt; *p);
+
+      bool FixRightChild(Node23&lt;E,K&gt; *p);
+
+      bool DeleteLargest(Node23&lt;E,K&gt; *p, E&amp; e);
+
+      bool Delete(const K&amp; k, E&amp; e, Node23&lt;E,K&gt; *p);
+
+      void InOutput(Node23&lt;E,K&gt; *t);
+
+      void PostOutput(Node23&lt;E,K&gt; *t);
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The recursive method <code class=code>Erase</code> is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void TwoThree&lt;E,K&gt;::Erase(Node23&lt;E,K&gt; *t)
+
+{// Delete all nodes in 2-3 tree with root t.
+
+ // Use a postorder traversal.
+
+   if (t) {// t has a left and middle subtree
+
+           Erase(t-&gt;LChild);
+
+           Erase(t-&gt;MChild);
+
+
+
+           // erase right subtree if it exists
+
+           if (t-&gt;RData != Null) Erase(t-&gt;RChild);
+
+
+
+           delete t;
+
+           }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code to search a 2-3 tree is very similar to the code
+
+used to search a binary search tree.  The code is given below.
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::Search(const K&amp; k, E &amp;e) const
+
+{// Search for element that matches k.
+
+ // Put matching element in e.
+
+ // Return false if no matching element.
+
+
+
+   // pointer p starts at the root and moves through
+
+   // the tree looking for an element with key k
+
+   Node23&lt;E,K&gt; *p = root;
+
+   while (p) // examine p-&gt;data
+
+      if (k &lt; p-&gt;LData) p = p-&gt;LChild;
+
+      else if (p-&gt;RData == Null)  // p is a 2-node
+
+              if (k == p-&gt;LData) {// found match
+
+                                  e = p-&gt;LData;
+
+                                  return true;
+
+                                  }
+
+              else // k &gt; p-&gt;LData
+
+                 p = p-&gt;MChild;
+
+           else  // p is a 3-node
+
+              if (k &gt; p-&gt;LData &amp;&amp; k &lt; p-&gt;RData)
+
+                 p = p-&gt;MChild;
+
+              else if (k &gt; p-&gt;RData)
+
+                      p = p-&gt;RChild;
+
+                   else {// k matches one of the elements
+
+                         if (k == p-&gt;LData)
+
+                            e = p-&gt;LData;
+
+                         else e = p-&gt;RData;
+
+                         return true;
+
+                         }
+
+
+
+   // no match was found
+
+   return false;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+We have seen how to insert into an AVL tree using a stack
+
+to record the path on the way to the insert node (see Exercise 19).
+
+Using this saved information, the path from the insert
+
+node to the root can be retraced to restructure the tree.
+
+In this exercise, we shall use recursion to accomplish the same
+
+objective.  The driver for the recursive insert method is the
+
+public insert method given below.
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+TwoThree&lt;E,K&gt;&amp; TwoThree&lt;E,K&gt;::Insert(const E&amp; e)
+
+{// Insert e if not duplicate.
+
+ // Throw BadInput exception if e is either Null or a duplicate.
+
+   if (e == Null)  // cannot insert null element
+
+      throw BadInput();
+
+
+
+   // insert recursively
+
+   ReturnPair23&lt;E,K&gt; r = Insert(root, e);
+
+
+
+   if (r.element != Null) {// root has split
+
+      // create new root, this is a 2-node
+
+      Node23&lt;E,K&gt; *NewRoot = new Node23&lt;E,K&gt;;
+
+      NewRoot-&gt;LChild = root;
+
+      NewRoot-&gt;MChild = r.NodePtr;
+
+      NewRoot-&gt;LData = r.element;
+
+      NewRoot-&gt;RData = Null;
+
+      root = NewRoot;
+
+      }
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The recursive insert method which is invoked by the driver
+
+returns a pair <code class=code>(element, NodePtr)</code>.
+
+<code class=code>element</code>
+
+is
+
+<code class=code>Null</code> iff
+
+the original root did not split as a result of the insertion.
+
+If this root did split, then the pair gives the element and
+
+right subtree pointer that did not fit in the two nodes created
+
+by the split.  The pair is put into a new node which becomes the
+
+new root.
+
+The class <code class=code>ReturnPair23</code> is given below
+
+and in the file
+
+<code class=code>ret23.h</code>.
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template &lt;class E, class K&gt;
+
+class ReturnPair23 {
+
+   friend TwoThree&lt;E, K&gt;;
+
+   private:
+
+      E element;             
+
+      Node23&lt;E,K&gt; *NodePtr;  // pointer to associated subtree
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The recursive insert method is given below.  It follows closely the
+
+strategy described in the text.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+ReturnPair23&lt;E,K&gt; TwoThree&lt;E,K&gt;::
+
+                  Insert(Node23&lt;E,K&gt; *p, const E&amp; e)
+
+{// Insert e into the 2-3 tree with root p.
+
+ // Throw BadInput exception if e is a duplicate.
+
+ // Return the pair (element, pointer) to be inserted in
+
+ // parent of p in case node p splits.  Return a pair
+
+ // with element = Null in case p does not split.
+
+   ReturnPair23&lt;E,K&gt; r;
+
+   if (p) // p is not empty
+
+      if (p-&gt;RData == Null) // p is a 2-node
+
+         if (e &lt; p-&gt;LData) {// insert in p-&gt;LChild
+
+            r = Insert(p-&gt;LChild, e);
+
+            if (r.element != Null) {// p-&gt;LChild did split
+
+               // insert r into p as LData and MChild
+
+               p-&gt;RData = p-&gt;LData;
+
+               p-&gt;RChild = p-&gt;MChild;
+
+               p-&gt;LData = r.element;
+
+               p-&gt;MChild = r.NodePtr;
+
+               // p does not split
+
+               r.element = Null;
+
+               }
+
+            return r;
+
+            }
+
+         else if (e &gt; p-&gt;LData) {// insert in p-&gt;MChild
+
+                 r = Insert(p-&gt;MChild, e);
+
+                 if (r.element != Null) {// p-&gt;MChild did split
+
+                    // insert r into p as RData and RChild
+
+                    p-&gt;RData = r.element;
+
+                    p-&gt;RChild = r.NodePtr;
+
+                    // p does not split
+
+                    r.element = Null;
+
+                    }
+
+                 return r;
+
+                 }
+
+              else  // e = p-&gt;LData, duplicate
+
+                    throw BadInput();
+
+      else // p is a 3-node
+
+         if (e &lt; p-&gt;LData) {// insert in p-&gt;LChild
+
+            r = Insert(p-&gt;LChild, e);
+
+            if (r.element != Null) {// p-&gt;LChild did split
+
+               // now p will split
+
+               // create a new 2-node q for p-&gt;RData
+
+               Node23&lt;E,K&gt; *q = new Node23&lt;E,K&gt;;
+
+               q-&gt;LData = p-&gt;RData;
+
+               q-&gt;MChild = p-&gt;RChild;
+
+               q-&gt;LChild = p-&gt;MChild;
+
+               q-&gt;RData = Null;
+
+
+
+               // p becomes a 2-node with LData = r.element
+
+               // and the pair (p-&gt;LData, q) is to be
+
+               // inserted in the parent of p
+
+               p-&gt;RData = Null;
+
+               Swap(p-&gt;LData, r.element);
+
+               p-&gt;MChild = r.NodePtr;
+
+               r.NodePtr = q;
+
+               }
+
+            return r;
+
+            }
+
+         else if (e &gt; p-&gt;RData) {// insert in p-&gt;RChild
+
+                 r = Insert(p-&gt;RChild, e);
+
+                 if (r.element != Null) {// p-&gt;RChild did split
+
+                    // now p will split
+
+                    // create a new 2-node q for r.element
+
+                    Node23&lt;E,K&gt; *q = new Node23&lt;E,K&gt;;
+
+                    q-&gt;LData = r.element;
+
+                    q-&gt;MChild = r.NodePtr;
+
+                    q-&gt;LChild = p-&gt;RChild;
+
+                    q-&gt;RData = Null;
+
+     
+
+                    // p becomes a 2-node
+
+                    // and the pair (p-&gt;MData, q) is to be
+
+                    // inserted in the parent of p
+
+                    r.element = p-&gt;RData;
+
+                    r.NodePtr = q;
+
+                    p-&gt;RData = Null;  // p is now a 2-node
+
+                    }
+
+                 return r;
+
+                 }
+
+              else if (e &gt; p-&gt;LData &amp;&amp; e &lt; p-&gt;RData) {
+
+                      // insert in p-&gt;MChild
+
+                      r = Insert(p-&gt;MChild, e);
+
+                      if (r.element != Null) {// p-&gt;MChild did split
+
+                         // now p will split
+
+                         // create a new 2-node q for p-&gt;RData
+
+                         Node23&lt;E,K&gt; *q = new Node23&lt;E,K&gt;;
+
+                         q-&gt;LData = p-&gt;RData;
+
+                         q-&gt;MChild = p-&gt;RChild;
+
+                         q-&gt;LChild = r.NodePtr;
+
+                         q-&gt;RData = Null;
+
+          
+
+                         // p becomes a 2-node
+
+                         // and the pair (r.element, q) is to be
+
+                         // inserted in the parent of p
+
+                         p-&gt;RData = Null;  // p is now a 2-node
+
+                         r.NodePtr = q;
+
+                         }
+
+                      return r;
+
+                      }
+
+                   else  // duplicate
+
+                         throw BadInput();
+
+   else {// p is empty
+
+         // create a pair to insert in parent of p
+
+         r.element = e;
+
+         r.NodePtr = 0;
+
+         return r;
+
+         }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The implementation of the delete method is simplified if we first
+
+develop methods to handle the cases
+
+when the left, middle, or right child of a node
+
+becomes deficient (in the case of a 2-3 tree, a node
+
+is deficient if it has no element) and a method to
+
+delete the largest element in a subtree (required when the element
+
+to be deleted is in the interior (i.e., not in a leaf) of the
+
+tree).  The codes for the first three of these methods use the
+
+node combining and borrowing strategies described in the text.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::FixLeftChild(Node23&lt;E,K&gt; *p)
+
+{// The left child of p has become
+
+ // deficient.  Fix deficiency.  Return true iff
+
+ // p becomes deficient as a result of the fix.
+
+
+
+   Node23&lt;E,K&gt; *lp = p-&gt;LChild, // left child of p
+
+               *mp = p-&gt;MChild; // middle child of p
+
+
+
+   // the left child of p must have been
+
+   // a 2-node before the deletion
+
+   if (mp-&gt;RData == Null) {
+
+      // middle child of p is a 2-node; combine lp,
+
+      // p-&gt;LData, and mp; lp becomes a 3-node
+
+      lp-&gt;LData = p-&gt;LData;
+
+      lp-&gt;RData = mp-&gt;LData;
+
+      lp-&gt;MChild = mp-&gt;LChild;
+
+      lp-&gt;RChild = mp-&gt;MChild;
+
+      delete mp;
+
+      if (p-&gt;RData == Null)  // p was a 2-node
+
+         // p becomes deficient
+
+         return true;
+
+      else  {// p was a 3-node
+
+             // p becomes a 2-node
+
+             p-&gt;LData = p-&gt;RData;
+
+             p-&gt;RData = Null;
+
+             p-&gt;MChild = p-&gt;RChild;
+
+             return false;
+
+             }
+
+      }
+
+   else {
+
+      // middle child of p is a 3-node, borrow from it
+
+      lp-&gt;LData = p-&gt;LData;
+
+      lp-&gt;MChild = mp-&gt;LChild;
+
+      p-&gt;LData = mp-&gt;LData;
+
+      mp-&gt;LChild = mp-&gt;MChild;
+
+      mp-&gt;MChild = mp-&gt;RChild;
+
+      mp-&gt;LData = mp-&gt;RData;
+
+      mp-&gt;RData = Null;  // mp is now a 2-node
+
+
+
+      // p is not deficient
+
+      return false;
+
+      }
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::FixMiddleChild(Node23&lt;E,K&gt; *p)
+
+{// The middle child of p has become
+
+ // deficient.  Fix deficiency.  Return true iff
+
+ // p becomes deficient as a result of the fix.
+
+
+
+   Node23&lt;E,K&gt; *lp = p-&gt;LChild, // left child of p
+
+               *mp = p-&gt;MChild; // midle child of p
+
+
+
+   // p-&gt;MChild must have been
+
+   // a 2-node before the deletion
+
+   if (lp-&gt;RData == Null) {
+
+      // left child of p is a 2-node; combine lp,
+
+      // p-&gt;LData and mp; lp becomes a 3-node
+
+      lp-&gt;RData = p-&gt;LData;
+
+      lp-&gt;RChild = mp-&gt;LChild;
+
+      delete mp;
+
+
+
+      if (p-&gt;RData == Null)  // p was a 2-node
+
+         // p becomes deficient
+
+         return true;
+
+      else  {// p was a 3-node
+
+             // p becomes a 2-node
+
+             p-&gt;LData = p-&gt;RData;
+
+             p-&gt;RData = Null;
+
+             p-&gt;MChild = p-&gt;RChild;
+
+             return false;
+
+             }
+
+      }
+
+   else {
+
+      // left child of p is a 3-node, borrow from it
+
+      mp-&gt;LData = p-&gt;LData;
+
+      mp-&gt;MChild = mp-&gt;LChild;
+
+      mp-&gt;LChild = lp-&gt;RChild;
+
+      p-&gt;LData = lp-&gt;RData;
+
+      lp-&gt;RData = Null;  // left child is now a 2-node
+
+
+
+      // p is not deficient
+
+      return false;
+
+      }
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::FixRightChild(Node23&lt;E,K&gt; *p)
+
+{// The right child of p has become
+
+ // deficient.  Fix deficiency.  Return true iff
+
+ // p becomes deficient as a result of the fix.
+
+
+
+   Node23&lt;E,K&gt; *rp = p-&gt;RChild, // right child of p
+
+               *mp = p-&gt;MChild; // midle child of p
+
+
+
+   // p is a 3-node
+
+   // p-&gt;RChild must have been
+
+   // a 2-node before the deletion
+
+   if (mp-&gt;RData == Null) {
+
+      // middle child of p is a 2-node; combine mp,
+
+      // p-&gt;RData and rp; mp becomes a 3-node
+
+      mp-&gt;RData = p-&gt;RData;
+
+      mp-&gt;RChild = rp-&gt;LChild;
+
+      delete rp;
+
+      p-&gt;RData = Null;
+
+      }
+
+   else {
+
+      // middle child of p is a 3-node, borrow from it
+
+      rp-&gt;LData = p-&gt;RData;
+
+      rp-&gt;MChild = rp-&gt;LChild;
+
+      rp-&gt;LChild = mp-&gt;RChild;
+
+      p-&gt;RData = mp-&gt;RData;
+
+      mp-&gt;RData = Null;  // middle child is now a 2-node
+
+      }
+
+
+
+   return false;
+
+}
+
+
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::DeleteLargest(Node23&lt;E,K&gt; *p, E&amp; e)
+
+{// Delete the largest element in the subtree with root p.
+
+ // Put this element in e.  Return true iff p becomes deficient.
+
+   if (p-&gt;LChild) // p is not a leaf
+
+      if (p-&gt;RData == Null)  // p is a 2-node
+
+         if (DeleteLargest(p-&gt;MChild, e))
+
+            return FixMiddleChild(p);
+
+         else return false;
+
+      else  // p is a 3-node
+
+         if (DeleteLargest(p-&gt;RChild, e))
+
+            return FixRightChild(p);
+
+         else return false;
+
+   else  // p is a leaf
+
+      if (p-&gt;RData == Null)  {// p is a 2-node
+
+         e = p-&gt;LData;
+
+         return true;  // p has become deficient
+
+         }
+
+      else {// p is a 3-node
+
+            e = p-&gt;RData;
+
+            p-&gt;RData = Null;
+
+            return false;  // p is not deficient
+
+            }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+With these methods implemented, the recursive code to
+
+delete from a node takes the form given below.  This code returns the
+
+value <code class=code>true</code> iff the deletion caused the
+
+subtree root to become deficient.
+
+
+
+
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool TwoThree&lt;E,K&gt;::Delete(const K&amp; k, E&amp; e, Node23&lt;E,K&gt; *p)
+
+{// Delete element with key k from the 2-3 tree
+
+ // with root p.  Put deleted element in e.
+
+ // Throw BadInput exception if there is no element
+
+ // with key k.
+
+ // Return true iff p is deficient (i.e., has no element)
+
+ // following the deletion.
+
+   if (!p)  // empty subtree
+
+      throw BadInput();
+
+
+
+   if (k &lt; p-&gt;LData) // delete from left subtree
+
+      if (Delete(k, e, p-&gt;LChild))
+
+         // p-&gt;LChild has become deficient
+
+         return FixLeftChild(p);
+
+      else return false;  // p is not deficient
+
+   else if (k == p-&gt;LData) {// p-&gt;LData is element to delete
+
+           e = p-&gt;LData;
+
+           if (p-&gt;LChild) // p is not a leaf
+
+              // delete largest element in p-&gt;LChild
+
+              // and place in p-&gt;LData
+
+              if (DeleteLargest(p-&gt;LChild, p-&gt;LData))
+
+                 // p-&gt;LChild has become deficient
+
+                 return FixLeftChild(p);
+
+              else return false;  // p is not deficient
+
+           else if (p-&gt;RData == Null)
+
+                   // deletion from a 2-node leaf
+
+                   return true;
+
+                else {// deletion from a 3-node leaf
+
+             

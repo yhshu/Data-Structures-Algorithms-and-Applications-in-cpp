@@ -1,0 +1,536 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 57<BR>
+
+<BR>
+
+</H1>
+
+Since we have not implemented the doubly-linked list methods yet,
+
+we do this first.  The implementations that
+
+go with the class definition of Prgram 3.21 are given below and in
+
+the files
+
+<code class=code>double.*</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+class Double {
+
+   public:
+
+      Double() {LeftEnd = RightEnd = 0;}
+
+      ~Double();
+
+      bool IsEmpty() const {return LeftEnd == 0;}
+
+      int Length() const; 
+
+      bool Find(int k, T&amp; x) const; 
+
+      int Search(const T&amp; x) const; 
+
+      Double&lt;T&gt;&amp; Delete(int k, T&amp; x); 
+
+      Double&lt;T&gt;&amp; Insert(int k, const T&amp; x);
+
+      void Output(ostream&amp; out) const;
+
+   private:
+
+      DoubleNode&lt;T&gt; *LeftEnd,   // pointer to leftmost node
+
+                    *RightEnd;  // pointer to rightmost node
+
+};
+
+
+
+template&lt;class T&gt;
+
+Double&lt;T&gt;::~Double()
+
+{// Double destructor. Delete all nodes.
+
+   DoubleNode&lt;T&gt; *curr = LeftEnd,  // current node
+
+                 *next;            // next node
+
+   while (curr) {
+
+      next = curr-&gt;right;
+
+      delete curr;
+
+      curr = next;
+
+      }
+
+}
+
+
+
+template&lt;class T&gt;
+
+int Double&lt;T&gt;::Length() const
+
+{// Return the number of elements in the list.
+
+   // count nodes
+
+   DoubleNode&lt;T&gt; *curr = LeftEnd;
+
+   int len = 0;  // number to left of curr
+
+   while (curr) {
+
+     len++;
+
+     curr = curr-&gt;right;
+
+     }
+
+   return len;
+
+}
+
+
+
+template&lt;class T&gt;
+
+bool Double&lt;T&gt;::Find(int k, T&amp; x) const
+
+{// Set x to the k'th element in the list.
+
+ // Return false if no k'th; return true otherwise.
+
+   if (k &lt; 1 || !LeftEnd) return false;
+
+
+
+   DoubleNode&lt;T&gt; *curr = LeftEnd;
+
+   int index = 1;  // index of curr
+
+   while (index &lt; k &amp;&amp; curr) {
+
+      // move to next node
+
+      curr = curr-&gt;right;
+
+      index++;
+
+      }
+
+   if (index == k) {x = curr-&gt;data;
+
+                    return true;}
+
+   return false; // no k'th element
+
+}
+
+
+
+template&lt;class T&gt;
+
+int Double&lt;T&gt;::Search(const T&amp; x) const
+
+{// Locate x.  Return position of x if found.
+
+ // Return 0 if x not in the chain.
+
+   if (!LeftEnd) return 0;  // list is empty
+
+
+
+   // examine nodes
+
+   DoubleNode&lt;T&gt; *curr = LeftEnd;
+
+   int index = 1;  // index of curr
+
+   while (curr &amp;&amp; curr-&gt;data != x) {
+
+      // move to next node
+
+      curr = curr-&gt;right;
+
+      index++;
+
+      }
+
+   if (curr) return index;
+
+   return 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Double&lt;T&gt;&amp; Double&lt;T&gt;::Delete(int k, T&amp; x)
+
+{// Set x to the k'th element and delete it.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+   if (k &lt; 1 || !LeftEnd)
+
+      throw OutOfBounds(); // no k'th
+
+   
+
+   // p will eventually point to k'th node
+
+   DoubleNode&lt;T&gt; *p = LeftEnd;
+
+   int index = 1;  // index of p
+
+
+
+   // move p to k'th
+
+   for (; index &lt; k &amp;&amp; p; index++)
+
+      p = p-&gt;right;
+
+
+
+   // make sure p is at the k'th element
+
+   if (index != k) throw OutOfBounds(); // no k'th
+
+
+
+   // remove p from list
+
+   if (p == LeftEnd) {
+
+      // delete first node
+
+      LeftEnd = LeftEnd-&gt;right;
+
+      if (!LeftEnd)  // list is empty
+
+         RightEnd = 0;
+
+      else  // list is not empty
+
+         LeftEnd-&gt;left = 0;
+
+      }
+
+   else if (p == RightEnd) {
+
+           // delete last node
+
+           RightEnd = RightEnd-&gt;left;
+
+           RightEnd-&gt;right = 0;
+
+           }
+
+         else {
+
+            // delete an interior node
+
+            p-&gt;right-&gt;left = p-&gt;left;
+
+            p-&gt;left-&gt;right = p-&gt;right;
+
+            }
+
+
+
+   // save k'th element and free node p
+
+   x = p-&gt;data;
+
+   delete p;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Double&lt;T&gt;&amp; Double&lt;T&gt;::Insert(int k, const T&amp; x)
+
+{// Insert x after the k'th element.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+ // Pass NoMem exception if inadequate space.
+
+   if (k &lt; 0) throw OutOfBounds();
+
+
+
+   if (k) {// locate k'th node
+
+      if (!LeftEnd) throw OutOfBounds();  // empty list
+
+
+
+      // p will eventually point to k'th node
+
+      DoubleNode&lt;T&gt; *p = LeftEnd;
+
+      int index = 1;
+
+      // move p to k'th
+
+      for (; index &lt; k &amp;&amp; p; index++)
+
+         p = p-&gt;right;
+
+      if (index != k) throw OutOfBounds(); // no k'th
+
+
+
+      // insert after p
+
+      DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+      y-&gt;data = x;
+
+      y-&gt;right = p-&gt;right;
+
+      p-&gt;right = y;
+
+      y-&gt;left = p;
+
+      if (p == RightEnd) // y is now the last node
+
+         RightEnd = y;
+
+      else  // y is not the last node
+
+         y-&gt;right-&gt;left = y;
+
+      }
+
+   else {// insert as first element
+
+         DoubleNode&lt;T&gt; *y = new DoubleNode&lt;T&gt;;
+
+         y-&gt;data = x;
+
+         if (LeftEnd) {// insert into nonempty list
+
+            y-&gt;right = LeftEnd;
+
+            y-&gt;left = 0;
+
+            LeftEnd-&gt;left = y;
+
+            }
+
+         else {// insert into an empty list
+
+               LeftEnd = RightEnd = y;
+
+               y-&gt;left = y-&gt;right = 0;
+
+               }
+
+         LeftEnd = y;
+
+         }
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+void Double&lt;T&gt;::Output(ostream&amp; out) const
+
+{// Insert the chain elements into the stream out.
+
+   for (DoubleNode&lt;T&gt; *curr = LeftEnd;
+
+        curr; curr = curr-&gt;right)
+
+      out &lt;&lt; curr-&gt;data &lt;&lt; "  ";
+
+}
+
+
+
+// overload &lt;&lt;
+
+template &lt;class T&gt;
+
+ostream&amp; operator&lt;&lt;(ostream&amp; out, const Double&lt;T&gt;&amp; x)
+
+   {x.Output(out); return out;}
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+The additional methods you have been asked to implement are
+
+iterators and are best done as a separate iterator class.
+
+However, since the exercise asks you to add these methods to
+
+the class
+
+<code class=code>Double</code>, we shall implement them as
+
+class members.  The implementations are given below and in the
+
+file
+
+<code class=code>double1.h</code>.
+
+
+
+<HR class = coderule>
+
+<PRE class = code>
+
+void ResetLeft()
+
+   {if (LeftEnd) {// not empty
+
+                  current = LeftEnd;
+
+                  return;
+
+                  }
+
+    // list is empty
+
+    throw OutOfBounds();
+
+    }
+
+void ResetRight()
+
+   {if (LeftEnd) {// not empty
+
+                  current = RightEnd;
+
+                  return;
+
+                  }
+
+    // list is empty
+
+    throw OutOfBounds();
+
+    }
+
+bool Current(T&amp; x)
+
+   {if (current) {// at a node
+
+                  x = current-&gt;data;
+
+                  return true;
+
+                  }
+
+    // not at a node
+
+    return false;
+
+    }
+
+bool End()
+
+   {return current == RightEnd;}
+
+bool Front()
+
+   {return current == LeftEnd;}
+
+bool Next()
+
+   {if (!current) return false;
+
+    // there is a next node, which may be 0
+
+    current = current-&gt;right;
+
+    return true;
+
+    }
+
+bool Previous()
+
+   {if (!current) return false;
+
+    // there is a previous node, which may be 0
+
+    current = current-&gt;left;
+
+    return true;
+
+    }
+
+<HR class = coderule>
+
+</pre>
+
+<br>
+
+
+
+
+
+The test program is <code class=code>double1.cpp</code>.
+
+The output is in the file
+
+<code class=code>double1.out</code>.
+
+</dl>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

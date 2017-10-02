@@ -1,0 +1,186 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 7, Exercise 13<BR>
+
+<BR>
+
+</H1>
+
+For this exercise we need to use the linear open addressing performance
+
+equations:<br>
+
+<font align = center>
+
+<em class=var>
+
+S <sub>n</sub> = 1/2[1 + 1/(1 - alpha)]<br>
+
+U <sub>n</sub> = 1/2[1 + 1/(1 - alpha)<sup>2</sup>]
+
+</em></font>
+
+<br>
+
+where <em class=var>alpha</em> is the loading density
+
+<em class=var>n/b</em>.  When the hash funstion is division,
+
+the divisor <em class=var>D</em> equals the number of buckets
+
+<em class=var>b</em>.
+
+<br><br>
+
+When linear open addessing is used, the number of buckets and hence
+
+the divisor <em class=var>D</em> must
+
+be &gt;= <em class=var>MaxElements</em>.
+
+<br><br>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Since
+
+<em class=var>D</em> must be &gt;= 530 and a prime number or
+
+a number with no prime divisors less than 20, we can choose
+
+<em class=var>D</em> = 563, which is a prime.
+
+With this choice of <em class=var>D</em> the loading density
+
+does not exceed 530/563 = 0.94.  Using this as <em class=var>alpha</em>
+
+in the performance equations, we get<br>
+
+<em class=var>
+
+S <sub>n</sub> = 1/2[1 + 1/(1 - alpha)] &lt;=  1/2[1 + 1/0.06] = 8.83<br>
+
+U <sub>n</sub> = 1/2[1 + 1/(1 - alpha)<sup>2</sup>] &lt;= 1/2[1 + 1/0.0036] = 139.5
+
+</em>
+
+<br><br><br>
+
+<dt> (b)
+
+<dd>
+
+Since
+
+<em class=var>D</em> must be &gt;= 130 and a prime number or
+
+a number with no prime divisors less than 20, we can choose
+
+<em class=var>D</em> = 131, which is a prime.
+
+With this choice of <em class=var>D</em> the loading density
+
+does not exceed 130/131 = 0.993.  Using this as <em class=var>alpha</em>
+
+in the performance equations, we get<br>
+
+<em class=var>
+
+S <sub>n</sub> = 1/2[1 + 1/(1 - alpha)] &lt;=  1/2[1 + 1/0.007] = 71.93<br>
+
+U <sub>n</sub> = 1/2[1 + 1/(1 - alpha)<sup>2</sup>] &lt;= 1/2[1 + 20409] = 10205
+
+<br><br>
+
+</em>
+
+Since the performance equations apply only when <em class=var>n</em>
+
+is large, we must make allowance for small <em class=var>n</em>.
+
+In particular, we know that
+
+<em class=var>
+
+S <sub>n</sub>
+
+</em>
+
+cannot exceed <em class=var>n</em> and
+
+<em class=var>
+
+U <sub>n</sub>
+
+</em>
+
+cannot exceed <em class=var>max{n+1, b}</em>.
+
+As a result, we modify the bound on
+
+<em class=var>
+
+U <sub>n</sub>
+
+</em>
+
+to 131.
+
+<br><br><br>
+
+<dt> (c)
+
+<dd>
+
+Since
+
+<em class=var>D</em> must be &gt;= 150 and a prime number or
+
+a number with no prime divisors less than 20, we can choose
+
+<em class=var>D</em> = 563, which is a prime. (We can actually use
+
+a smaller <em class=var>D</em> but a larger <em class=var>D</em>
+
+yields better performance.
+
+With this choice of <em class=var>D</em> the loading density
+
+does not exceed 150/563 = 0.27.  Using this as <em class=var>alpha</em>
+
+in the performance equations, we get<br>
+
+<em class=var>
+
+S <sub>n</sub> = 1/2[1 + 1/(1 - alpha)] &lt;=  1/2[1 + 1/0.73] = 1.2<br>
+
+U <sub>n</sub> = 1/2[1 + 1/(1 - alpha)<sup>2</sup>] &lt;= 1/2[1 + 1.88] = 1.44
+
+</em>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

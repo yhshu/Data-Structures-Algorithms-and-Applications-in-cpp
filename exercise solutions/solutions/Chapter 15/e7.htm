@@ -1,0 +1,80 @@
+
+
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 15, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+
+
+The recursive call is easily replaced by a
+
+<em class=code>while</code> loop.
+
+This transformation causes the segments to be output in the
+
+reverse order from that output by the recursive code.
+
+<br><br>
+
+The nonrecursive traceback function
+
+is given below and in the files <code class=code>rvbits1.*</code>.
+
+This version is expected to run slightly faster as we have replaced
+
+the overhead of function calls by the smaller overhead of a
+
+<code class=code>while</code> loop.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void Traceback(int kay[], int n)
+
+{// Decompose into segments.
+
+   while (n &gt; 0) {
+
+      cout &lt;&lt; "New segment begins at "
+
+           &lt;&lt; (n - kay[n] + 1) &lt;&lt; endl;
+
+      n -= kay[n];
+
+      }
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

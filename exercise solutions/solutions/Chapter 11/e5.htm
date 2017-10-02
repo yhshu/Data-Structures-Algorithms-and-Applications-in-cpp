@@ -1,0 +1,496 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 11, Exercise 5<BR>
+
+<BR>
+
+</H1>
+
+
+
+First we must decide how we are going to incorporate
+
+the field <code class=code>LeftSize</code>.
+
+We can either require the user to include this
+
+field as one of the fields of the data type
+
+<code class=code>T</code>, or we can define
+
+a new type <code class=code>Element</code>
+
+with a <code class=code>LeftSize</code> field and a
+
+field <code class=code>data</code> of type <code class=code>T</code>.
+
+In our implementation of <code class=code>IndexedBSTree</code>
+
+we have gone the first route.
+
+<br><br>
+
+The class <code class=code>IndexedBSTree</code> is derived
+
+from <code class=code>BSTree</code>.
+
+The public members <code class=code>Search</code> and
+
+<code class=code>Ascend</code> as well as the constructor and
+
+destructor are
+
+simply inherited from the base class.
+
+The code to do an indexed search, insert, delete, and
+
+indexed delete are new.
+
+The class definition is given below and in the file
+
+<code class=code>ibst.h</code>.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+class IndexedBSTree : public BSTree&lt;E,K&gt; {
+
+   public:
+
+      bool IndexedSearch(int k, E&amp; e);
+
+      IndexedBSTree&lt;E,K&gt;&amp; Insert(const E&amp; e);
+
+      IndexedBSTree&lt;E,K&gt;&amp; Delete(const K&amp; k, E&amp; e);
+
+      IndexedBSTree&lt;E,K&gt;&amp; IndexedDelete(int k, E&amp; e);
+
+   private:
+
+      void iDelete(E&amp; e);
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for  indexed search is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+bool IndexedBSTree&lt;E,K&gt;::IndexedSearch(int k, E&amp; e)
+
+{// Put the k'th element in e.
+
+ // Return false iff there is no k'th element
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (p)
+
+      if (k &lt; p-&gt;data.LeftSize) p = p-&gt;LeftChild;
+
+      else if (k &gt; p-&gt;data.LeftSize) {
+
+   	      k -= p-&gt;data.LeftSize;
+
+              p = p-&gt;RightChild;}
+
+           else {e = p-&gt;data;
+
+                return true;}
+
+   return false;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+An insert may be performed in two phases.  First, an insert is done assuming
+
+we have an ordinary binary search tree (not an indexed one).  If this succeeds,
+
+then another pass is made from the root to the inserted element
+
+adjusting the value of <code class=code>LeftSize</code> as needed.
+
+The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+IndexedBSTree&lt;E,K&gt;&amp; IndexedBSTree&lt;E,K&gt;::
+
+                    Insert(const E&amp; e)
+
+{// Insert e provided it is not a duplicate.
+
+ // Pass BadInput exception if duplicate.
+
+
+
+   BSTree&lt;E, K&gt;::Insert(e);
+
+   // if e is a duplicate, the preceding insert
+
+   // throws an exception and we do not get to
+
+   // the following code
+
+
+
+   // insert has succeeded, update LeftSize
+
+   // by following search path to e
+
+   BinaryTreeNode&lt;E&gt; *p = root;
+
+   while (true)
+
+      if (e &lt; p-&gt;data) {
+
+         // e was inserted in left subtree of p
+
+         p-&gt;data.LeftSize++;
+
+         p = p-&gt;LeftChild;}
+
+      else if (e &gt; p-&gt;data) p = p-&gt;RightChild;
+
+           else {p-&gt;data.LeftSize = 1;
+
+                 return *this;}
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+Notice that this code penalizes successful searches over unsuccessful searches
+
+in that the former require two passes from the root down while the latter
+
+require just one.  It is reasonable to expect that there will be more
+
+successful inserts than unsuccessful ones.  So we may wish to write the
+
+insert code to make a single pass for successful searches and two
+
+for unsuccessful ones instead.  This can be done if in the first pass,
+
+we update <code class=code>LeftSize</code> fields.
+
+If the insert fails, a second pass is made
+
+in which the <code class=code>LeftSize</code> fields
+
+are reset to their original values.
+
+<br><br>
+
+An element may be deleted using a two step algorithm.  In the first,
+
+a search is made to verify the presence of the desired element.
+
+In the second, <code class=code>LeftSize</code> fields are adjusted and the element deleted.
+
+The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+IndexedBSTree&lt;E,K&gt;&amp; IndexedBSTree&lt;E,K&gt;::
+
+                    Delete(const K&amp; k, E&amp; e)
+
+{// Delete element that matches k.  Put deleted
+
+ // element in e.  Throw BadInput exception if
+
+ // no element matches k.
+
+   if (!Search(k,e)) throw BadInput();
+
+   iDelete(e);
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The function <code class=code>iDelete</code> is similar to
+
+<code class=code>BSTree::Delete</code>
+
+except that it knows the delete will succeed and it also
+
+updates <code class=code>LeftSize</code> fields.  The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+void IndexedBSTree&lt;E,K&gt;::iDelete(E&amp; e)
+
+{// Actual delete function.
+
+ // Delete element that matches e, put deleted
+
+ // element in e.
+
+   BinaryTreeNode&lt;E&gt; *pp = 0,  // pp is parent of p
+
+                     *p = root;
+
+   // follow path to e decrementing LeftSize each time
+
+   // we move to a left subtree
+
+   while (p-&gt;data != e) {
+
+      pp = p;
+
+      if (e &lt; p-&gt;data) {
+
+         p-&gt;data.LeftSize--;
+
+         p = p-&gt;LeftChild;}
+
+      else p = p-&gt;RightChild;
+
+      }
+
+
+
+   if (p-&gt;LeftChild &amp;&amp; p-&gt;RightChild) {
+
+      // p has two children
+
+      // find largest element in left subtree of p
+
+      // first move into left subtree, then make as
+
+      // many right child moves as possible
+
+      int ls = p-&gt;data.LeftSize - 1; // save value
+
+      BinaryTreeNode&lt;E&gt; *ps = p,  // parent of s
+
+                        *s = p-&gt;LeftChild;
+
+      while (s-&gt;RightChild) {
+
+         ps = s;
+
+         s = s-&gt;RightChild;
+
+         }
+
+
+
+      // move largest element to p
+
+      p-&gt;data = s-&gt;data;
+
+      p-&gt;data.LeftSize = ls;
+
+      // set pp and p so that p is node to delete
+
+      pp = ps;
+
+      p = s;
+
+      }
+
+
+
+   // now p has at most one child
+
+   // save pointer to single subtree of p in s
+
+   BinaryTreeNode&lt;E&gt; *s;
+
+   if (p-&gt;LeftChild) s = p-&gt;LeftChild;
+
+   else s = p-&gt;RightChild;
+
+
+
+   // attach s to pp unless p is root
+
+   if (p == root) root = s;
+
+   else if (p == pp-&gt;LeftChild)
+
+           pp-&gt;LeftChild = s;
+
+        else pp-&gt;RightChild = s;
+
+
+
+   delete p;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+An indexed delete may be done in a similar way.  The code is given below.
+
+
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+template&lt;class E, class K&gt;
+
+IndexedBSTree&lt;E,K&gt;&amp; IndexedBSTree&lt;E,K&gt;::
+
+                    IndexedDelete(int k, E&amp; e)
+
+{// Delete the k'th element.  Put deleted element in e.
+
+ // Throw BadInput exception if no k'th element.
+
+   if (!IndexedSearch(k,e)) throw BadInput();
+
+   iDelete(e);
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+
+
+Our delete code penalizes successful deletions over unsuccessful ones.
+
+Since we would normally expect a delete to succeed, we may rewrite
+
+the code so as to update <code class=code>LeftSize</code> fields on the first pass assuming the delete
+
+will succeed.  In case it fails, a second pass is made and <code class=code>LeftSize</code> values
+
+reset.
+
+<br><br>
+
+
+
+The constructor has complexity Theta(1).  The destructor and <code class=code>Ascend</code>
+
+have complexity Theta(<em class=var>n</em>).
+
+The search, insert, and delete functions
+
+have complexity O(<em class=var>h</em>), where <em class=var>h</em>
+
+is the height of the search tree.  The relevant files are
+
+<code class=code>ibst.*</code>.
+
+The insert and delete codes that favor successful operations may be
+
+found in the file <code class=code>jbst.h</code>.
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

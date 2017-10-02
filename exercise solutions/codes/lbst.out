@@ -1,0 +1,21 @@
+Elements in nondecreasing order are
+2 f 1  4 c 2  4 e 1  5 a 4  5 d 1  5 g 1  6 b 3  
+element 1 is 2 f
+element 2 is 4 c
+element 3 is 4 e
+element 4 is 5 a
+element 5 is 5 d
+element 6 is 5 g
+element 7 is 6 b
+Deleted  4 c
+Elements in ascending order are
+2 f 1  4 e 1  5 a 3  5 d 1  5 g 1  6 b 3  
+Delete of fourth element suceeds  5 d
+Elements in ascending order are
+2 f 1  4 e 1  5 a 3  5 g 1  6 b 2  
+Delete of fourth element succeeds  5 g
+Elements in ascending order are
+2 f 1  4 e 1  5 a 3  6 b 1  
+Delete of third element succeeds  5 a
+Elements in ascending order are
+2 f 1  4 e 2  6 b 1  

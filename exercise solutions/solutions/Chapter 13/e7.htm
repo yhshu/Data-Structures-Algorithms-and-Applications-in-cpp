@@ -1,0 +1,292 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 13, Exercise 7<BR>
+
+<BR>
+
+</H1>
+
+
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+Let <em class=var>G</em> be the greedy selection of tasks and let
+
+<em class=var>O</em> be the optimal selection.  If
+
+<em class=var>G</em> and
+
+<em class=var>O</em> have the same number of tasks, then the greedy selection is
+
+also optimal.  Assume that the greedy selection has fewer tasks than does
+
+the optimal selection.  Arrange the tasks in each selection in increasing
+
+order of finish time.  Now compare the two selections from left to right
+
+and find the least <em class=var>i</em> such that the <em class=var>i</em>th
+
+tasks in the greedy and optimal selections are different.
+
+Such an <em class=var>i</em> must exist as otherwise the greedy
+
+selection agrees fully with the left part of the optimal selection.
+
+This is not possible because
+
+the greedy algorithm would have selected at least one more task
+
+(since the optimal has a task with start time &gt; largest
+
+finish time of any task in the greedy selection).
+
+<br><br>
+
+From the way the greedy algorithm works, we see that
+
+the finish time of task <em class=code>i</em> of the greedy
+
+selection is &lt;= that of task
+
+<em class=code>i</em> of the optimal selection.
+
+Task <em class=code>i</code> of the greedy selection is not
+
+one of the tasks selected by he optimal algorithm.  Replace
+
+task <em class=code>i</code> of the optimal selection with
+
+task <em class=code>i</code> of the greedy selection.  The result is
+
+a new optimal selection which agrees with the greedy selection at least up to
+
+the <em class=var>i</em>th tasks.
+
+<br><br>
+
+By repeating this replacement step several times, we transform the
+
+original optimal solution into a new optimal solution in which
+
+the first <em class=var>|G|</em> tasks (<em class=var>|G|</em>
+
+is the number of tasks in <em class=var>G</em>) are
+
+the tasks in the greedy solution.  From the way the greedy algorithm works,
+
+we know that it is not possible to add any tasks with larger finish time
+
+to the selection.  Therefore, the optimal solution cannot contain any
+
+additional tasks.  So the greedy selection is of the same size as
+
+the optimal selection; it is, therefore, an optimal selection.
+
+<br><br>
+
+<dt> (b)
+
+<dd>
+
+If we choose to use the hint, we can begin by initializing a min heap
+
+with the tasks and then extract the tasks from the min heap in nondecreasing
+
+order of finish time.  When a task is extracted from the min heap,
+
+we see if it is possible to add it to the set of already selected tasks.
+
+An alternative strategy is to first sort the tasks into nondecreasing
+
+order of finish time and then examine them one at a time in this order.
+
+<br><br>
+
+The code we develop uses the class <code class=code>Task</code>
+
+which is given below and in the file <code class=code>task2.h</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+class Task {
+
+   friend void main(void);
+
+   public:
+
+      operator int() const
+
+      {return finish;}
+
+   private:
+
+      int start;  // task start time
+
+      int finish; // task finish time
+
+      int ID;     // task ID
+
+};
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+
+
+The code for the greedy task assignment
+
+algorithm is given below and in the files
+
+<code class=code>sched2.*</code>.
+
+
+
+<HR class = coderule>
+
+<pre class = code>
+
+void main(void)
+
+{// Output a maximum selection of tasks that can be done
+
+ // on a single machine.
+
+
+
+   // input the number of tasks
+
+   int n;  // number of tasks
+
+   cout &lt;&lt; "Enter the number of tasks" &lt;&lt; endl;
+
+   cin &gt;&gt; n;
+
+   if (n &lt; 1) {cout &lt;&lt; "Must be more than 0" &lt;&lt; endl;
+
+               exit(1);}
+
+
+
+   // input and store the n tasks in a task array
+
+   Task *t = new Task [n+1];
+
+   for (int i = 1; i &lt;= n; i++) {
+
+      cout &lt;&lt; "Enter the start and finish time of task "
+
+           &lt;&lt; i &lt;&lt; endl;
+
+      cin &gt;&gt; t[i].start &gt;&gt; t[i].finish;
+
+      if (t[i].start &lt; 0 || t[i].finish &lt;= 0
+
+          || t[i].start &gt;= t[i].finish) {
+
+          cout &lt;&lt; "Bad start and/or finish time"
+
+               &lt;&lt; endl;
+
+          exit(1);
+
+          }
+
+      t[i].ID = i;
+
+      }
+
+
+
+      // initialize a min heap with n tasks
+
+      MinHeap&lt;Task&gt; H(1);
+
+      H.Initialize(t,n,n);
+
+
+
+      // select tasks
+
+      cout &lt;&lt; "The selected tasks are ";
+
+      int avail = 0;  // time machine gets free
+
+      for (int i = 1; i &lt;= n; i++) {
+
+         // get task with least finish time
+
+         Task w;
+
+         H.DeleteMin(w);
+
+         if (w.start &gt;= avail) {
+
+             // select the task
+
+             cout &lt;&lt; w.ID &lt;&lt; " ";
+
+             avail = w.finish;
+
+             }
+
+         }  
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<br><br>
+
+It takes
+
+O(<em class=var>n</em>)
+
+time to initialize the min heap. Each delete
+
+operation on the min heap takes 
+
+O(<em class=var>log n</em>) time.  After a task is extracted from
+
+the min heap, it takes Theta(1) time to decide whether it should be selected.
+
+So the total time spent selecting tasks is
+
+O(<em class=var>n log n</em>).
+
+Therefore, the overall complexity of our code is
+
+O(<em class=var>n log n</em>).
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

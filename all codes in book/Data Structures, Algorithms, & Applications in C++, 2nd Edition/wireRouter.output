@@ -1,0 +1,14 @@
+Enter grid size
+Enter the start position
+Enter the finish position
+Enter the wiring grid in row-major order
+The wire path is
+4 2
+5 2
+5 3
+5 4
+6 4
+6 5
+6 6
+5 6
+4 6

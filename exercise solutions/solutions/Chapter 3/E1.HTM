@@ -1,0 +1,474 @@
+
+
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 3, Exercise 1<BR>
+
+<BR>
+
+</H1>
+
+<P ALIGN=LEFT>
+
+<DL Compact>
+
+<DT> (a)
+
+<DD>
+
+We shall make use of the function <strong class=var>ChangeSize1D</strong>
+
+developed for Exercise 6 of Chapter 1.  The following methods of
+
+<strong class=var>LinearList</strong> are to be changed:
+
+<strong class=var>Constructor</strong>,
+
+<strong class=var>Delete</strong>,
+
+and
+
+<strong class=var>Insert</strong>.
+
+The new codes are given below.  Changes from the original
+
+code are shown in <font color=red>red</font>.
+
+We have retained the parameter to the constructor
+
+for compatibility with the original class <strong class=var>LinearList</strong>.
+
+A compilable version is in the
+
+files <STRONG class = var>glist.*</STRONG>.
+
+</DL>
+
+<BR>
+
+</P>
+
+<HR class = coderule>
+
+<PRE class = code>
+
+template&lt;class T&gt;
+
+LinearList&lt;T&gt;::LinearList(int MaxListSize)
+
+{// Constructor for formula-based linear list.
+
+   <font color=red>MaxSize = 1;
+
+   element = new T[1];</font>
+
+   length = 0;
+
+}
+
+
+
+template&lt;class T&gt;
+
+LinearList&lt;T&gt;&amp; LinearList&lt;T&gt;::Delete(int k, T&amp; x)
+
+{// Set x to the k'th element and delete it.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+   if (Find(k, x)) {// move elements k+1, ..., down
+
+      for (int i = k; i &lt; length; i++)
+
+         element[i-1] = element[i];
+
+      length--;
+
+      <font color=red>// reduce array size if necessary
+
+      if ((length &lt;= MaxSize/4) &amp;&amp; MaxSize &gt; 1) {
+
+         MaxSize /= 2;
+
+         ChangeSize1D(element, length, MaxSize);
+
+         }</font>
+
+      return *this;
+
+      }
+
+   else throw OutOfBounds();
+
+}
+
+
+
+template&lt;class T&gt;
+
+LinearList&lt;T&gt;&amp; LinearList&lt;T&gt;::Insert(int k, const T&amp; x)
+
+{// Insert x after the k'th element.
+
+ // Throw OutOfBounds exception if no k'th element.
+
+ // Throw NoMem exception if list is already full.
+
+   if (k &lt; 0 || k &gt; length) throw OutOfBounds();
+
+   if (length == MaxSize) {
+
+      <font color=red>MaxSize *= 2;
+
+      ChangeSize1D(element, length, MaxSize);</font>
+
+      }
+
+   // move one up
+
+   for (int i = length-1; i &gt;= k; i--)
+
+      element[i+1] = element[i];
+
+   element[k] = x;
+
+   length++;
+
+   return *this;
+
+}
+
+</pre>
+
+<HR><BR>
+
+<DL Compact>
+
+<DT> (b)
+
+<DD>
+
+To obtain the cost of a sequence of linear list operations, we use
+
+the <strong class=def> cost amortization method</strong> in which
+
+the sum of the costs of a sequence is determined by first
+
+distributing costs from expensive operations to cheaper ones.
+
+As an example, consider computing the sum 8 + 10 + 12.
+
+The direct way is to add the first two numbers to get 18, and then
+
+add in the 12 to get 30.  In cost amortization, we alter the numbers, keeping
+
+the sum the same.  We could shift two units from the 12 to the 8 to get
+
+the expression 10 + 10 + 10, which has the same value as the original
+
+expression.  Following this alteration of the numbers, the sum is more easily
+
+computed.<br>
+
+<br>
+
+
+
+Comparing the original and the new versions of <strong class=var>LinearList
+
+</strong>, we see that the step count for a sequence
+
+of <em class=var>n</em> list operations in the new version
+
+is<br>
+
+<br>
+
+
+
+<center><em class=var>
+
+f(n) + </em> sum of step counts for all invocations of <strong class=var>ChangeSize1D</strong>
+
+</center>
+
+<br>
+
+<br>
+
+
+
+where <em class=var>f(n)</em> is the step count for the operation sequence when
+
+the original version of <strong class=var>LinearList</strong>
+
+is used.  To compute the new step count, we shall amortize the
+
+cost of the <strong class=var>ChangeSize1D</strong> invocations
+
+over the insert and delete operations.<br>
+
+<br>
+
+
+
+For every invocation of
+
+<strong class=var>ChangeSize1D</strong>
+
+other than the first, there is a most recent earlier invocation of
+
+<strong class=var>ChangeSize1D</strong>.
+
+The first invocation of
+
+<strong class=var>ChangeSize1D</strong> increases the size
+
+of the array
+
+<em class=var>element</em>
+
+from 1 to 2 and takes 1 step.
+
+This step can be added to the cost of one of the insert operations
+
+that must have occurred since the start of the operation sequence. <br>
+
+<br>
+
+
+
+Now  consider any other invocation of
+
+<strong class=var>ChangeSize1D</strong>.
+
+If the size of the array
+
+<em class=var>element</em>
+
+is increased from
+
+<em class=var>MaxSize</em>
+
+to
+
+2*<em class=var>MaxSize</em>,
+
+then at least
+
+<em class=var>MaxSize</em>/2 inserts (including the insert
+
+that triggered the current invocation) must have taken place
+
+since the most recent earlier invocation of
+
+<strong class=var>ChangeSize1D</strong>.
+
+The step count for the current invocation is
+
+<em class=var>MaxSize</em>.  We can transfer this count to the
+
+inserts that occurred
+
+since the most recent earlier invocation of
+
+<strong class=var>ChangeSize1D</strong> and the current invocation.
+
+Each of these insert operations is charged at most 2 steps.<br>
+
+<br>
+
+
+
+
+
+If the size of the array
+
+<em class=var>element</em>
+
+is decreased from
+
+<em class=var>MaxSize</em>
+
+to
+
+<em class=var>MaxSize</em>/2,
+
+then at least
+
+<em class=var>MaxSize</em>/4 deletes (including the delete
+
+that triggered the current invocation) must have taken place
+
+since the most recent earlier invocation of
+
+<strong class=var>ChangeSize1D</strong>.
+
+The step count for the current invocation is
+
+<em class=var>MaxSize/4</em>.  We can transfer this count to the
+
+deletes that occurred
+
+since the most recent earlier invocation of
+
+<strong class=var>ChangeSize1D</strong> and the current invocation.
+
+Each of these delete operations is charged at most 1 step.<br>
+
+<br>
+
+
+
+The amortization scheme just described transfers the cost of the
+
+<strong class=var>ChangeSize1D</strong> invocations to some of the
+
+insert and delete operations that have occurred.  No insert is charge
+
+more than 2 steps and no delete is charged more than 1 step.
+
+Since the number of insert and delete operations is at most
+
+<em class=var>n</em>, the total cost transferred to the
+
+insert and delete operations is at most 2<em class=var>n</em>.
+
+Consequently, the cost of the <em class=var>n</em> list operations is
+
+at most <em class=var>f(n)</em> + 2<em class=var>n</em>, which is at most
+
+<em class=var>cf(n)</em> for some constant <em class=var>c</em>.
+
+ 
+
+</DL>
+
+<h2> Discussion </h2>
+
+<br>
+
+<p>
+
+The preceding analysis shows that the scheme used in
+
+this exercise to change the array size
+
+increases the cost of a sequence of linear list operations by
+
+just a small constant factor.  You should note that the memory
+
+requirements of this scheme.  To increase the size of an
+
+<em class=var>n</em>
+
+element array to 2<em class=var>n</em>, we first allocate
+
+space for the 2<em class=var>n</em> element array.
+
+At this time, we have a total of 3<em class=var>n</em>
+
+(2<em class=var>n</em> in the newly allocated array and
+
+<em class=var>n</em> in the original array) units of space.
+
+Therefore, for a list of maximum size <em class=var>n</em> + 1,
+
+we require up to 3<em class=var>n</em> space be available
+
+(at least temporarily).
+
+<br><br>
+
+
+
+The space burden can be reduced by modifying the change size
+
+strategy.  For example, instead of doubling the array size, we
+
+could increase it by 50%.  A fractional increase in size increases
+
+the run time by a constant factor.  If the size changing scheme is modified
+
+to increase the size by an additive constant, the worst-case run time
+
+increases significantly.  For example, if we increase the array size by one
+
+each time we reach the array size limit, the cost of each insert may increase
+
+by the list length.  A sequence of <em class=var>n</em> inserts
+
+done at the end of a linear list takes
+
+<em class=var>n</em> steps (total) when the implementation
+
+of the text is used, and costs
+
+Theta(<em class=var>n</em><sup>2</sup>) steps (total) when the modified
+
+change size strategy is used.
+
+<br><br>
+
+
+
+An alternative to the scheme of (a) is to permit the user to
+
+specify a list size <em class=var>OriginalMaxSize</em>
+
+at the time the list is created (as in
+
+the implementation of the text), use the constructor
+
+from the implementation of the text, use the
+
+<strong class=var>Insert</strong> function of part (a),
+
+and modify the delete code of part (a) so that the array size is
+
+never reduced below
+
+<em class=var>OriginalMaxSize</em>.
+
+Now we pay the overhead of increasing and decreasing the
+
+array size only when the user underestimates the maximum list length.
+
+Note that such a change could cause some applications to produce
+
+incorrect results.  For example, we may write a simulation
+
+program so that it
+
+catches the <strong class=var>NoMem</strong> exception
+
+thrown by <strong class=var>Insert</em> when the capacity of
+
+the linear list is exceeded, and then signals an abnormal
+
+condition in the system being simulated.
+
+
+
+
+
+
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

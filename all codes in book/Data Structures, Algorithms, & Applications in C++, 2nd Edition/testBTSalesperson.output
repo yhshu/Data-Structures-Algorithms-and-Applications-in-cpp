@@ -1,0 +1,32 @@
+Enter number of vertices and edges
+Enter weighted edge 1
+Enter weighted edge 2
+Enter weighted edge 3
+Enter weighted edge 4
+Enter weighted edge 5
+Enter weighted edge 6
+Enter weighted edge 7
+Enter weighted edge 8
+The weighted undirected graph is
+100  100  100  5  10  100  9  
+100  100  100  8  100  3  100  
+100  100  100  100  3  100  2  
+5  8  100  100  100  100  100  
+10  100  3  100  100  1  100  
+100  3  100  100  1  100  100  
+9  100  2  100  100  100  100  
+
+The weighted digraph is
+100  100  100  5  10  100  100  
+100  100  100  100  100  3  100  
+100  100  100  100  100  100  2  
+100  8  100  100  100  100  100  
+100  100  3  100  100  100  100  
+100  100  100  100  1  100  100  
+9  100  100  100  100  100  100  
+
+The length of the shortest tour is 31
+The shortest tour is 1  4  2  6  5  3  7  
+
+The length of the shortest tour is 31
+The shortest tour is 1  4  2  6  5  3  7  

@@ -1,0 +1,244 @@
+<HTML>
+
+<HEAD>
+
+<LINK rel="stylesheet" href="../exer.css">
+
+</HEAD>
+
+<BODY>
+
+<H1>
+
+Data Structures, Algorithms, & Applications in C++<BR>
+
+Chapter 6, Exercise 6<BR>
+
+<BR>
+
+</H1>
+
+<dl compact>
+
+<dt> (a)
+
+<dd>
+
+The ADT is given below
+
+<pre class=code>
+
+<hr class=coderule>
+
+<strong>ADT</strong> <em class=var>Deque</em>
+
+{
+
+<strong>instances</strong>
+
+   ordered list of elements; one end is called the <em class=var>front</em>;
+
+   the other is the <em class=var>rear</em>;
+
+<strong>operations:</em>
+
+   <em class=var>Create():</em> Create an empty deque;
+
+   <em class=var>IsEmpty():</em> Return <strong>true</strong> if deque is empty, return <strong>false</strong> otherwise;
+
+   <em class=var>IsFull():</em> Return <strong>true</strong> if deque is full, return <strong>false</strong> otherwise;
+
+   <em class=var>Left():</em> Return leftmost element of deque;
+
+   <em class=var>Right():</em> Return rightmost element of deque;
+
+   <em class=var>AddLeft(x):</em> Add <em class=var>x</em> to left end of deque;
+
+   <em class=var>AddRight(x):</em> Add <em class=var>x</em> to right end of deque;
+
+   <em class=var>DeleteLeft(x):</em> Delete leftmost element from deque and put it in <em class=var>x</em>;
+
+   <em class=var>DeleteRight(x):</em> Delete rightmost element from deque and put it in <em class=var>x</em>;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+<dl compact>
+
+<dt> (b)
+
+<dd>
+
+The class <strong class=var>Deque</strong> may be derived
+
+from the class <strong class=var>Queue</strong> as below.  For this to
+
+work, we must make the data members of
+
+<strong class=var>Queue</strong>
+
+<strong class=var>protected</strong> members rather than
+
+<strong class=var>private</strong> members.
+
+</dl>
+
+<br>
+
+<pre class=code>
+
+<hr class=coderule>
+
+template&lt;class T&gt;
+
+class Deque : protected Queue&lt;T&gt;
+
+{
+
+   public:
+
+      Deque(int MaxDequeSize = 10)
+
+         : Queue&lt;T&gt; (MaxDequeSize) {}
+
+      bool IsEmpty() const
+
+           {return Queue&lt;T&gt;::IsEmpty();}
+
+      bool IsFull() const
+
+           {return Queue&lt;T&gt;::IsFull();}
+
+      T Left() const
+
+        {return First();}
+
+      T Right() const
+
+        {return Last();}
+
+      Deque&lt;T&gt;&amp; AddLeft(const T&amp; x);
+
+      Deque&lt;T&gt;&amp; AddRight(const T&amp; x)
+
+                {Add(x); return *this;}
+
+      Deque&lt;T&gt;&amp; DeleteLeft(T&amp; x)
+
+                {Delete(x); return *this;}
+
+      Deque&lt;T&gt;&amp; DeleteRight(T&amp; x);
+
+};
+
+
+
+template&lt;class T&gt;
+
+Deque&lt;T&gt;&amp; Deque&lt;T&gt;::AddLeft(const T&amp; x)
+
+{// Add x to left end of deque.
+
+   // first see if there is space
+
+   if (IsFull()) throw NoMem();
+
+
+
+   // put x counterclockwise from current
+
+   // leftmost element
+
+   queue[front] = x;
+
+
+
+   // move front counterclockwise
+
+   if (front == 0) front = MaxSize - 1;
+
+   else front--;
+
+
+
+   return *this;
+
+}
+
+
+
+template&lt;class T&gt;
+
+Deque&lt;T&gt;&amp; Deque&lt;T&gt;::DeleteRight(T&amp; x)
+
+{// Delete righhtmost element and put in x.
+
+
+
+   // first make sure there is a last element
+
+   if (IsEmpty()) throw OutOfBounds();
+
+
+
+   // save last element in x
+
+   x = queue[rear];
+
+
+
+   // move rear counterclockwise
+
+   if (rear == 0) rear = MaxSize - 1;
+
+   else rear--;
+
+
+
+   return *this;
+
+}
+
+<hr class=coderule>
+
+</pre>
+
+
+
+Note that <em class=var>front</em> and
+
+<em class=var>rear</em> can also be moved counterclockwise using the code
+
+<br><br>
+
+<p align=center>
+
+<strong class=var>
+
+rear = (MaxSize + rear - 1) % MaxSize
+
+<br>
+
+front = (MaxSize + front - 1) % MaxSize
+
+</strong></p>
+
+
+
+<dl compact>
+
+<dt> (c)
+
+<dd>
+
+The relevant files are <em class=var>deque^.^*</em>.
+
+</FONT>
+
+</BODY>
+
+</HTML>
+

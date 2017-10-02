@@ -1,0 +1,149 @@
+Enter number of rows, columns, and terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Matrix A is
+rows = 4 columns = 5
+row 1
+column 3 value 2
+  column 4 value 3
+  
+row 3
+column 1 value 4
+  column 4 value 5
+  
+A(1,2) = 0
+A(1,4) = 3
+A(1,5) = 0
+A(2,2) = 0
+A(3,1) = 4
+A(4,3) = 0
+Enter row, col, and value of term to store
+Enter row, col, and value of term to store
+Enter row, col, and value of term to store
+Enter row, col, and value of term to store
+Enter row, col, and value of term to store
+Enter row, col, and value of term to store
+The matrix is now
+rows = 4 columns = 5
+row 1
+column 2 value 1
+  column 3 value 3
+  column 4 value 3
+  
+row 2
+column 3 value 4
+  
+row 4
+column 5 value 5
+  
+Enter number of rows, columns, and terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Enter row, column, and value of term 5
+Enter row, column, and value of term 6
+Enter row, column, and value of term 7
+Enter row, column, and value of term 8
+The second matrix is
+rows = 4 columns = 5
+row 1
+column 2 value -1
+  column 3 value -3
+  column 4 value -3
+  
+row 3
+column 2 value 6
+  column 4 value 8
+  
+row 4
+column 1 value 7
+  column 3 value 9
+  column 5 value 3
+  
+Their sum is
+rows = 4 columns = 5
+row 2
+column 3 value 4
+  
+row 3
+column 2 value 6
+  column 4 value 8
+  
+row 4
+column 1 value 7
+  column 3 value 9
+  column 5 value 8
+  
+Enter number of rows, columns, and terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Enter row, column, and value of term 5
+Enter row, column, and value of term 6
+Enter number of rows, columns, and terms
+Enter row, column, and value of term 1
+Enter row, column, and value of term 2
+Enter row, column, and value of term 3
+Enter row, column, and value of term 4
+Enter row, column, and value of term 5
+Enter row, column, and value of term 6
+Enter row, column, and value of term 7
+Enter row, column, and value of term 8
+Enter row, column, and value of term 9
+The difference of the matrices
+rows = 5 columns = 6
+row 1
+column 3 value 1
+  
+row 3
+column 2 value 2
+  column 3 value 3
+  column 6 value 4
+  
+row 4
+column 1 value 5
+  column 4 value 6
+  
+and
+rows = 5 columns = 6
+row 2
+column 1 value 1
+  column 4 value 2
+  column 5 value 3
+  
+row 3
+column 3 value -3
+  column 4 value 4
+  
+row 4
+column 1 value 5
+  column 4 value 6
+  
+row 5
+column 1 value 5
+  column 5 value 6
+  
+is
+rows = 5 columns = 6
+row 1
+column 3 value 1
+  
+row 2
+column 1 value -1
+  column 4 value -2
+  column 5 value -3
+  
+row 3
+column 2 value 2
+  column 3 value 6
+  column 4 value -4
+  column 6 value 4
+  
+row 5
+column 1 value -5
+  column 5 value -6
+  
